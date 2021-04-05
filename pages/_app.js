@@ -14,7 +14,7 @@ import '../styles/globals.css';
 const config = {
   readOnlyChainId: ChainId.Mainnet,
   readOnlyUrls: {
-    [ChainId.Mainnet]: 'https://mainnet.infura.io/v3/62687d1a985d4508b2b7a24827551934',
+    [ChainId.Mainnet]: 'https://mainnet.infura.io/v3/436480aea3834d7dacd1d2bfbe017f1c',
   },
 }
 
