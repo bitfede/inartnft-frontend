@@ -5,20 +5,26 @@
 */
 
 //dependencies
+import { InjectedConnector } from "@web3-react/injected-connector";
 
 //hooks
-import { useEthers } from '@usedapp/core';
+import { useEffect } from 'react';
+import { useEthers, account } from '@usedapp/core';
 
 //components
 import Head from 'next/head'
+import Header from '../components/Header/Header';
 
 //assets
 import styles from '../styles/Home.module.css'
 
+//variables
+
 export default function Home() {
 
-  const { activateBrowserWallet } = useEthers();
+  const { activate, account } = useEthers();
 
+  //render
   return (
     <div className={styles.container}>
       <Head>
@@ -26,8 +32,10 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+      <Header />
+
       <main className={styles.main}>
-        
+        <p>Hello {account ? account : "user not logged in"}</p>
       </main>
     </div>
   )
