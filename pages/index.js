@@ -45,7 +45,7 @@ function Home(props) {
         { products.map( (product, i) => {
           return (
             <Card className="nft-item-card" style={{ width: '18rem' }}>
-              <Card.Img variant="top" src={"img/artgallery4.png"} />
+              <Card.Img variant="top" src={"img/artgallery5.png"} />
               <Card.Body>
                   <Card.Title>{product.title}</Card.Title>
                   <Card.Text>
@@ -99,7 +99,7 @@ function Home(props) {
                                 <Link href="#">
                                   <a>
                                     <div className="list-item-sidemenu">
-                                        <Avatar className={"list-item-avatar-sidemenu"} src={"img/artgallery1.png"} /> <span>Museo d'arte Federico</span>
+                                        <Avatar className={"list-item-avatar-sidemenu"} src={"img/artgallery1.png"} /> <span>AuctionGallery</span>
                                     </div>
                                   </a>
                                 </Link>
@@ -107,14 +107,21 @@ function Home(props) {
                                   <a>
 
                                     <div className="list-item-sidemenu">
-                                        <Avatar className={"list-item-avatar-sidemenu"} src={"img/artgallery2.png"} /> <span>Galleria Alessandro</span>
+                                        <Avatar className={"list-item-avatar-sidemenu"} src={"img/artgallery2.png"} /> <span>Frilli Gallery</span>
                                     </div>
                                   </a>
                                 </Link>
                                 <Link href="#">
                                   <a>
                                     <div className="list-item-sidemenu">
-                                        <Avatar className={"list-item-avatar-sidemenu"} src={"img/artgallery3.png"} /> <span>Pinacoteca Omar</span>
+                                        <Avatar className={"list-item-avatar-sidemenu"} src={"img/artgallery3.png"} /> <span>Orion Consulting</span>
+                                    </div>
+                                  </a>
+                                </Link>
+                                <Link href="#">
+                                  <a>
+                                    <div className="list-item-sidemenu">
+                                        <Avatar className={"list-item-avatar-sidemenu"} src={"img/artgallery4.png"} /> <span>ArtVise</span>
                                     </div>
                                   </a>
                                 </Link>
