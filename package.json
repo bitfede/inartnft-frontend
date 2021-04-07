@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@material-ui/core": "^4.11.3",
     "@usedapp/core": "^0.3.4",
     "bootstrap": "^4.6.0",
     "ethers": "^5.1.0",
