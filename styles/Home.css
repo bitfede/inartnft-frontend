@@ -52,15 +52,27 @@
     padding: 0.5rem;
 }
 
+.list-container-sidemenu a:hover {
+    text-decoration: none;
+}
+
+.list-item-sidemenu:hover {
+    background: rgba(17, 17, 26, 0.05);
+}
+
+.list-item-sidemenu a:hover {
+    text-decoration: none;
+}
+
 .list-item-avatar-sidemenu {
     width: 60px !important;
     height: 60px !important;
-    margin-right: 1rem;
+    margin-right: 1\rem;
 }
 
 .list-item-sidemenu span {
     /* font-family: 'Montserrat'; */
-    font-weight: 700;
+    font-weight: 500;
     font-size: 1.1rem;
     color: rgb(75, 75, 75);
 }
@@ -70,14 +82,24 @@
 
 /* Right section - CARDS */
 
+.card-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    padding-left: 2rem;
+}
+
 .cards-wrapper {
-    margin-top: 1.5rem;
+    margin-top: 2rem;
     padding-left: 0;
 }
 
 .nft-item-card {
     box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;
     margin-bottom: 2rem;
+    margin-right: 2rem;
 }
 
 .list-group-nftcard span {

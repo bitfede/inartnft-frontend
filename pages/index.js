@@ -20,19 +20,55 @@ import {Avatar} from '@material-ui/core';
 // custom components
 import Header from '../components/Header';
 
-
 //assets and icons
 import styles from '../styles/Home.module.css'
 import LiveHelpSharpIcon from '@material-ui/icons/LiveHelpSharp';
 import ListAltSharpIcon from '@material-ui/icons/ListAltSharp';
 
-
 //variables
 
 // COMPONENT STARTS HERE
-export default function Home() {
+function Home(props) {
+
+  const { products } = props;
+  console.log(products)
 
   const { activate, account } = useEthers();
+
+  //functions ---
+  
+
+  //render functions
+  const renderProductCards = () => {
+    return (
+      <Col className="card-container">
+        { products.map( (product, i) => {
+          return (
+            <Card className="nft-item-card" style={{ width: '18rem' }}>
+              <Card.Img variant="top" src={"img/artgallery4.png"} />
+              <Card.Body>
+                  <Card.Title>{product.title}</Card.Title>
+                  <Card.Text>
+                    {product.describtion}
+                  </Card.Text>
+              </Card.Body>
+              <ListGroup className="list-group-flush list-group-nftcard">
+                  <ListGroupItem><span>AUTHOR:</span> {product.author}</ListGroupItem>
+                  <ListGroupItem><span>PRICE:</span> 3,999.20 Ξ</ListGroupItem>
+                  <ListGroupItem><span>OWNER:</span> {product.nameUser}</ListGroupItem>
+              </ListGroup>
+              <Card.Body>
+                  <Link href={`/art/${product.id}`}>
+                    <a className={"btn btn-success card-link"}> Buy Now</a>
+                  </Link>
+                  <Card.Link href={"#"}>Share</Card.Link>
+              </Card.Body>
+            </Card>
+          )
+        }) }
+      </Col>
+    )
+  }
 
   //render
   return (
@@ -87,29 +123,7 @@ export default function Home() {
                     </Col>
                     <Col xs={12} lg={8}>
                         <Row className="cards-wrapper">
-                            <Col className="card-container">
-                                <Card className="nft-item-card" style={{ width: '18rem' }}>
-                                    <Card.Img variant="top" src={"img/artgallery4.png"} />
-                                    <Card.Body>
-                                        <Card.Title>Los Desperados</Card.Title>
-                                        <Card.Text>
-                                        Some quick example text to build on the card title and make up the bulk of
-                                        the card's content.
-                                        </Card.Text>
-                                    </Card.Body>
-                                    <ListGroup className="list-group-flush list-group-nftcard">
-                                        <ListGroupItem><span>AUTHOR:</span> El Desaparecido</ListGroupItem>
-                                        <ListGroupItem><span>PRICE:</span> 3,999.20 Ξ</ListGroupItem>
-                                        <ListGroupItem><span>OWNER:</span> Gallery Staff</ListGroupItem>
-                                    </ListGroup>
-                                    <Card.Body>
-                                        <Link href="/view/1">
-                                          <a className={"btn btn-success card-link"}> Buy Now</a>
-                                        </Link>
-                                        <Card.Link href="#">Share</Card.Link>
-                                    </Card.Body>
-                                </Card>
-                            </Col>
+                          { renderProductCards() }
                         </Row>
                     </Col>
                 </Row>
@@ -120,3 +134,22 @@ export default function Home() {
     </div>
   )
 }
+
+
+export async function getStaticProps(context) {
+  const res = await fetch(`http://79.143.177.8/api/PublicListProducts`)
+  const products = await res.json()
+
+  if (!products) {
+    return {
+      notFound: true,
+    }
+  }
+
+  return {
+    props: { products }, // will be passed to the page component as props
+  }
+}
+
+
+export default Home;
