@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
     "@usedapp/core": "^0.3.4",
     "bootstrap": "^4.6.0",
     "ethers": "^5.1.0",

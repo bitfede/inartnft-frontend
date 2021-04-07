@@ -12,7 +12,6 @@ import {Nav, NavDropdown, Navbar } from 'react-bootstrap';
 //global variables
 const injected = new InjectedConnector({ supportedChainIds: [1, 4, 1337] });
 
-
 const Header = (props) => {
 
     const {account, activate, activateBrowserWallet, deactivate} = useEthers()
@@ -40,7 +39,7 @@ const Header = (props) => {
                     </Nav>
                     <Nav>
                     <Nav.Item>
-                    <Nav.Link className={"nav-link hvr-underline-from-left"} href="/">Browse</Nav.Link>
+                        <Nav.Link className={"nav-link hvr-underline-from-left"} href="/">Browse</Nav.Link>
                     </Nav.Item>
                     <NavDropdown title="More" id="nav-dropdown">
                         <NavDropdown.Item eventKey="4.1"><Nav.Link href="/faq">What is an NFT?</Nav.Link></NavDropdown.Item>

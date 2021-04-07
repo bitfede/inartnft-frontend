@@ -1,0 +1,99 @@
+#homeContainer {
+    border-top: 1px grey;
+}
+
+/* SIDEMENU STYLES */
+
+#home-sidemenu-container {
+    /* background: grey; */
+    min-height: 80vh;
+    padding-left: 0;
+    padding-right: 0;
+    border-right: 1px solid rgb(229, 232, 235);
+}
+
+.title-section-sidemenu {
+    padding: 1.5rem 1rem;
+    /* padding-left: 10px; */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    border-bottom: 1px solid rgb(229, 232, 235);
+}
+
+.title-section-sidemenu span {
+    font-weight: 700;
+}
+
+.title-section-sidemenu svg {
+    margin-right: 0.5rem;
+}
+
+.paragraph-section-sidemenu {
+    padding: 1.5rem 1rem;
+    border-bottom: 1px solid rgb(229, 232, 235);
+    background-color: #fafdff;
+}
+
+.paragraph-section-sidemenu p {
+    margin: 0;
+}
+
+.list-section-sidemenu {
+    padding: 0.5rem 0.5rem;
+    border-bottom: 1px solid rgb(229, 232, 235);
+    background-color: #fafdff;
+}
+
+.list-item-sidemenu {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+}
+
+.list-item-avatar-sidemenu {
+    width: 60px !important;
+    height: 60px !important;
+    margin-right: 1rem;
+}
+
+.list-item-sidemenu span {
+    /* font-family: 'Montserrat'; */
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: rgb(75, 75, 75);
+}
+
+/* NOTES: BORDERS */
+/* border-top: 1px solid rgb(229, 232, 235); */
+
+/* Right section - CARDS */
+
+.cards-wrapper {
+    margin-top: 1.5rem;
+    padding-left: 0;
+}
+
+.nft-item-card {
+    box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;
+    margin-bottom: 2rem;
+}
+
+.list-group-nftcard span {
+    font-weight: 700;
+    padding-right: 0.5rem;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

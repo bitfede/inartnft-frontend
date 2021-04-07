@@ -10,7 +10,8 @@ import {DAppProvider, ChainId} from '@usedapp/core';
 // assets
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/globals.css';
-import '../components/Header/Header.css'
+import '../styles/Header.css';
+import '../styles/Home.css';
 
 // global variables
 const config = {
