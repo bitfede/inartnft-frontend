@@ -44,7 +44,7 @@ function Home(props) {
       <Col className="card-container">
         { products.map( (product, i) => {
           return (
-            <Card className="nft-item-card" style={{ width: '18rem' }}>
+            <Card key={`card-${i}`} className="nft-item-card" style={{ width: '18rem' }}>
               <Card.Img variant="top" src={"img/artgallery5.png"} />
               <Card.Body>
                   <Card.Title>{product.title}</Card.Title>
