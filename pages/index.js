@@ -19,6 +19,7 @@ import {Avatar} from '@material-ui/core';
 
 // custom components
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 //assets and icons
 import styles from '../styles/Home.module.css';
@@ -138,6 +139,8 @@ function Home(props) {
             
         </div>
       </main>
+
+      <Footer />
     </div>
   )
 }

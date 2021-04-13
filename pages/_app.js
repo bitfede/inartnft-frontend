@@ -11,6 +11,7 @@ import {DAppProvider, ChainId} from '@usedapp/core';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/globals.css';
 import '../styles/Header.css';
+import '../styles/Footer.css';
 import '../styles/Home.css';
 import '../styles/ArtProductDetailPage.css';
 

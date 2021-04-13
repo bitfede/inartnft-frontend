@@ -1,0 +1,18 @@
+.footer-container {
+    padding-top: 3rem;
+    padding-bottom: 1rem;
+    background: rgb(2,0,34);
+    background: linear-gradient(90deg, rgba(2,0,34,1) 0%, rgba(0,175,215,1) 100%);
+    color: white;
+    list-style-type: none;
+}
+
+#footerLinks {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#footerLinks a {
+    color: white;
+}

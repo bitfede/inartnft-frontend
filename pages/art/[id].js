@@ -24,6 +24,7 @@ import {Avatar, Accordion, AccordionSummary, Typography, AccordionDetails} from 
 
 // custom components
 import Header from '../../components/Header';
+import Footer from '../../components/Footer';
 
 //assets and icons
 import styles from '../../styles/ArtProductDetailPage.module.css'
@@ -134,9 +135,9 @@ function ArtProductDetailPage(props) {
                             <AccordionDetails id="product-gallery-content-container">
                                 <Typography>
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-                                    sit amet blandit leo lobortis eget. Hai capito? 
+                                    sit amet blandit leo lobortis eget.
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-                                    sit amet blandit leo lobortis eget. Hai capito?
+                                    sit amet blandit leo lobortis eget.
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                                 </Typography>
                             </AccordionDetails>
@@ -247,6 +248,9 @@ function ArtProductDetailPage(props) {
         </Modal>
         
     </div>
+
+                    <Footer />
+    
     </div>
   )
 }
@@ -290,7 +294,7 @@ const prodotto = {
     "contract_price" : 100.000000000000000001,
     "urlImageVideoPresentation": "/img/example/Malevich.jpg",
     "author": "Kazimir Severinovic Malevic",
-    "title": "Portrait of Stalin and Lenin",
+    "title": "Stalin and Lenin",
     "describtion": "Kazimir Severinovic Malevic (Kiev 23 February 1879 - Leningrad, 15 May 1935), was a pioneer of geometric abstractionism, Russian avant-gardes and futurism. He studied in Moscow, where he met and influenced many important artists, including Kandinsky. He has always maintained a strong link with Paris, Berlin and Europe. Abstract painting came to light shortly before the Bolshevik revolution of 1917, following which it obtained important public positions in the field of education and art. However, due to his acquaintances around Europe and in particular in Germany, he was arrested in 1930 and many of his notes and artworks were destroyed. His theories resulted in supremacism: for Malevich, nature had no interest and nothing was more relevant than sensitivity in art. In fact, he said that with supremacism art arrives at pure expression without representation. About seventy paintings and seventy drawings prior to 1927 remained in Berlin before returning to Moscow.",
     "history": "Absolutely out of the ordinary is the portrait in the foreground of a young Stalin, as successor of Lenin, depicted in a very patriotic way, in compliance with the propaganda ideology of Russia in the 1930s, which until his incarceration, before denying him, had favored the artist, who had enthusiastically joined the post-revolutionary regime. It is therefore evident that despite the forcings of the Soviet regime, Malevich never abandoned his artistic conception and that in the last years of his life he tried to reconcile his creed with what was required."
 }
