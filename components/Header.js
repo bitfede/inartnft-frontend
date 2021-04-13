@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { InjectedConnector } from "@web3-react/injected-connector";
 
 //hooks
-import { useEthers, activate, address, activateBrowserWallet } from "@usedapp/core";
+import { useEthers } from "@usedapp/core";
  
 import {Link} from 'next/link';
 import {Nav, NavDropdown, Navbar } from 'react-bootstrap';
@@ -67,7 +67,7 @@ const Header = (props) => {
                                 <Nav.Link className={"hvr-underline-from-left btn"} onClick={() => deactivate(false)} href="#" eventKey="logout">Logout</Nav.Link>
                             </Nav.Item>) : (
                             <Nav.Item>
-                                <Nav.Link className={"hvr-underline-from-left btn"} onClick={() => activateBrowserWallet(true)} href="#" eventKey="login">Login</Nav.Link>
+                                <Nav.Link className={"hvr-underline-from-left btn"} onClick={() => console.log("login!")} href="/login" eventKey="login">Login</Nav.Link>
                             </Nav.Item>
                             )
                         }

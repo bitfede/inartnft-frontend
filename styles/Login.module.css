@@ -1,0 +1,16 @@
+.loginContainer {
+    margin: 1.5rem;
+    min-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.loginContainer h3 {
+    margin-bottom: 1.5rem;
+}
+
+.loginContainer h5 {
+    margin-bottom: 1rem;
+}
