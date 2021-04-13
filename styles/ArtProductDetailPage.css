@@ -1,0 +1,101 @@
+#product-detail-container {
+    background-color: white;
+    margin-top: 1.5rem;
+}
+
+#product-detail-img {
+    margin-top: 0.5rem;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+#product-detail-main-title {
+    font-weight: 700;
+}
+
+#product-details-price-box {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background-color: #fafdff;
+}
+
+#price-title-attribute {
+    color: rgb(138, 147, 155);
+    font-size: 0.9rem;
+    margin-bottom: 0.2rem;
+}
+
+.pricetag-wrapper-div {
+    margin-bottom: 0.2rem;
+}
+
+#product-pricetag-eth {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-right: 0.5rem;
+}
+
+#product-pricetag-usd {
+    color:rgb(138, 147, 155);
+}
+
+#product-buy-now-button {
+    margin-right: 0.5rem;
+}
+
+#product-description-container {
+    margin-bottom: 1rem;
+}
+
+.product-detail-box-title {
+    font-weight: 700 !important;
+}
+
+.product-detail-box-title svg {
+    margin-bottom: 4px;
+    margin-right: 0.5rem;
+}
+
+#product-details-content-container {
+    overflow-y: scroll;
+    min-height: 200px;
+    background-color: #fafdff;
+
+}
+
+#product-details-content-container p {
+    /* font-family: 'Montserrat'; */
+}
+
+#product-gallery-content-container p {
+    /* font-family: 'Montserrat'; */
+}
+
+#product-video-content-container {
+    background-color: #fafdff;
+}
+
+.product-detail-expandable-section {
+    margin-bottom: 1rem;
+}
+
+#product-documents-content-container img {
+    width: 150px;
+    margin-bottom: 0.5rem;
+}
+
+.product-docs-section-title {
+    margin-bottom: 0.5rem;
+    font-weight: 800;
+}
+
+.datepickers-container {
+    font-family: 'Nunito Sans';
+}
+.text-field-wrapper {
+    margin-left: 0.2rem;
+}
+
+#email-textfield-modal {
+    width: 14.2rem;
+}

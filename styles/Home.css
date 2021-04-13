@@ -89,7 +89,7 @@
 .card-container {
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: flex-start;
     justify-content: flex-start;
     flex-wrap: wrap;
     padding-left: 2rem;

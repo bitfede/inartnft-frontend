@@ -30,8 +30,8 @@ const Header = (props) => {
     return (
         <div>
             <Navbar className={"main-app-navbar"} collapseOnSelect expand="lg" >
-                <Navbar.Brand id="logoNavContainer" href="#home">
-                    <img src="img/InArtNFT-logo.png" id="navbarLogo" />
+                <Navbar.Brand id="logoNavContainer" href="/">
+                    <img src="/img/InArtNFT-logo.png" id="navbarLogo" />
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
@@ -54,10 +54,10 @@ const Header = (props) => {
                     <Nav.Item>
                         { account ? (
                                 <Nav.Link className={"nav-link hvr-underline-from-left"} href="/profile">
-                                    Profilo
+                                    Profile
                                 </Nav.Link>) : (
                             <Nav.Link eventKey="disabled" disabled>
-                                Profilo
+                                Profile
                             </Nav.Link>
                             )
                         }

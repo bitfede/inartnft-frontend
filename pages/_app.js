@@ -12,6 +12,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/globals.css';
 import '../styles/Header.css';
 import '../styles/Home.css';
+import '../styles/ArtProductDetailPage.css';
 
 // global variables
 const config = {
