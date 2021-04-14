@@ -7,7 +7,9 @@
 
 //dependencies
 import {useState} from 'react';
-import {Container, Row, Col, Card, Button, Modal} from 'react-bootstrap';
+import {Container, Row, Col, Card, Button, Modal, Form} from 'react-bootstrap';
+import useSWR from 'swr'
+
 
 //hooks
 import { useEffect } from 'react';
@@ -37,7 +39,9 @@ const {account, activate, activateBrowserWallet, deactivate} = useEthers()
 console.log("ACCOUNT ", account);
 
 const [profileData, setProfileData] = useState(null);
-const [firstAuthRes, setFirstAuthRes] = useState(null);
+const [authStatus, setAuthStatus] = useState(null);
+const [username, setUsername] = useState(null);
+const [userEmail, setUserEmail] = useState(null);
 
 
 //use effect functions
@@ -48,6 +52,8 @@ const logInWithMetamask = async (account) => {
     let myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
+    // address omar 0x7B2E869Cf25f80764F90835Eb8eA63B7dd925138
+    // address mio 
     let raw = JSON.stringify({
         "address": account,
     });
@@ -60,10 +66,45 @@ const logInWithMetamask = async (account) => {
 
     const resp = await fetch("http://79.143.177.8/api/User/Login", requestOptions)
     
-    const loginAnswer = resp.json();
+    const loginAnswer = await resp.json();
+
+    if (loginAnswer.errormessage === "CREATE_USER") {
+        setAuthStatus("CREATE_USER");
+    }
 
     console.log("answer:", loginAnswer);
-    setFirstAuthRes("CREATE_USER");
+
+
+}
+
+const logInWithForm = async (account) => {
+
+    let myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    // address omar 0x7B2E869Cf25f80764F90835Eb8eA63B7dd925138
+    // address mio 
+    let raw = JSON.stringify({
+        "address": account,
+        "username": username,
+        "mail": userEmail
+    });
+
+    let requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw
+    };
+
+    const resp = await fetch("http://79.143.177.8/api/User/Login", requestOptions)
+    
+    const secondLoginAnswer = await resp.json();
+
+    // if (loginAnswer.errormessage === "CREATE_USER") {
+    //     setAuthStatus("CREATE_USER");
+    // }
+
+    console.log("answer2:", secondLoginAnswer);
 
 }
 
@@ -76,12 +117,27 @@ if (!account) {
             <Button onClick={() => activateBrowserWallet()} >Connect Metamask</Button>
         </div>
     ) 
-} else {
+} else if (account && !authStatus) {
         return (
             <div className={styles.loginContainer}>
-            <Typography variant="h5" >Welcome {account}</Typography>
-            <Button onClick={() => logInWithMetamask(account)}>Log In</Button>
-        </div>
+                <Typography variant="h5" >Welcome {account}</Typography>
+                <Button onClick={() => logInWithMetamask(account)}>Log In</Button>
+            </div>
+        )
+    } else if (account && authStatus === "CREATE_USER") {
+        return (
+            <div className={styles.loginContainer}>
+                <Typography variant="h5" >Register account with {account}</Typography>
+                <Form.Group>
+                    <Form.Label>Email address</Form.Label>
+                    <Form.Control onChange={(e) => setUserEmail(e.target.value)} type="email" placeholder="name@example.com" />
+                    </Form.Group>
+                <Form.Group>
+                    <Form.Label>Username</Form.Label>
+                    <Form.Control onChange={(e) => setUsername(e.target.value)} type="username" placeholder="username" />
+                </Form.Group>
+                <Button onClick={() => logInWithForm(account)}>Log In</Button>
+            </div>
         )
     }
   }

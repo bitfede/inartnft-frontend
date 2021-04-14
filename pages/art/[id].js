@@ -216,7 +216,7 @@ function ArtProductDetailPage(props) {
                     label="Date picker dialog"
                     format="MM/dd/yyyy"
                     value={selectedDate}
-                    onChange={handleDateChange}
+                    onChange={() => handleDateChange()}
                     KeyboardButtonProps={{
                         'aria-label': 'change date',
                     }}
@@ -226,7 +226,7 @@ function ArtProductDetailPage(props) {
                     id="time-picker"
                     label="Time picker"
                     value={selectedDate}
-                    onChange={handleDateChange}
+                    onChange={() => handleDateChange()}
                     KeyboardButtonProps={{
                         'aria-label': 'change time',
                     }}

@@ -5,10 +5,10 @@
 */
 
 //dependencies
-import { InjectedConnector } from "@web3-react/injected-connector";
+// import { InjectedConnector } from "@web3-react/injected-connector";
 
 //hooks
-import { useEffect } from 'react';
+// import { useEffect } from 'react';
 import { useEthers, account } from '@usedapp/core';
 
 // library components
