@@ -5,6 +5,7 @@
 */
 
 // dependencies
+import { useState } from "react";
 import {DAppProvider, ChainId} from '@usedapp/core';
 
 // assets
@@ -24,9 +25,13 @@ const config = {
 }
 
 function MyApp({ Component, pageProps }) {
+
+  const [authToken, setAuthToken] = useState(null)
+
+
   return (
     <DAppProvider config={config}>
-      <Component {...pageProps} />
+      <Component authToken={authToken} setAuthToken={setAuthToken} {...pageProps} />
     </DAppProvider>
   )
 }

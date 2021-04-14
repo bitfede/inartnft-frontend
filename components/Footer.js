@@ -4,7 +4,6 @@ const Footer = (props) => {
 
     const authenticated = false;
 
-    console.log("Rendering with auth", authenticated);
     return (
         <div className={"footer-container"}>
             <Container>

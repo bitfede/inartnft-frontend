@@ -14,6 +14,8 @@ const injected = new InjectedConnector({ supportedChainIds: [1, 4, 1337] });
 
 const Header = (props) => {
 
+    console.log("HEADER PROPPI", props)
+
     const {account, activate, activateBrowserWallet, deactivate} = useEthers()
 
     useEffect(() => {
@@ -25,8 +27,6 @@ const Header = (props) => {
       }, [activate]); 
 
     
-    console.log("add", account);
-
     return (
         <div>
             <Navbar className={"main-app-navbar"} collapseOnSelect expand="lg" >
