@@ -34,7 +34,7 @@ import styles from '../styles/Login.module.css'
 // COMPONENT STARTS HERE
 function Login(props) {
 
-const { setAuthToken, authToken } = props;
+const { setAuthToken, authToken, userData, setUserData } = props;
 
 const router = useRouter()
 const {account, activate, activateBrowserWallet, deactivate} = useEthers()
@@ -110,9 +110,19 @@ const logInWithMetamask = async (account) => {
 
         const token = loginAnswer2.token.access_token;
         // maybe save it in localstorage of browser to persist?
-        const profileId = loginAnswer2._user.id;
+        const userProfile = loginAnswer2._user
+        const profileId = userProfile.id;
 
         setAuthToken(token)
+        setUserData(userProfile)
+
+        console.log(typeof window, window)
+        if (typeof window !== "undefined") {
+
+            localStorage.setItem("authToken", token)
+            
+        }
+
         setTimeout(function(){ router.push(`/profile/${profileId}`) }, 2000);
 
     }
@@ -176,7 +186,14 @@ const logInWithForm = async (account) => {
         // maybe save it in localstorage of browser to persist?
         const profileId = loginAnswer2._user.id;
 
-        setAuthToken(loginAnswer2.token.access_token)
+        setAuthToken(loginAnswer2.token.access_token);
+        if (typeof window !== "undefined") {
+
+            console.log("locallo storaggio", localStorage)
+
+            localStorage.setItem("authToken", token)
+            
+        }
         setTimeout(function(){ router.push(`/profile/${profileId}`) }, 2000);
 
     }
@@ -189,9 +206,9 @@ const outputLoginSection = () => {
 if (authToken) {
 
     return (
-    <div className={styles.loginContainer}>
-        <Typography variant="h5" >Redirecting to profile page...</Typography>
-    </div>
+        <div className={styles.loginContainer}>
+            <Typography variant="h5" >Redirecting to profile page...</Typography>
+        </div>
     )
 }
 
@@ -237,7 +254,7 @@ if (!account) {
         <link rel="icon" href="/favicon.ico" />
     </Head>
 
-    <Header />
+    <Header authToken={authToken} />
 
     { outputLoginSection() }
 

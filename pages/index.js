@@ -31,7 +31,7 @@ import ListAltSharpIcon from '@material-ui/icons/ListAltSharp';
 // COMPONENT STARTS HERE
 function Home(props) {
 
-  const { products } = props;
+  const { products, authToken, setAuthToken } = props;
   console.log(products)
 
   const { activate, account } = useEthers();
@@ -79,7 +79,7 @@ function Home(props) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Header />
+      <Header authToken={authToken} setAuthToken={setAuthToken} />
 
       <main className={styles.main}>
       <div id="homeContainer">
@@ -169,7 +169,6 @@ export async function getStaticProps(context) {
 
   console.log("RES", res);
 
-
   const products = await res.json();
 
   if (!products) {
@@ -179,7 +178,7 @@ export async function getStaticProps(context) {
   }
 
   console.log("PRODU", products);
-
+ 
   const products2 = [
     {
       "id": "76b32f75-d15d-4e0a-b60d-93e29dfa77cc",

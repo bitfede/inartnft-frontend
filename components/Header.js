@@ -16,6 +16,10 @@ const Header = (props) => {
 
     console.log("HEADER PROPPI", props)
 
+    const {authToken, setAuthToken} = props;
+    
+    console.log("AUTH", authToken, typeof authToken )
+
     const {account, activate, activateBrowserWallet, deactivate} = useEthers()
 
     useEffect(() => {
@@ -26,7 +30,15 @@ const Header = (props) => {
         });
       }, [activate]); 
 
-    
+    // functions
+    const _handleLogut = () => {
+        console.log("LOGOUT")
+        localStorage.removeItem("authToken")
+        setAuthToken(undefined)
+    }
+
+
+    //main render
     return (
         <div>
             <Navbar className={"main-app-navbar"} collapseOnSelect expand="lg" >
@@ -52,7 +64,7 @@ const Header = (props) => {
                         <Nav.Link className={"nav-link hvr-underline-from-left"} href="/create">Create</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                        { account ? (
+                        { authToken ? (
                                 <Nav.Link className={"nav-link hvr-underline-from-left"} href="/profile">
                                     Profile
                                 </Nav.Link>) : (
@@ -62,9 +74,9 @@ const Header = (props) => {
                             )
                         }
                     </Nav.Item>
-                        { account ? (
+                        { authToken ? (
                             <Nav.Item>
-                                <Nav.Link className={"hvr-underline-from-left btn"} onClick={() => deactivate(false)} href="#" eventKey="logout">Logout</Nav.Link>
+                                <Nav.Link className={"hvr-underline-from-left btn"} onClick={() => _handleLogut()} href="#" eventKey="logout">Logout</Nav.Link>
                             </Nav.Item>) : (
                             <Nav.Item>
                                 <Nav.Link className={"hvr-underline-from-left btn"} onClick={() => console.log("login!")} href="/login" eventKey="login">Login</Nav.Link>

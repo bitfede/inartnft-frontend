@@ -1,11 +1,11 @@
 /*
- AUTHOR: Federico G. De Faveri
+ AUTHOR: Federico G. De  Faveri
  DATE: April 5th, 2021
  PURPOSE: This is the root component of the InArt NFT platform.
 */
 
 // dependencies
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {DAppProvider, ChainId} from '@usedapp/core';
 
 // assets
@@ -27,11 +27,21 @@ const config = {
 function MyApp({ Component, pageProps }) {
 
   const [authToken, setAuthToken] = useState(null)
+  const [userData, setUserData] = useState(null)
+
+
+  useEffect( () => {
+
+    if (localStorage.authToken) {
+      setAuthToken(localStorage.authToken);
+    }
+
+  })
 
 
   return (
     <DAppProvider config={config}>
-      <Component authToken={authToken} setAuthToken={setAuthToken} {...pageProps} />
+      <Component userData={userData} setUserData={setUserData} authToken={authToken} setAuthToken={setAuthToken} {...pageProps} />
     </DAppProvider>
   )
 }
