@@ -14,11 +14,11 @@ const injected = new InjectedConnector({ supportedChainIds: [1, 4, 1337] });
 
 const Header = (props) => {
 
-    console.log("HEADER PROPPI", props)
+    console.log("HEADER PROPPI", props) //debug
 
-    const {authToken, setAuthToken} = props;
-    
-    console.log("AUTH", authToken, typeof authToken )
+    const {authToken, setAuthToken, userId, setUserId} = props;
+
+    console.log("AUTH", authToken, typeof authToken ) //debug
 
     const {account, activate, activateBrowserWallet, deactivate} = useEthers()
 
@@ -34,9 +34,12 @@ const Header = (props) => {
     const _handleLogut = () => {
         console.log("LOGOUT")
         localStorage.removeItem("authToken")
+        localStorage.removeItem("userId")
         setAuthToken(undefined)
+        setUserId(undefined)
     }
 
+    console.log("userID", userId)
 
     //main render
     return (
@@ -64,8 +67,8 @@ const Header = (props) => {
                         <Nav.Link className={"nav-link hvr-underline-from-left"} href="/create">Create</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                        { authToken ? (
-                                <Nav.Link className={"nav-link hvr-underline-from-left"} href="/profile">
+                        { (authToken && userId) ? (
+                                <Nav.Link className={"nav-link hvr-underline-from-left"} href={`/profile/${userId}`}>
                                     Profile
                                 </Nav.Link>) : (
                             <Nav.Link eventKey="disabled" disabled>

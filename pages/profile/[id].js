@@ -31,28 +31,45 @@ import styles from '../../styles/ProfilePage.module.css'
 //variables
 
 // COMPONENT STARTS HERE
-function ArtProductDetailPage(props) {
+function ProfilePage(props) {
 
-  const { product } = props;
-  console.log("PROPPI", props)
+    const { authToken, setAuthToken, userId } = props;
+    console.log("PROPPI", props)
 
-  const { activate, account } = useEthers();
+    const { activate, account } = useEthers();
 
-  const [calendarModalOpen, setCalendarModalOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+    useEffect( async () => {
 
-  const handleDateChange = (date) => {
-      setSelectedDate(date);
-  };
+        if (!authToken) { return }
+        if (!userId) { return }
+
+        const myHeaders = new Headers();
+        myHeaders.append("Authorization", `Bearer ${authToken}`);
+
+        const requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+        };
+
+        const res = await fetch(`http://79.143.177.8/api/UserInfo/${userId}`, requestOptions)
+        
+        const profileData = await res.json();
 
 
+        console.log("RISPOSTA API", res)
 
-  //functions ---
+        console.log("DATA", profileData)
 
-  //render functions
+    });
 
-  //render
-  return (
+
+    //functions ---
+
+    //render functions
+
+    //render
+    return (
 
     <div>
 
@@ -61,15 +78,16 @@ function ArtProductDetailPage(props) {
             <link rel="icon" href="/favicon.ico" />
         </Head>
 
-        <Header />
+        <Header authToken={authToken} setAuthToken={setAuthToken} userId={userId} />
 
         <div id={styles.profilePageContainer}>
-            PROFILE
+            
+            {}
 
         </div>
 
         <Footer />
-    
+
     </div>
   )
 }
@@ -80,7 +98,7 @@ export async function getStaticProps(context) {
     console.log("CONTEXT", context)
 
     return {
-        props: { product: "YAAA" } // will be passed to the page component as props
+        props: { loading: true } // will be passed to the page component as props
     }
 }
 
@@ -93,4 +111,4 @@ export const getStaticPaths = async (slug) => {
 }
 
 
-export default ArtProductDetailPage;
+export default ProfilePage;

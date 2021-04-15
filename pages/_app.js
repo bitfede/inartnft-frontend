@@ -27,13 +27,20 @@ const config = {
 function MyApp({ Component, pageProps }) {
 
   const [authToken, setAuthToken] = useState(null)
-  const [userData, setUserData] = useState(null)
+  const [userId, setUserId] = useState(null)
 
 
   useEffect( () => {
 
-    if (localStorage.authToken) {
-      setAuthToken(localStorage.authToken);
+    if (typeof window !== "undefined") {
+      if (localStorage.authToken) {
+        setAuthToken(localStorage.authToken);
+      }
+
+      if (localStorage.userId) {
+        console.log("USERIDDID", userId);
+        setUserId(localStorage.userId);
+      }
     }
 
   })
@@ -41,7 +48,7 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <DAppProvider config={config}>
-      <Component userData={userData} setUserData={setUserData} authToken={authToken} setAuthToken={setAuthToken} {...pageProps} />
+      <Component userId={userId} setUserId={setUserId} authToken={authToken} setAuthToken={setAuthToken} {...pageProps} />
     </DAppProvider>
   )
 }

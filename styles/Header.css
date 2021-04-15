@@ -23,10 +23,10 @@
     color: black;
   }
   
-  #logoNavContainer {
+  /* #logoNavContainer {
   
   }
-  
+   */
   #nav-logo-link {
     display: flex;
     flex-direction: row;

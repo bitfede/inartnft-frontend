@@ -34,7 +34,7 @@ import styles from '../styles/Login.module.css'
 // COMPONENT STARTS HERE
 function Login(props) {
 
-const { setAuthToken, authToken, userData, setUserData } = props;
+const { setAuthToken, authToken, userId, setUserId } = props;
 
 const router = useRouter()
 const {account, activate, activateBrowserWallet, deactivate} = useEthers()
@@ -114,12 +114,13 @@ const logInWithMetamask = async (account) => {
         const profileId = userProfile.id;
 
         setAuthToken(token)
-        setUserData(userProfile)
+        setUserId(profileId)
 
         console.log(typeof window, window)
         if (typeof window !== "undefined") {
 
             localStorage.setItem("authToken", token)
+            localStorage.setItem("userId", profileId )
             
         }
 
@@ -184,15 +185,15 @@ const logInWithForm = async (account) => {
 
         const token = loginAnswer2.token.access_token;
         // maybe save it in localstorage of browser to persist?
+        const userProfile = loginAnswer2._user;
         const profileId = loginAnswer2._user.id;
 
-        setAuthToken(loginAnswer2.token.access_token);
+        setAuthToken(token)
+        setUserData(userProfile)
+
         if (typeof window !== "undefined") {
-
-            console.log("locallo storaggio", localStorage)
-
             localStorage.setItem("authToken", token)
-            
+            localStorage.setItem("userId", profileId )
         }
         setTimeout(function(){ router.push(`/profile/${profileId}`) }, 2000);
 
