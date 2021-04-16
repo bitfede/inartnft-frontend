@@ -41,27 +41,31 @@ function ProfilePage(props) {
     useEffect( async () => {
 
         if (!authToken) { return }
-        if (!userId) { return }
+        // if (!userId) { return }
 
         const myHeaders = new Headers();
         myHeaders.append("Authorization", `Bearer ${authToken}`);
 
         const requestOptions = {
         method: 'GET',
-        headers: myHeaders,
-        redirect: 'follow'
+        headers: myHeaders
         };
 
-        const res = await fetch(`http://79.143.177.8/api/UserInfo/${userId}`, requestOptions)
-        
-        const profileData = await res.json();
+
+        try {
+            const res = await fetch(`http://79.143.177.8/api/UserInfo/me`, requestOptions)
+            const profileData = await res.json();
+        } catch (e) {
+            console.log("ERROR", e)
+            return console.error("[E]", e)
+        }
 
 
         console.log("RISPOSTA API", res)
 
         console.log("DATA", profileData)
 
-    });
+    }, [authToken]);
 
 
     //functions ---
@@ -82,7 +86,7 @@ function ProfilePage(props) {
 
         <div id={styles.profilePageContainer}>
             
-            {}
+
 
         </div>
 

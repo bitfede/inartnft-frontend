@@ -76,6 +76,7 @@ const logInWithMetamask = async (account) => {
 
     if (loginAnswer.errormessage === "CREATE_USER") {
         setAuthStatus("CREATE_USER");
+        return
     }
 
     if (loginAnswer.nonce) {
@@ -157,7 +158,7 @@ const logInWithForm = async (account) => {
 
     if (secondLoginAnswer.nonce) {
 
-        const nonce = loginAnswer.nonce;
+        const nonce = secondLoginAnswer.nonce;
         const sig = await sign(nonce);
         console.log("SIGNED:", sig);
 
