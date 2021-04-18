@@ -6,7 +6,7 @@
 
 
 //dependencies
-import {useState} from 'react';
+import React, {useState} from 'react';
 import {Container, Row, Col, Card, Button, Modal} from 'react-bootstrap';
 import {Grid, TextField} from '@material-ui/core';
 // import {Link} from 'react-router-dom';
@@ -272,7 +272,7 @@ export async function getStaticProps(context) {
 //     redirect: 'follow'
 //   };
 
-//   const res = await fetch(`http://79.143.177.8/api/PublicProduct`, requestOptions)
+//   const res = await fetch(settings.Endpoints.ApiUrl + `/PublicProduct`, requestOptions)
 
 //   const product = await res.json()
 

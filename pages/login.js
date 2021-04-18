@@ -10,7 +10,7 @@ import {useState} from 'react';
 import {Container, Row, Col, Card, Button, Modal, Form} from 'react-bootstrap';
 
 //hooks
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useEthers, account } from '@usedapp/core';
 import { useRouter } from 'next/router'
 
@@ -28,6 +28,7 @@ import Footer from '../components/Footer';
 
 //assets and icons
 import styles from '../styles/Login.module.css'
+import settings from '../settings';
 
 //variables
 
@@ -68,7 +69,7 @@ const logInWithMetamask = async (account) => {
         body: raw
     };
 
-    const resp = await fetch("http://79.143.177.8/api/User/Login", requestOptions)
+    const resp = await fetch(settings.Endpoints.ApiUrl + "/User/Login", requestOptions)
     
     const loginAnswer = await resp.json();
 
@@ -103,7 +104,7 @@ const logInWithMetamask = async (account) => {
             body: raw2
         };
 
-        const resp2 = await fetch("http://79.143.177.8/api/User/Authentication", requestOptions2)
+        const resp2 = await fetch(settings.Endpoints.ApiUrl + "/User/Authentication", requestOptions2)
         
         const loginAnswer2 = await resp2.json();
 
@@ -150,7 +151,7 @@ const logInWithForm = async (account) => {
         body: raw
     };
 
-    const resp = await fetch("http://79.143.177.8/api/User/Login", requestOptions)
+    const resp = await fetch(settings.Endpoints.ApiUrl + "/User/Login", requestOptions)
     
     const secondLoginAnswer = await resp.json();
 
@@ -180,7 +181,7 @@ const logInWithForm = async (account) => {
             body: raw2
         };
 
-        const resp2 = await fetch("http://79.143.177.8/api/User/Authentication", requestOptions2)
+        const resp2 = await fetch(settings.Endpoints.ApiUrl + "/User/Authentication", requestOptions2)
         
         const loginAnswer2 = await resp2.json();
 

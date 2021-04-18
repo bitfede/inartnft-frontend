@@ -8,7 +8,7 @@
 // import { InjectedConnector } from "@web3-react/injected-connector";
 
 //hooks
-// import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useEthers, account } from '@usedapp/core';
 
 // library components
@@ -25,6 +25,7 @@ import Footer from '../components/Footer';
 import styles from '../styles/Home.module.css';
 import LiveHelpSharpIcon from '@material-ui/icons/LiveHelpSharp';
 import ListAltSharpIcon from '@material-ui/icons/ListAltSharp';
+import settings from '../settings';
 
 //variables
 
@@ -165,7 +166,7 @@ export async function getStaticProps(context) {
     redirect: 'follow'
   };
 
-  const res = await fetch(`http://79.143.177.8/api/PublicListProducts`, requestOptions);
+  const res = await fetch(settings.Endpoints.ApiUrl + `/PublicListProducts`, requestOptions);
 
   console.log("RES", res);
 

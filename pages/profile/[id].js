@@ -6,7 +6,7 @@
 
 
 //dependencies
-import {useState} from 'react';
+import React, {useState} from 'react';
 import {Container, Row, Col, Card, Button, Modal} from 'react-bootstrap';
 import {Grid, TextField} from '@material-ui/core';
 import { MuiPickersUtilsProvider, KeyboardTimePicker, KeyboardDatePicker } from '@material-ui/pickers';
@@ -27,6 +27,7 @@ import Footer from '../../components/Footer';
 
 //assets and icons
 import styles from '../../styles/ProfilePage.module.css'
+import settings from '../../settings';
 
 //variables
 
@@ -53,7 +54,7 @@ function ProfilePage(props) {
 
 
         try {
-            const res = await fetch(`http://79.143.177.8/api/UserInfo/me`, requestOptions)
+            const res = await fetch(settings.Endpoints.ApiUrl + `/UserInfo/me`, requestOptions)
             const profileData = await res.json();
         } catch (e) {
             console.log("ERROR", e)
