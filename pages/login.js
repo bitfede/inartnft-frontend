@@ -4,267 +4,241 @@
  PURPOSE: This is the login page of the InArt NFT platform.
 */
 
-
 //dependencies
-import {useState} from 'react';
-import {Container, Row, Col, Card, Button, Modal, Form} from 'react-bootstrap';
+import { useState } from "react";
+import { Container, Row, Col, Card, Button, Modal, Form } from "react-bootstrap";
 
 //hooks
-import React, { useEffect } from 'react';
-import { useEthers, account } from '@usedapp/core';
-import { useRouter } from 'next/router'
+import React, { useEffect } from "react";
+import { useEthers, account } from "@usedapp/core";
+import { useRouter } from "next/router";
 
 //custom hooks
 import usePersonalSign from "../hooks/usePersonalSign";
 
 // library components
-import Head from 'next/head'
+import Head from "next/head";
 // import Link from 'next/link'
-import {Avatar, Accordion, AccordionSummary, Typography, AccordionDetails} from '@material-ui/core';
+import { Avatar, Accordion, AccordionSummary, Typography, AccordionDetails } from "@material-ui/core";
 
 // custom components
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 //assets and icons
-import styles from '../styles/Login.module.css'
-import settings from '../settings';
+import styles from "../styles/Login.module.css";
+import settings from "../settings";
+import { useAuth } from "../hooks/auth";
 
 //variables
 
 // COMPONENT STARTS HERE
 function Login(props) {
+	const { authToken, saveAuth } = useAuth();
 
-const { setAuthToken, authToken, userId, setUserId } = props;
+	const router = useRouter();
+	const { account, activate, activateBrowserWallet, deactivate } = useEthers();
+	const sign = usePersonalSign();
 
-const router = useRouter()
-const {account, activate, activateBrowserWallet, deactivate} = useEthers()
-const sign = usePersonalSign();
+	console.log("ACCOUNT ", account);
+	console.log("PROPPI", props);
 
-console.log("ACCOUNT ", account);
-console.log("PROPPI", props)
+	const [authStatus, setAuthStatus] = useState(null);
+	const [username, setUsername] = useState(null);
+	const [userEmail, setUserEmail] = useState(null);
 
-const [authStatus, setAuthStatus] = useState(null);
-const [username, setUsername] = useState(null);
-const [userEmail, setUserEmail] = useState(null);
+	//use effect functions
 
+	//functions ---
+	const logInWithMetamask = async account => {
+		let myHeaders = new Headers();
+		myHeaders.append("Content-Type", "application/json");
 
-//use effect functions
+		// address omar 0x7B2E869Cf25f80764F90835Eb8eA63B7dd925138
+		// address mio
+		let raw = JSON.stringify({
+			address: account,
+		});
 
-//functions ---
-const logInWithMetamask = async (account) => {
+		let requestOptions = {
+			method: "POST",
+			headers: myHeaders,
+			body: raw,
+		};
 
-    let myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
+		const resp = await fetch(settings.Endpoints.ApiUrl + "/User/Login", requestOptions);
 
-    // address omar 0x7B2E869Cf25f80764F90835Eb8eA63B7dd925138
-    // address mio 
-    let raw = JSON.stringify({
-        "address": account,
-    });
+		const loginAnswer = await resp.json();
 
-    let requestOptions = {
-        method: 'POST',
-        headers: myHeaders,
-        body: raw
-    };
+		console.log("API Answer:", loginAnswer);
 
-    const resp = await fetch(settings.Endpoints.ApiUrl + "/User/Login", requestOptions)
-    
-    const loginAnswer = await resp.json();
+		if (loginAnswer.errormessage === "CREATE_USER") {
+			setAuthStatus("CREATE_USER");
+			return;
+		}
 
-    console.log("API Answer:", loginAnswer);
+		if (loginAnswer.nonce) {
+			const nonce = loginAnswer.nonce;
+			const sig = await sign(nonce);
+			console.log("SIGNED:", sig);
 
-    if (loginAnswer.errormessage === "CREATE_USER") {
-        setAuthStatus("CREATE_USER");
-        return
-    }
+			// new web3 call
+			let myHeaders2 = new Headers();
+			myHeaders2.append("Content-Type", "application/json");
 
-    if (loginAnswer.nonce) {
-        const nonce = loginAnswer.nonce;
-        const sig = await sign(nonce);
-        console.log("SIGNED:", sig);
+			// address omar 0x7B2E869Cf25f80764F90835Eb8eA63B7dd925138
+			// address mio
+			let raw2 = loginAnswer;
 
+			raw2.sign = sig;
 
-        // new web3 call
-        let myHeaders2 = new Headers();
-        myHeaders2.append("Content-Type", "application/json");
+			raw2 = JSON.stringify(raw2);
 
-        // address omar 0x7B2E869Cf25f80764F90835Eb8eA63B7dd925138
-        // address mio 
-        let raw2 = loginAnswer
+			let requestOptions2 = {
+				method: "POST",
+				headers: myHeaders2,
+				body: raw2,
+			};
 
-        raw2.sign = sig;
+			const resp2 = await fetch(settings.Endpoints.ApiUrl + "/User/Authentication", requestOptions2);
 
-        raw2 = JSON.stringify(raw2)
+			const loginAnswer2 = await resp2.json();
 
-        let requestOptions2 = {
-            method: 'POST',
-            headers: myHeaders2,
-            body: raw2
-        };
+			console.log(2, loginAnswer2);
 
-        const resp2 = await fetch(settings.Endpoints.ApiUrl + "/User/Authentication", requestOptions2)
-        
-        const loginAnswer2 = await resp2.json();
+			const token = loginAnswer2.token.access_token;
+			// maybe save it in localstorage of browser to persist?
+			const userProfile = loginAnswer2._user;
+			const profileId = userProfile.id;
 
-        console.log(2, loginAnswer2)
+			saveAuth(token, profileId);
 
-        const token = loginAnswer2.token.access_token;
-        // maybe save it in localstorage of browser to persist?
-        const userProfile = loginAnswer2._user
-        const profileId = userProfile.id;
+			setTimeout(function () {
+				router.push(`/profile/${profileId}`);
+			}, 2000);
+		}
+	};
 
-        setAuthToken(token)
-        setUserId(profileId)
+	const logInWithForm = async account => {
+		let myHeaders = new Headers();
+		myHeaders.append("Content-Type", "application/json");
 
-        console.log(typeof window, window)
-        if (typeof window !== "undefined") {
+		// address omar 0x7B2E869Cf25f80764F90835Eb8eA63B7dd925138
+		// address mio
+		let raw = JSON.stringify({
+			address: account,
+			username: username,
+			mail: userEmail,
+		});
 
-            localStorage.setItem("authToken", token)
-            localStorage.setItem("userId", profileId )
-            
-        }
+		let requestOptions = {
+			method: "POST",
+			headers: myHeaders,
+			body: raw,
+		};
 
-        setTimeout(function(){ router.push(`/profile/${profileId}`) }, 2000);
+		const resp = await fetch(settings.Endpoints.ApiUrl + "/User/Login", requestOptions);
 
-    }
+		const secondLoginAnswer = await resp.json();
 
-}
+		console.log("answer2:", secondLoginAnswer);
 
-const logInWithForm = async (account) => {
+		if (secondLoginAnswer.nonce) {
+			const nonce = secondLoginAnswer.nonce;
+			const sig = await sign(nonce);
+			console.log("SIGNED:", sig);
 
-    let myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
+			// new web3 call
+			let myHeaders2 = new Headers();
+			myHeaders2.append("Content-Type", "application/json");
 
-    // address omar 0x7B2E869Cf25f80764F90835Eb8eA63B7dd925138
-    // address mio 
-    let raw = JSON.stringify({
-        "address": account,
-        "username": username,
-        "mail": userEmail
-    });
+			// address omar 0x7B2E869Cf25f80764F90835Eb8eA63B7dd925138 //debug
+			let raw2 = secondLoginAnswer;
 
-    let requestOptions = {
-        method: 'POST',
-        headers: myHeaders,
-        body: raw
-    };
+			raw2.sign = sig;
 
-    const resp = await fetch(settings.Endpoints.ApiUrl + "/User/Login", requestOptions)
-    
-    const secondLoginAnswer = await resp.json();
+			raw2 = JSON.stringify(raw2);
 
-    console.log("answer2:", secondLoginAnswer);
+			let requestOptions2 = {
+				method: "POST",
+				headers: myHeaders2,
+				body: raw2,
+			};
 
-    if (secondLoginAnswer.nonce) {
+			const resp2 = await fetch(settings.Endpoints.ApiUrl + "/User/Authentication", requestOptions2);
 
-        const nonce = secondLoginAnswer.nonce;
-        const sig = await sign(nonce);
-        console.log("SIGNED:", sig);
+			const loginAnswer2 = await resp2.json();
 
+			const token = loginAnswer2.token.access_token;
+			// maybe save it in localstorage of browser to persist?
+			const userProfile = loginAnswer2._user;
+			const profileId = loginAnswer2._user.id;
 
-        // new web3 call
-        let myHeaders2 = new Headers();
-        myHeaders2.append("Content-Type", "application/json");
+			saveAuth(token, profileId);
 
-        // address omar 0x7B2E869Cf25f80764F90835Eb8eA63B7dd925138 //debug
-        let raw2 = loginAnswer
+			setTimeout(function () {
+				router.push(`/profile/${profileId}`);
+			}, 2000);
+		}
+	};
 
-        raw2.sign = sig;
+	//render functions
+	const outputLoginSection = () => {
+		if (authToken) {
+			return (
+				<div className={styles.loginContainer}>
+					<Typography variant="h5">Redirecting to profile page...</Typography>
+				</div>
+			);
+		}
 
-        raw2 = JSON.stringify(raw2)
+		if (!account) {
+			return (
+				<div className={styles.loginContainer}>
+					<Typography variant="h3">Connect your Metamask Wallet</Typography>
+					<Button onClick={() => activateBrowserWallet()}>Connect Metamask</Button>
+				</div>
+			);
+		} else if (account && !authStatus) {
+			return (
+				<div className={styles.loginContainer}>
+					<Typography variant="h5">Welcome {account}</Typography>
+					<Button onClick={() => logInWithMetamask(account)}>Log In</Button>
+				</div>
+			);
+		} else if (account && authStatus === "CREATE_USER") {
+			return (
+				<div className={styles.loginContainer}>
+					<Typography variant="h5">Register account with {account}</Typography>
+					<Form.Group>
+						<Form.Label>Email address</Form.Label>
+						<Form.Control onChange={e => setUserEmail(e.target.value)} type="email" placeholder="name@example.com" />
+					</Form.Group>
+					<Form.Group>
+						<Form.Label>Username</Form.Label>
+						<Form.Control onChange={e => setUsername(e.target.value)} type="username" placeholder="username" />
+					</Form.Group>
+					<Button onClick={() => logInWithForm(account)}>Log In</Button>
+				</div>
+			);
+		}
+	};
 
-        let requestOptions2 = {
-            method: 'POST',
-            headers: myHeaders2,
-            body: raw2
-        };
+	//render
+	return (
+		<div>
+			<Head>
+				<title>InArt NFT</title>
+				<link rel="icon" href="/favicon.ico" />
+			</Head>
 
-        const resp2 = await fetch(settings.Endpoints.ApiUrl + "/User/Authentication", requestOptions2)
-        
-        const loginAnswer2 = await resp2.json();
+			<Header authToken={authToken} />
 
-        const token = loginAnswer2.token.access_token;
-        // maybe save it in localstorage of browser to persist?
-        const userProfile = loginAnswer2._user;
-        const profileId = loginAnswer2._user.id;
+			{outputLoginSection()}
 
-        setAuthToken(token)
-        setUserData(userProfile)
-
-        if (typeof window !== "undefined") {
-            localStorage.setItem("authToken", token)
-            localStorage.setItem("userId", profileId )
-        }
-        setTimeout(function(){ router.push(`/profile/${profileId}`) }, 2000);
-
-    }
-
-}
-
-//render functions
-const outputLoginSection = () => {
-
-if (authToken) {
-
-    return (
-        <div className={styles.loginContainer}>
-            <Typography variant="h5" >Redirecting to profile page...</Typography>
-        </div>
-    )
-}
-
-if (!account) {
-    return (
-        <div className={styles.loginContainer}>
-            <Typography variant="h3" >Connect your Metamask Wallet</Typography>
-            <Button onClick={() => activateBrowserWallet()} >Connect Metamask</Button>
-        </div>
-    ) 
-} else if (account && !authStatus) {
-        return (
-            <div className={styles.loginContainer}>
-                <Typography variant="h5" >Welcome {account}</Typography>
-                <Button onClick={() => logInWithMetamask(account)}>Log In</Button>
-            </div>
-        )
-    } else if (account && authStatus === "CREATE_USER") {
-        return (
-            <div className={styles.loginContainer}>
-                <Typography variant="h5" >Register account with {account}</Typography>
-                <Form.Group>
-                    <Form.Label>Email address</Form.Label>
-                    <Form.Control onChange={(e) => setUserEmail(e.target.value)} type="email" placeholder="name@example.com" />
-                    </Form.Group>
-                <Form.Group>
-                    <Form.Label>Username</Form.Label>
-                    <Form.Control onChange={(e) => setUsername(e.target.value)} type="username" placeholder="username" />
-                </Form.Group>
-                <Button onClick={() => logInWithForm(account)}>Log In</Button>
-            </div>
-        )
-    }
-  }
-
-  //render
-  return (
-
-    <div>
-
-    <Head>
-        <title>InArt NFT</title>
-        <link rel="icon" href="/favicon.ico" />
-    </Head>
-
-    <Header authToken={authToken} />
-
-    { outputLoginSection() }
-
-    <Footer />
-    
-    </div>
-  )
+			<Footer />
+		</div>
+	);
 }
 
 export default Login;

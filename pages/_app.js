@@ -5,7 +5,7 @@
 */
 
 // dependencies
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { DAppProvider, ChainId } from "@usedapp/core";
 import settings from "../settings";
 
@@ -16,6 +16,7 @@ import "../styles/Header.css";
 import "../styles/Footer.css";
 import "../styles/Home.css";
 import "../styles/ArtProductDetailPage.css";
+import { AuthProvider } from "../hooks/auth";
 
 // global variables
 const config = {
@@ -26,23 +27,11 @@ const config = {
 };
 
 function MyApp({ Component, pageProps }) {
-	const [authToken, setAuthToken] = useState(null);
-	const [userId, setUserId] = useState(null);
-
-	useEffect(() => {
-		if (typeof window !== "undefined") {
-			if (localStorage.authToken) {
-				setAuthToken(localStorage.authToken);
-			}
-			if (localStorage.userId) {
-				setUserId(localStorage.userId);
-			}
-		}
-	});
-
 	return (
 		<DAppProvider config={config}>
-			<Component userId={userId} setUserId={setUserId} authToken={authToken} setAuthToken={setAuthToken} {...pageProps} />
+			<AuthProvider>
+				<Component {...pageProps} />
+			</AuthProvider>
 		</DAppProvider>
 	);
 }

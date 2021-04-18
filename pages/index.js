@@ -30,9 +30,7 @@ import settings from '../settings';
 //variables
 
 // COMPONENT STARTS HERE
-function Home(props) {
-
-  const { products, authToken, setAuthToken, userId, setUserId } = props;
+function Home({products}) {
   console.log(products)
 
   const { activate, account } = useEthers();
@@ -80,7 +78,7 @@ function Home(props) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Header userId={userId} setUserId={setUserId} authToken={authToken} setAuthToken={setAuthToken} />
+      <Header />
 
       <main className={styles.main}>
       <div id="homeContainer">

@@ -28,13 +28,13 @@ import Footer from '../../components/Footer';
 //assets and icons
 import styles from '../../styles/ProfilePage.module.css'
 import settings from '../../settings';
+import { useAuth } from '../../hooks/auth';
 
 //variables
 
 // COMPONENT STARTS HERE
 function ProfilePage(props) {
-
-    const { authToken, setAuthToken, userId } = props;
+    const { authToken } = useAuth();
     console.log("PROPPI", props)
 
     const { activate, account } = useEthers();
@@ -56,15 +56,14 @@ function ProfilePage(props) {
         try {
             const res = await fetch(settings.Endpoints.ApiUrl + `/UserInfo/me`, requestOptions)
             const profileData = await res.json();
+
+            console.log("RISPOSTA API", res)
+    
+            console.log("DATA", profileData)
         } catch (e) {
             console.log("ERROR", e)
             return console.error("[E]", e)
         }
-
-
-        console.log("RISPOSTA API", res)
-
-        console.log("DATA", profileData)
 
     }, [authToken]);
 
@@ -83,7 +82,7 @@ function ProfilePage(props) {
             <link rel="icon" href="/favicon.ico" />
         </Head>
 
-        <Header authToken={authToken} setAuthToken={setAuthToken} userId={userId} />
+        <Header />
 
         <div id={styles.profilePageContainer}>
             
