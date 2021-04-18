@@ -34,6 +34,7 @@ import TheatersIcon from '@material-ui/icons/Theaters';
 import DescriptionIcon from '@material-ui/icons/Description';
 import InfoIcon from '@material-ui/icons/Info';
 import ContactsIcon from '@material-ui/icons/Contacts';
+import httpClient from '../../utilities/http-client';
 
 //variables
 
@@ -185,7 +186,7 @@ function ArtProductDetailPage(props) {
                             <span className={"product-detail-box-title"}> <TheatersIcon />Video</span>
                             </AccordionSummary>
                             <AccordionDetails id="product-video-content-container">
-                                <iframe width="560" height="315" src="https://www.youtube.com/embed/e3YS6uZ87Ec" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                <iframe width="560" height="315" src="https://www.youtube.com/embed/e3YS6uZ87Ec" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
                             </AccordionDetails>
                         </Accordion>
                     </div>
@@ -257,25 +258,9 @@ function ArtProductDetailPage(props) {
 
 
 export async function getStaticProps(context) {
-
   console.log("CONTEXT", context.params.id)
   const artId = context.params.id;
-
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
-
-
-//   const requestOptions = {
-//     method: 'GET',
-//     headers: myHeaders,
-//     body: raw,
-//     redirect: 'follow'
-//   };
-
-//   const res = await fetch(settings.Endpoints.ApiUrl + `/PublicProduct`, requestOptions)
-
-//   const product = await res.json()
-
+//   const product = await httpClient.get("/PublicProduct");
 //   if (!product) {
 //     return {
 //       notFound: true,

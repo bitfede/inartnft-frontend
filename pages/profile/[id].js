@@ -29,6 +29,7 @@ import Footer from '../../components/Footer';
 import styles from '../../styles/ProfilePage.module.css'
 import settings from '../../settings';
 import { useAuth } from '../../hooks/auth';
+import httpClient from '../../utilities/http-client';
 
 //variables
 
@@ -40,31 +41,14 @@ function ProfilePage(props) {
     const { activate, account } = useEthers();
 
     useEffect( async () => {
-
         if (!authToken) { return }
-        // if (!userId) { return }
-
-        const myHeaders = new Headers();
-        myHeaders.append("Authorization", `Bearer ${authToken}`);
-
-        const requestOptions = {
-        method: 'GET',
-        headers: myHeaders
-        };
-
-
         try {
-            const res = await fetch(settings.Endpoints.ApiUrl + `/UserInfo/me`, requestOptions)
-            const profileData = await res.json();
-
-            console.log("RISPOSTA API", res)
-    
+            const profileData = await httpClient.get("/UserInfo/me")
             console.log("DATA", profileData)
         } catch (e) {
             console.log("ERROR", e)
             return console.error("[E]", e)
         }
-
     }, [authToken]);
 
 

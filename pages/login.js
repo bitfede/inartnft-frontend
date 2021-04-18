@@ -14,12 +14,14 @@ import { useEthers, account } from "@usedapp/core";
 import { useRouter } from "next/router";
 
 //custom hooks
+import { useAuth } from "../hooks/auth";
 import usePersonalSign from "../hooks/usePersonalSign";
 
 // library components
 import Head from "next/head";
 // import Link from 'next/link'
 import { Avatar, Accordion, AccordionSummary, Typography, AccordionDetails } from "@material-ui/core";
+import httpClient from "../utilities/http-client";
 
 // custom components
 import Header from "../components/Header";
@@ -27,8 +29,6 @@ import Footer from "../components/Footer";
 
 //assets and icons
 import styles from "../styles/Login.module.css";
-import settings from "../settings";
-import { useAuth } from "../hooks/auth";
 
 //variables
 
@@ -51,25 +51,11 @@ function Login(props) {
 
 	//functions ---
 	const logInWithMetamask = async account => {
-		let myHeaders = new Headers();
-		myHeaders.append("Content-Type", "application/json");
-
 		// address omar 0x7B2E869Cf25f80764F90835Eb8eA63B7dd925138
 		// address mio
-		let raw = JSON.stringify({
+		const loginAnswer = await httpClient.post("/User/Login", {
 			address: account,
 		});
-
-		let requestOptions = {
-			method: "POST",
-			headers: myHeaders,
-			body: raw,
-		};
-
-		const resp = await fetch(settings.Endpoints.ApiUrl + "/User/Login", requestOptions);
-
-		const loginAnswer = await resp.json();
-
 		console.log("API Answer:", loginAnswer);
 
 		if (loginAnswer.errormessage === "CREATE_USER") {
@@ -83,27 +69,10 @@ function Login(props) {
 			console.log("SIGNED:", sig);
 
 			// new web3 call
-			let myHeaders2 = new Headers();
-			myHeaders2.append("Content-Type", "application/json");
-
-			// address omar 0x7B2E869Cf25f80764F90835Eb8eA63B7dd925138
-			// address mio
-			let raw2 = loginAnswer;
-
-			raw2.sign = sig;
-
-			raw2 = JSON.stringify(raw2);
-
-			let requestOptions2 = {
-				method: "POST",
-				headers: myHeaders2,
-				body: raw2,
-			};
-
-			const resp2 = await fetch(settings.Endpoints.ApiUrl + "/User/Authentication", requestOptions2);
-
-			const loginAnswer2 = await resp2.json();
-
+			const loginAnswer2 = await httpClient.post("/User/Authentication", {
+				...loginAnswer,
+				sign: sig,
+			});
 			console.log(2, loginAnswer2);
 
 			const token = loginAnswer2.token.access_token;
@@ -120,27 +89,11 @@ function Login(props) {
 	};
 
 	const logInWithForm = async account => {
-		let myHeaders = new Headers();
-		myHeaders.append("Content-Type", "application/json");
-
-		// address omar 0x7B2E869Cf25f80764F90835Eb8eA63B7dd925138
-		// address mio
-		let raw = JSON.stringify({
+		const secondLoginAnswer = await httpClient.post("/User/Login", {
 			address: account,
 			username: username,
 			mail: userEmail,
 		});
-
-		let requestOptions = {
-			method: "POST",
-			headers: myHeaders,
-			body: raw,
-		};
-
-		const resp = await fetch(settings.Endpoints.ApiUrl + "/User/Login", requestOptions);
-
-		const secondLoginAnswer = await resp.json();
-
 		console.log("answer2:", secondLoginAnswer);
 
 		if (secondLoginAnswer.nonce) {
@@ -149,25 +102,10 @@ function Login(props) {
 			console.log("SIGNED:", sig);
 
 			// new web3 call
-			let myHeaders2 = new Headers();
-			myHeaders2.append("Content-Type", "application/json");
-
-			// address omar 0x7B2E869Cf25f80764F90835Eb8eA63B7dd925138 //debug
-			let raw2 = secondLoginAnswer;
-
-			raw2.sign = sig;
-
-			raw2 = JSON.stringify(raw2);
-
-			let requestOptions2 = {
-				method: "POST",
-				headers: myHeaders2,
-				body: raw2,
-			};
-
-			const resp2 = await fetch(settings.Endpoints.ApiUrl + "/User/Authentication", requestOptions2);
-
-			const loginAnswer2 = await resp2.json();
+			const loginAnswer2 = await httpClient.post("/User/Authentication", {
+				...secondLoginAnswer,
+				sign: sig,
+			});
 
 			const token = loginAnswer2.token.access_token;
 			// maybe save it in localstorage of browser to persist?

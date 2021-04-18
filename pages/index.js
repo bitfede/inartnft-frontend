@@ -25,7 +25,7 @@ import Footer from '../components/Footer';
 import styles from '../styles/Home.module.css';
 import LiveHelpSharpIcon from '@material-ui/icons/LiveHelpSharp';
 import ListAltSharpIcon from '@material-ui/icons/ListAltSharp';
-import settings from '../settings';
+import httpClient from '../utilities/http-client';
 
 //variables
 
@@ -146,29 +146,12 @@ function Home({products}) {
 
 
 export async function getStaticProps(context) {
-
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
-
-  var raw = JSON.stringify({
+  const products = await httpClient.post("/PublicListProducts", {
     "pagenumber": 0,
     "numberrecords": 5,
     "orderSelection": 0,
     "ascDesc": 0
   });
-
-  var requestOptions = {
-    method: 'POST',
-    headers: myHeaders,
-    body: raw,
-    redirect: 'follow'
-  };
-
-  const res = await fetch(settings.Endpoints.ApiUrl + `/PublicListProducts`, requestOptions);
-
-  console.log("RES", res);
-
-  const products = await res.json();
 
   if (!products) {
     return {
