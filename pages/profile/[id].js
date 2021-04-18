@@ -17,19 +17,13 @@ import { useEffect } from 'react';
 import { useEthers, account } from '@usedapp/core';
 
 // library components
-import Head from 'next/head'
-import Link from 'next/link'
 import {Avatar, Accordion, AccordionSummary, Typography, AccordionDetails} from '@material-ui/core';
-
-// custom components
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
 
 //assets and icons
 import styles from '../../styles/ProfilePage.module.css'
-import settings from '../../settings';
 import { useAuth } from '../../hooks/auth';
 import httpClient from '../../utilities/http-client';
+import Layout from '../../components/Layout';
 
 //variables
 
@@ -58,26 +52,12 @@ function ProfilePage(props) {
 
     //render
     return (
-
-    <div>
-
-        <Head>
-            <title>InArt NFT</title>
-            <link rel="icon" href="/favicon.ico" />
-        </Head>
-
-        <Header />
-
-        <div id={styles.profilePageContainer}>
-            
-
-
-        </div>
-
-        <Footer />
-
-    </div>
-  )
+        <Layout title="Profilo">
+            <div id={styles.profilePageContainer}>
+                Blah blah blah
+            </div>
+        </Layout>
+    );
 }
 
 

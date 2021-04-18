@@ -18,14 +18,11 @@ import { useAuth } from "../hooks/auth";
 import usePersonalSign from "../hooks/usePersonalSign";
 
 // library components
-import Head from "next/head";
-// import Link from 'next/link'
 import { Avatar, Accordion, AccordionSummary, Typography, AccordionDetails } from "@material-ui/core";
 import httpClient from "../utilities/http-client";
 
 // custom components
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import Layout from "../components/Layout";
 
 //assets and icons
 import styles from "../styles/Login.module.css";
@@ -164,18 +161,9 @@ function Login(props) {
 
 	//render
 	return (
-		<div>
-			<Head>
-				<title>InArt NFT</title>
-				<link rel="icon" href="/favicon.ico" />
-			</Head>
-
-			<Header authToken={authToken} />
-
+		<Layout title="Login">
 			{outputLoginSection()}
-
-			<Footer />
-		</div>
+		</Layout>
 	);
 }
 
