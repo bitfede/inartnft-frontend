@@ -29,7 +29,6 @@ import styles from "../styles/Login.module.css";
 
 //variables
 
-// COMPONENT STARTS HERE
 function Login(props) {
 	const { authToken, saveAuth } = useAuth();
 
@@ -55,26 +54,37 @@ function Login(props) {
 		});
 		console.log("API Answer:", loginAnswer);
 
-		if (loginAnswer.errormessage === "CREATE_USER") {
+        const loginAnswerStatus = loginAnswer.status;
+        // TODO: manage all the statuses here!
+
+        const loginAnswerData = loginAnswer.data;
+
+		if (loginAnswerData.errormessage === "CREATE_USER") {
 			setAuthStatus("CREATE_USER");
 			return;
 		}
 
-		if (loginAnswer.nonce) {
-			const nonce = loginAnswer.nonce;
+		if (loginAnswerData.nonce) {
+			const nonce = loginAnswerData.nonce;
 			const sig = await sign(nonce);
 			console.log("SIGNED:", sig);
 
-			// new web3 call
+			// new ajax call
 			const loginAnswer2 = await httpClient.post("/User/Authentication", {
-				...loginAnswer,
+				...loginAnswerData,
 				sign: sig,
 			});
 			console.log(2, loginAnswer2);
 
-			const token = loginAnswer2.token.access_token;
+            const loginAnswer2Status = loginAnswer2.status;
+            // TODO manage the statuses
+
+            const loginAnswer2Data = loginAnswer2.data;
+
+
+			const token = loginAnswer2Data.token.access_token;
 			// maybe save it in localstorage of browser to persist?
-			const userProfile = loginAnswer2._user;
+			const userProfile = loginAnswer2Data._user;
 			const profileId = userProfile.id;
 
 			saveAuth(token, profileId);
@@ -86,28 +96,41 @@ function Login(props) {
 	};
 
 	const logInWithForm = async account => {
-		const secondLoginAnswer = await httpClient.post("/User/Login", {
+		const formRegAnswer = await httpClient.post("/User/Login", {
 			address: account,
 			username: username,
 			mail: userEmail,
 		});
-		console.log("answer2:", secondLoginAnswer);
 
-		if (secondLoginAnswer.nonce) {
-			const nonce = secondLoginAnswer.nonce;
+
+		console.log("Form registration answer:", formRegAnswer);
+
+        const formRegAnswerStatus = formRegAnswer.status;
+        //TODO: manage statuses
+
+        const formRegAnswerData = formRegAnswer.data;
+
+		if (formRegAnswerData.nonce) {
+			const nonce = formRegAnswerData.nonce;
 			const sig = await sign(nonce);
 			console.log("SIGNED:", sig);
 
 			// new web3 call
-			const loginAnswer2 = await httpClient.post("/User/Authentication", {
-				...secondLoginAnswer,
+			const formRegAnswer2 = await httpClient.post("/User/Authentication", {
+				...formRegAnswerData,
 				sign: sig,
 			});
 
-			const token = loginAnswer2.token.access_token;
+
+            const formRegAnswer2Status = formRegAnswer2.status;
+            // TODO: manage all the statuses
+
+            const formRegAnswer2Data = formRegAnswer2.data;
+
+			const token = formRegAnswer2Data.token.access_token;
 			// maybe save it in localstorage of browser to persist?
-			const userProfile = loginAnswer2._user;
-			const profileId = loginAnswer2._user.id;
+			const userProfile = formRegAnswer2Data._user;
+			const profileId = userProfile.id;
 
 			saveAuth(token, profileId);
 
