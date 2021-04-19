@@ -11,6 +11,7 @@ import {Container, Row, Col, Card, Button, Modal} from 'react-bootstrap';
 import {Grid, TextField} from '@material-ui/core';
 import { MuiPickersUtilsProvider, KeyboardTimePicker, KeyboardDatePicker } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
+import apiUrl from '../../utils/apiConfig';
 
 //hooks
 import { useEffect } from 'react';
@@ -33,7 +34,7 @@ import styles from '../../styles/ProfilePage.module.css'
 // COMPONENT STARTS HERE
 function ProfilePage(props) {
 
-    const { authToken, setAuthToken, userId } = props;
+    const { authToken, setAuthToken, userId, setUserId } = props;
     console.log("PROPPI", props)
 
     const { activate, account } = useEthers();
@@ -41,31 +42,31 @@ function ProfilePage(props) {
     useEffect( async () => {
 
         if (!authToken) { return }
-        // if (!userId) { return }
+        if (!userId) { return }
 
         const myHeaders = new Headers();
         myHeaders.append("Authorization", `Bearer ${authToken}`);
 
         const requestOptions = {
-        method: 'GET',
-        headers: myHeaders
+            method: 'GET',
+            headers: myHeaders
         };
 
+        let res, profileData;
 
         try {
-            const res = await fetch(`http://79.143.177.8/api/UserInfo/me`, requestOptions)
-            const profileData = await res.json();
+            res = await fetch(`${apiUrl}/api/UserInfo/me`, requestOptions)
+            profileData = await res.json();
         } catch (e) {
             console.log("ERROR", e)
             return console.error("[E]", e)
         }
 
-
         console.log("RISPOSTA API", res)
 
         console.log("DATA", profileData)
 
-    }, [authToken]);
+    })
 
 
     //functions ---
@@ -82,11 +83,11 @@ function ProfilePage(props) {
             <link rel="icon" href="/favicon.ico" />
         </Head>
 
-        <Header authToken={authToken} setAuthToken={setAuthToken} userId={userId} />
+        <Header authToken={authToken} setAuthToken={setAuthToken} userId={userId} setUserId={setUserId} />
 
         <div id={styles.profilePageContainer}>
             
-
+            {}
 
         </div>
 

@@ -8,6 +8,7 @@
 //dependencies
 import {useState} from 'react';
 import {Container, Row, Col, Card, Button, Modal, Form} from 'react-bootstrap';
+import apiUrl from '../utils/apiConfig';
 
 //hooks
 import { useEffect } from 'react';
@@ -68,7 +69,7 @@ const logInWithMetamask = async (account) => {
         body: raw
     };
 
-    const resp = await fetch("http://79.143.177.8/api/User/Login", requestOptions)
+    const resp = await fetch(`${apiUrl}/api/User/Login`, requestOptions)
     
     const loginAnswer = await resp.json();
 
@@ -103,7 +104,7 @@ const logInWithMetamask = async (account) => {
             body: raw2
         };
 
-        const resp2 = await fetch("http://79.143.177.8/api/User/Authentication", requestOptions2)
+        const resp2 = await fetch(`${apiUrl}/api/User/Authentication`, requestOptions2)
         
         const loginAnswer2 = await resp2.json();
 
@@ -150,7 +151,7 @@ const logInWithForm = async (account) => {
         body: raw
     };
 
-    const resp = await fetch("http://79.143.177.8/api/User/Login", requestOptions)
+    const resp = await fetch(`${apiUrl}/api/User/Login`, requestOptions)
     
     const secondLoginAnswer = await resp.json();
 
@@ -168,7 +169,7 @@ const logInWithForm = async (account) => {
         myHeaders2.append("Content-Type", "application/json");
 
         // address omar 0x7B2E869Cf25f80764F90835Eb8eA63B7dd925138 //debug
-        let raw2 = loginAnswer
+        let raw2 = secondLoginAnswer
 
         raw2.sign = sig;
 
@@ -180,7 +181,7 @@ const logInWithForm = async (account) => {
             body: raw2
         };
 
-        const resp2 = await fetch("http://79.143.177.8/api/User/Authentication", requestOptions2)
+        const resp2 = await fetch(`${apiUrl}/api/User/Authentication`, requestOptions2)
         
         const loginAnswer2 = await resp2.json();
 
