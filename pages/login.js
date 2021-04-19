@@ -48,7 +48,7 @@ function Login(props) {
 	//functions ---
 	const logInWithMetamask = async account => {
 		// address omar 0x7B2E869Cf25f80764F90835Eb8eA63B7dd925138
-		// address mio
+		// wrap in try..catch
 		const loginAnswer = await httpClient.post("/User/Login", {
 			address: account,
 		});
@@ -69,7 +69,7 @@ function Login(props) {
 			const sig = await sign(nonce);
 			console.log("SIGNED:", sig);
 
-			// new ajax call
+			// new ajax call // wrap in try..catch
 			const loginAnswer2 = await httpClient.post("/User/Authentication", {
 				...loginAnswerData,
 				sign: sig,
@@ -96,6 +96,7 @@ function Login(props) {
 	};
 
 	const logInWithForm = async account => {
+		// wrap in try..catch
 		const formRegAnswer = await httpClient.post("/User/Login", {
 			address: account,
 			username: username,
@@ -115,7 +116,7 @@ function Login(props) {
 			const sig = await sign(nonce);
 			console.log("SIGNED:", sig);
 
-			// new web3 call
+			// new web3 call // wrap in try..catch 
 			const formRegAnswer2 = await httpClient.post("/User/Authentication", {
 				...formRegAnswerData,
 				sign: sig,
