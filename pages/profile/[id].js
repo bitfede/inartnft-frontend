@@ -6,7 +6,7 @@
 
 
 //dependencies
-import {useState} from 'react';
+import React, {useState} from 'react';
 import {Container, Row, Col, Card, Button, Modal} from 'react-bootstrap';
 import {Grid, TextField} from '@material-ui/core';
 import { MuiPickersUtilsProvider, KeyboardTimePicker, KeyboardDatePicker } from '@material-ui/pickers';
@@ -18,55 +18,42 @@ import { useEffect } from 'react';
 import { useEthers, account } from '@usedapp/core';
 
 // library components
-import Head from 'next/head'
-import Link from 'next/link'
 import {Avatar, Accordion, AccordionSummary, Typography, AccordionDetails} from '@material-ui/core';
-
-// custom components
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
 
 //assets and icons
 import styles from '../../styles/ProfilePage.module.css'
+import { useAuth } from '../../hooks/auth';
+import httpClient from '../../utilities/http-client';
+import Layout from '../../components/Layout';
 
 //variables
 
 // COMPONENT STARTS HERE
 function ProfilePage(props) {
-
-    const { authToken, setAuthToken, userId, setUserId } = props;
+    const { authToken } = useAuth();
     console.log("PROPPI", props)
 
     const { activate, account } = useEthers();
 
     useEffect( async () => {
-
         if (!authToken) { return }
         if (!userId) { return }
-
-        const myHeaders = new Headers();
-        myHeaders.append("Authorization", `Bearer ${authToken}`);
-
-        const requestOptions = {
-            method: 'GET',
-            headers: myHeaders
-        };
-
-        let res, profileData;
-
+        
         try {
-            res = await fetch(`${apiUrl}/api/UserInfo/me`, requestOptions)
-            profileData = await res.json();
+            const profileData = await httpClient.get("/UserInfo/me")
+            console.log("DATA", profileData)
         } catch (e) {
             console.log("ERROR", e)
             return console.error("[E]", e)
         }
 
+
         console.log("RISPOSTA API", res)
 
         console.log("DATA", profileData)
 
-    })
+
+    }, [authToken]);
 
 
     //functions ---
@@ -76,25 +63,12 @@ function ProfilePage(props) {
     //render
     return (
 
-    <div>
-
-        <Head>
-            <title>InArt NFT</title>
-            <link rel="icon" href="/favicon.ico" />
-        </Head>
-
-        <Header authToken={authToken} setAuthToken={setAuthToken} userId={userId} setUserId={setUserId} />
-
-        <div id={styles.profilePageContainer}>
-            
-            {}
-
-        </div>
-
-        <Footer />
-
-    </div>
-  )
+        <Layout title="Profilo">
+            <div id={styles.profilePageContainer}>
+                Blah blah blah
+            </div>
+        </Layout>
+    );
 }
 
 

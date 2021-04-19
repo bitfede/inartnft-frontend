@@ -6,10 +6,9 @@
 
 
 //dependencies
-import {useState} from 'react';
+import React, {useState} from 'react';
 import {Container, Row, Col, Card, Button, Modal} from 'react-bootstrap';
 import {Grid, TextField} from '@material-ui/core';
-// import {Link} from 'react-router-dom';
 import { MuiPickersUtilsProvider, KeyboardTimePicker, KeyboardDatePicker } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 
@@ -18,8 +17,6 @@ import { useEffect } from 'react';
 import { useEthers, account } from '@usedapp/core';
 
 // library components
-import Head from 'next/head'
-import Link from 'next/link'
 import {Avatar, Accordion, AccordionSummary, Typography, AccordionDetails} from '@material-ui/core';
 
 // custom components
@@ -34,6 +31,8 @@ import TheatersIcon from '@material-ui/icons/Theaters';
 import DescriptionIcon from '@material-ui/icons/Description';
 import InfoIcon from '@material-ui/icons/Info';
 import ContactsIcon from '@material-ui/icons/Contacts';
+import httpClient from '../../utilities/http-client';
+import Layout from '../../components/Layout';
 
 //variables
 
@@ -62,220 +61,192 @@ function ArtProductDetailPage(props) {
 
   //render
   return (
-
-    <div>
-
-        <Head>
-            <title>InArt NFT</title>
-            <link rel="icon" href="/favicon.ico" />
-        </Head>
-
-      <Header />
-
-    <div id="product-detail-container">
-        <Container>
-            <Row>
-                <Col xs={12} lg={6} >
-                    <img id="product-detail-img" src={product.urlImageVideoPresentation} />
-                    
-                    <div className="product-detail-expandable-section">
-                        <Accordion expanded={true}>
-                            <AccordionSummary
-                            expandIcon={false}
-                            aria-controls="panel1a-content"
-                            id="panel1a-header3"
-                            >
-                            <span className={"product-detail-box-title"}> <InfoIcon />Details</span>
-                            </AccordionSummary>
-                            <AccordionDetails id="product-details-content-container">
-                                <Typography>
-                                {product.describtion}
-                                </Typography>
-                            </AccordionDetails>
-                        </Accordion>
-                    </div>
-
-                    <div className="product-detail-expandable-section">
-                        <Accordion>
-                            <AccordionSummary
-                            expandIcon={<ExpandMore />}
-                            aria-controls="panel1a-content"
-                            id="panel1a-header4"
-                            >
-                            <span className={"product-detail-box-title"}> <DescriptionIcon />Documents</span>
-                            </AccordionSummary>
-                            <AccordionDetails id="product-documents-content-container">
-                            <Container fluid>
-                                <Row>
-                                    <Col xs={6}>
-                                        <img src={"/img/document1.png"} />
-                                        <span className="product-docs-section-title">Scientific Lab Tests</span>
-                                        <p>Lab analyses and reflectographic examinations are included.</p>
-                                    </Col>
-                                    <Col xs={6}>
-                                        <img src={"/img/document2.png"} />
-                                        <span className="product-docs-section-title">Condition report</span>
-                                        <p>“Atelier Arte” - Genève: Good conditions</p>
-                                    </Col>
-                                </Row>
-                                </Container> 
-                            </AccordionDetails>
-                        </Accordion>
-                    </div>
-
-                    <div className="product-detail-expandable-section">
-                        <Accordion>
-                            <AccordionSummary
-                            expandIcon={<ExpandMore />}
-                            aria-controls="panel1a-content"
-                            id="panel1a-header7"
-                            >
-                            <span className={"product-detail-box-title"}> <ContactsIcon />Gallery Info</span>
-                            </AccordionSummary>
-                            <AccordionDetails id="product-gallery-content-container">
-                                <Typography>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-                                    sit amet blandit leo lobortis eget.
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-                                    sit amet blandit leo lobortis eget.
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                </Typography>
-                            </AccordionDetails>
-                        </Accordion>
-                    </div>
-
-                </Col>
-                <Col xs={12} lg={6} >
-                    <h1 id="product-detail-main-title">{product.title.toUpperCase()}</h1>
-                    <Card id={"product-details-price-box"} >
-                        <h2 id="price-title-attribute">Current Price:</h2>
-                        <div className="pricetag-wrapper-div">
-                            <span id="product-pricetag-eth">3999.0279 Ξ</span> <span id="product-pricetag-usd">($8,664,733.74)</span>
+    <Layout title="Opera">
+        <div id="product-detail-container">
+            <Container>
+                <Row>
+                    <Col xs={12} lg={6} >
+                        <img id="product-detail-img" src={product.urlImageVideoPresentation} />
+                        
+                        <div className="product-detail-expandable-section">
+                            <Accordion expanded={true}>
+                                <AccordionSummary
+                                expandIcon={false}
+                                aria-controls="panel1a-content"
+                                id="panel1a-header3"
+                                >
+                                <span className={"product-detail-box-title"}> <InfoIcon />Details</span>
+                                </AccordionSummary>
+                                <AccordionDetails id="product-details-content-container">
+                                    <Typography>
+                                    {product.describtion}
+                                    </Typography>
+                                </AccordionDetails>
+                            </Accordion>
                         </div>
-                        <div className="button-group-cta-two">
-                            <Button id="product-buy-now-button">Buy Now</Button>
-                            <Button variant="success" onClick={() => setCalendarModalOpen(true)} id="product-book-meeting-button">Schedule a Meeting</Button>
-                        </div>
-                    </Card>
-
-                    <div id="product-description-container">
-                        <Accordion>
-                            <AccordionSummary
-                            expandIcon={<ExpandMore />}
-                            aria-controls="panel1a-content"
-                            id="panel1a-header"
-                            >
-                            <span className={"product-detail-box-title"}> <MenuBook />Storia Dell'Opera</span>
-                            </AccordionSummary>
-                            <AccordionDetails id="product-details-content-container">
-                            <Typography>
-                                {product.history}
-                            </Typography>
-                            </AccordionDetails>
-                        </Accordion>
-                    </div>
-
-                    <div className="product-detail-expandable-section">
-                        <Accordion>
-                            <AccordionSummary
-                            expandIcon={<ExpandMore />}
-                            aria-controls="panel1a-content"
-                            id="panel1a-header2"
-                            >
-                            <span className={"product-detail-box-title"}> <TheatersIcon />Video</span>
-                            </AccordionSummary>
-                            <AccordionDetails id="product-video-content-container">
-                                <iframe width="560" height="315" src="https://www.youtube.com/embed/e3YS6uZ87Ec" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                            </AccordionDetails>
-                        </Accordion>
-                    </div>
-
-
-                </Col>
-
-            </Row>
-        </Container>
-
-        <Modal
-            show={calendarModalOpen}
-            onHide={() => setCalendarModalOpen(false)}
-            backdrop="static"
-            keyboard={false}
-        >
-            <Modal.Header closeButton>
-            <Modal.Title>Modal title</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-            <p>Pick a date and a time</p>
-            <div>
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <Grid container justify="space-around" className={"datepickers-container"}>
-                    <KeyboardDatePicker
-                    margin="normal"
-                    id="date-picker-dialog"
-                    label="Date picker dialog"
-                    format="MM/dd/yyyy"
-                    value={selectedDate}
-                    onChange={() => handleDateChange()}
-                    KeyboardButtonProps={{
-                        'aria-label': 'change date',
-                    }}
-                    />
-                    <KeyboardTimePicker
-                    margin="normal"
-                    id="time-picker"
-                    label="Time picker"
-                    value={selectedDate}
-                    onChange={() => handleDateChange()}
-                    KeyboardButtonProps={{
-                        'aria-label': 'change time',
-                    }}
-                    />
-                </Grid>
-
-            </MuiPickersUtilsProvider>
-            </div>
-            <form className={"text-field-wrapper"} noValidate autoComplete="off">
-            <TextField id="email-textfield-modal" label="Email" />
-            </form>
-            </Modal.Body>
-            <Modal.Footer>
-            <Button variant="secondary" onClick={() => setCalendarModalOpen(false)}>
-                Close
-            </Button>
-            <Button variant="primary">OK</Button>
-            </Modal.Footer>
-        </Modal>
-        
-    </div>
-
-                    <Footer />
     
-    </div>
-  )
+                        <div className="product-detail-expandable-section">
+                            <Accordion>
+                                <AccordionSummary
+                                expandIcon={<ExpandMore />}
+                                aria-controls="panel1a-content"
+                                id="panel1a-header4"
+                                >
+                                <span className={"product-detail-box-title"}> <DescriptionIcon />Documents</span>
+                                </AccordionSummary>
+                                <AccordionDetails id="product-documents-content-container">
+                                <Container fluid>
+                                    <Row>
+                                        <Col xs={6}>
+                                            <img src={"/img/document1.png"} />
+                                            <span className="product-docs-section-title">Scientific Lab Tests</span>
+                                            <p>Lab analyses and reflectographic examinations are included.</p>
+                                        </Col>
+                                        <Col xs={6}>
+                                            <img src={"/img/document2.png"} />
+                                            <span className="product-docs-section-title">Condition report</span>
+                                            <p>“Atelier Arte” - Genève: Good conditions</p>
+                                        </Col>
+                                    </Row>
+                                    </Container> 
+                                </AccordionDetails>
+                            </Accordion>
+                        </div>
+    
+                        <div className="product-detail-expandable-section">
+                            <Accordion>
+                                <AccordionSummary
+                                expandIcon={<ExpandMore />}
+                                aria-controls="panel1a-content"
+                                id="panel1a-header7"
+                                >
+                                <span className={"product-detail-box-title"}> <ContactsIcon />Gallery Info</span>
+                                </AccordionSummary>
+                                <AccordionDetails id="product-gallery-content-container">
+                                    <Typography>
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
+                                        sit amet blandit leo lobortis eget.
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
+                                        sit amet blandit leo lobortis eget.
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                    </Typography>
+                                </AccordionDetails>
+                            </Accordion>
+                        </div>
+    
+                    </Col>
+                    <Col xs={12} lg={6} >
+                        <h1 id="product-detail-main-title">{product.title.toUpperCase()}</h1>
+                        <Card id={"product-details-price-box"} >
+                            <h2 id="price-title-attribute">Current Price:</h2>
+                            <div className="pricetag-wrapper-div">
+                                <span id="product-pricetag-eth">3999.0279 Ξ</span> <span id="product-pricetag-usd">($8,664,733.74)</span>
+                            </div>
+                            <div className="button-group-cta-two">
+                                <Button id="product-buy-now-button">Buy Now</Button>
+                                <Button variant="success" onClick={() => setCalendarModalOpen(true)} id="product-book-meeting-button">Schedule a Meeting</Button>
+                            </div>
+                        </Card>
+    
+                        <div id="product-description-container">
+                            <Accordion>
+                                <AccordionSummary
+                                expandIcon={<ExpandMore />}
+                                aria-controls="panel1a-content"
+                                id="panel1a-header"
+                                >
+                                <span className={"product-detail-box-title"}> <MenuBook />Storia Dell'Opera</span>
+                                </AccordionSummary>
+                                <AccordionDetails id="product-details-content-container">
+                                <Typography>
+                                    {product.history}
+                                </Typography>
+                                </AccordionDetails>
+                            </Accordion>
+                        </div>
+    
+                        <div className="product-detail-expandable-section">
+                            <Accordion>
+                                <AccordionSummary
+                                expandIcon={<ExpandMore />}
+                                aria-controls="panel1a-content"
+                                id="panel1a-header2"
+                                >
+                                <span className={"product-detail-box-title"}> <TheatersIcon />Video</span>
+                                </AccordionSummary>
+                                <AccordionDetails id="product-video-content-container">
+                                    <iframe width="560" height="315" src="https://www.youtube.com/embed/e3YS6uZ87Ec" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+                                </AccordionDetails>
+                            </Accordion>
+                        </div>
+    
+    
+                    </Col>
+    
+                </Row>
+            </Container>
+    
+            <Modal
+                show={calendarModalOpen}
+                onHide={() => setCalendarModalOpen(false)}
+                backdrop="static"
+                keyboard={false}
+            >
+                <Modal.Header closeButton>
+                <Modal.Title>Modal title</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                <p>Pick a date and a time</p>
+                <div>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <Grid container justify="space-around" className={"datepickers-container"}>
+                        <KeyboardDatePicker
+                        margin="normal"
+                        id="date-picker-dialog"
+                        label="Date picker dialog"
+                        format="MM/dd/yyyy"
+                        value={selectedDate}
+                        onChange={() => handleDateChange()}
+                        KeyboardButtonProps={{
+                            'aria-label': 'change date',
+                        }}
+                        />
+                        <KeyboardTimePicker
+                        margin="normal"
+                        id="time-picker"
+                        label="Time picker"
+                        value={selectedDate}
+                        onChange={() => handleDateChange()}
+                        KeyboardButtonProps={{
+                            'aria-label': 'change time',
+                        }}
+                        />
+                    </Grid>
+    
+                </MuiPickersUtilsProvider>
+                </div>
+                <form className={"text-field-wrapper"} noValidate autoComplete="off">
+                <TextField id="email-textfield-modal" label="Email" />
+                </form>
+                </Modal.Body>
+                <Modal.Footer>
+                <Button variant="secondary" onClick={() => setCalendarModalOpen(false)}>
+                    Close
+                </Button>
+                <Button variant="primary">OK</Button>
+                </Modal.Footer>
+            </Modal>
+            
+        </div>
+    </Layout>    
+  );
 }
 
 
 export async function getStaticProps(context) {
-
   console.log("CONTEXT", context.params.id)
   const artId = context.params.id;
-
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
-
-
-//   const requestOptions = {
-//     method: 'GET',
-//     headers: myHeaders,
-//     body: raw,
-//     redirect: 'follow'
-//   };
-
-//   const res = await fetch(`http://79.143.177.8/api/PublicProduct`, requestOptions)
-
-//   const product = await res.json()
-
+//   const product = await httpClient.get("/PublicProduct");
 //   if (!product) {
 //     return {
 //       notFound: true,

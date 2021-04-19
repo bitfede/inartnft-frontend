@@ -1,0 +1,31 @@
+{
+	"root": true,
+	"env": {
+		"browser": true,
+		"amd": true,
+		"node": true,
+		"es6": true
+	},
+	"parserOptions": {
+		"ecmaVersion": 2020,
+		"sourceType": "module",
+		"ecmaFeatures": {
+			"jsx": true
+		}
+	},
+	"plugins": [],
+	"extends": [
+		"eslint:recommended", // eslint default rules
+		"plugin:react/recommended" // eslint react rules (github.com/yannickcr/eslint-plugin-react)
+	],
+	"rules": {
+		"semi": ["warn", "always"],
+		"quotes": ["warn", "double"],
+		"no-unused-vars": "off",
+		"no-empty-pattern": "off",
+		"prefer-const": "warn",
+		"react/prop-types": "off",
+		"react/no-unescaped-entities": "off",
+		"react/display-name": "off"
+	}
+}

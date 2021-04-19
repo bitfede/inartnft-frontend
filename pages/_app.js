@@ -5,52 +5,35 @@
 */
 
 // dependencies
-import { useState, useEffect } from "react";
-import {DAppProvider, ChainId} from '@usedapp/core';
+import React from "react";
+import { DAppProvider, ChainId } from "@usedapp/core";
+import settings from "../settings";
 
 // assets
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../styles/globals.css';
-import '../styles/Header.css';
-import '../styles/Footer.css';
-import '../styles/Home.css';
-import '../styles/ArtProductDetailPage.css';
+import "bootstrap/dist/css/bootstrap.min.css";
+import "../styles/globals.css";
+import "../styles/Header.css";
+import "../styles/Footer.css";
+import "../styles/Home.css";
+import "../styles/ArtProductDetailPage.css";
+import { AuthProvider } from "../hooks/auth";
 
 // global variables
 const config = {
-  readOnlyChainId: ChainId.Mainnet,
-  readOnlyUrls: {
-    [ChainId.Mainnet]: 'https://mainnet.infura.io/v3/436480aea3834d7dacd1d2bfbe017f1c',
-  },
-}
+	readOnlyChainId: ChainId.Mainnet,
+	readOnlyUrls: {
+		[ChainId.Mainnet]: settings.Endpoints.Mainnet,
+	},
+};
 
 function MyApp({ Component, pageProps }) {
-
-  const [authToken, setAuthToken] = useState(null)
-  const [userId, setUserId] = useState(null)
-
-
-  useEffect( () => {
-
-    if (typeof window !== "undefined") {
-      if (localStorage.authToken) {
-        setAuthToken(localStorage.authToken);
-      }
-
-      if (localStorage.userId) {
-        console.log("USERIDDID", userId);
-        setUserId(localStorage.userId);
-      }
-    }
-
-  })
-
-
-  return (
-    <DAppProvider config={config}>
-      <Component userId={userId} setUserId={setUserId} authToken={authToken} setAuthToken={setAuthToken} {...pageProps} />
-    </DAppProvider>
-  )
+	return (
+		<DAppProvider config={config}>
+			<AuthProvider>
+				<Component {...pageProps} />
+			</AuthProvider>
+		</DAppProvider>
+	);
 }
 
-export default MyApp
+export default MyApp;
