@@ -34,7 +34,7 @@
     width: 100px;
     border-radius: 50px;
     top: 33%;
-    left: 22%;
+    left: 83px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -97,8 +97,9 @@
     max-height: 38px;
 }
 
-.pulse {
-    animation: pulse 1s infinite both;
+
+.avatarImageGridItem {
+    width: 100px;
 }
 
 
@@ -106,32 +107,52 @@
 
 
 
-/* KEYFRAMES */
-  @keyframes pulse {
-    from {
-      transform: scale3d(1, 1, 1);
-    }
-  
-    50% {
-      transform: scale3d(1.05, 1.05, 1.05);
-    }
-  
-    to {
-      transform: scale3d(1, 1, 1);
-    }
-  }
 
-  @keyframes pulseStrong {
+
+
+
+
+
+
+
+
+
+
+
+
+/*  ANIMATIONS AND KEYFRAMES */
+
+
+.pulse {
+    animation: pulse 1s infinite both;
+}
+
+
+
+@keyframes pulse {
     from {
-      transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
     }
-  
+
     50% {
-      transform: scale3d(1.55, 1.55, 1.55);
+    transform: scale3d(1.05, 1.05, 1.05);
     }
-  
+
     to {
-      transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
     }
-  }
-  
+}
+
+@keyframes pulseStrong {
+    from {
+    transform: scale3d(1, 1, 1);
+    }
+
+    50% {
+    transform: scale3d(1.55, 1.55, 1.55);
+    }
+
+    to {
+    transform: scale3d(1, 1, 1);
+    }
+}

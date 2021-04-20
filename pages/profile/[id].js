@@ -161,10 +161,25 @@ function ProfilePage(props) {
 
     }
 
-    const _handleNewImgUpload = (e) => {
+    const _handleNewImgUpload = async (e) => {
         const fileUploaded = e.target.files[0];
 
-        console.log(3, fileUploaded)
+        console.log("let's go, upload img")
+
+        const formData = new FormData();
+        formData.append('image',fileUploaded)
+        formData.append('tag',"Uploaded Profile Image")
+        const config = {
+            headers: {
+                'content-type': 'multipart/form-data'
+            }
+        }
+        
+        const responseUpload = await httpClient.post("/Upload/UploadImage", formData, config); 
+
+        //CHECK STATUSES!!!! TODO
+
+        console.log(4, responseUpload)
     }
 
 
@@ -210,8 +225,11 @@ function ProfilePage(props) {
             )
         } else {
             allTheImages = avatarImages.map( (imgData, i) => {
+                console.log(imgData, 5)
                 return (
-                    <Image src={imgData} />
+                    <a href="#">
+                        <Image className={styles.avatarImageGridItem} key={i} src={imgData.url} />
+                    </a>
                 )
             })
         }
