@@ -49,4 +49,39 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-top: 1rem;
 }
+
+.infoInputsContainer {
+    display: flex;
+}
+
+.infoInputsContainer button {
+    margin-left: .5rem;
+    max-height: 38px;
+}
+
+.pulse {
+    animation: pulse 1s infinite both;
+}
+
+
+
+
+
+
+/* KEYFRAMES */
+  @keyframes pulse {
+    from {
+      transform: scale3d(1, 1, 1);
+    }
+  
+    50% {
+      transform: scale3d(1.05, 1.05, 1.05);
+    }
+  
+    to {
+      transform: scale3d(1, 1, 1);
+    }
+  }
+  

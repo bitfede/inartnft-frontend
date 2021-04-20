@@ -83,22 +83,56 @@ function ProfilePage(props) {
 
 
     //functions ---
-    const _handleEditProfileInfo = (info, setter) => {
+    const _handleEditInfo = (e, info, setter) => {
+        e.preventDefault();
 
-        // USE SETTER FUNCTION 
         console.log("Editing", info)
-        setModalEditOpen(true);
-        setValueToEdit(info);
+        setValueToEdit(info)        
     }
 
-    // const _handleEditModalClose = () => {
+    const _handleDoneEditInfo = () => {
+        console.log("Done editing")
+        setValueToEdit(null)
+    }
 
-    // }
+    const _handleShowHideInfo = (info, setter) => {
+        setProfileModified(true)
+        setter(!info)
+    }
+
+    const _handleChangeInfoValue = (e, setter) => {
+        setProfileModified(true)
+        setter(e.target.value)
+    }
+
 
     //render functions
+    const renderInfo = (attributeName, info, setter) => {
+
+        if (valueToEdit === attributeName) {
+
+            return (
+                <Form>
+                    <Form.Group>
+                        <div className={styles.infoInputsContainer}>
+                            <Form.Control as={ attributeName === "descrizioneIstitutoProprietario" ? "textarea" : "input" } type="text" value={info} onChange={(e) => _handleChangeInfoValue(e, setter)} />
+                            <Button onClick={() => {_handleDoneEditInfo()}}>Done</Button>
+                        </div>
+                    </Form.Group>
+                </Form>
+            )
+        }
+
+
+        return (
+            <p>{info ? info : (<i>No info</i>)} <a href="#" onClick={(e) => _handleEditInfo(e, attributeName, setter)}><Edit fontSize="small" /></a> </p>
+        )
+    }
+
+
     const renderEditModal = () => {
         
-        console.log("value to edit:", )
+        console.log("value to edit:", valueToEdit)
         
         return (
             <Modal
@@ -136,50 +170,50 @@ function ProfilePage(props) {
                             <Typography id={styles.profileInfoTitle} variant="h4">Profile Info</Typography>
                             <Paper id={styles.profileInfoCard} elevation={3}>
                                 <Row id={styles.cardRowFirst}>
-                                <Col xs={12} md={12} lg={6}>
-                                    <div id={styles.avatarContainer}>
-                                        <Image src={urlImageVideoProfile} />
-                                    </div>
-                                    <div id={styles.userDataContainer}>
-                                        <div>
-                                            <h5>Email</h5>
-                                            <p>{userEmail ? userEmail : (<i>No info</i>)} <a href="#" onClick={() => _handleEditProfileInfo("userEmail", setUserEmail)}><Edit fontSize="small" /></a> </p>
+                                    <Col xs={12} md={12} lg={6}>
+                                        <div id={styles.avatarContainer}>
+                                            <Image src={urlImageVideoProfile} />
                                         </div>
-                                        <div>
-                                            <h5>Phone Number</h5>
-                                            <p>{phoneNumber ? phoneNumber : (<i>No info</i>)} <a href="#"><Edit fontSize="small" /></a> </p>
+                                        <div id={styles.userDataContainer}>
+                                            <div>
+                                                <h5>Email</h5>
+                                                { renderInfo("userEmail", userEmail, setUserEmail) }
+                                            </div>
+                                            <div>
+                                                <h5>Phone Number</h5>
+                                                { renderInfo("phoneNumber", phoneNumber, setPhoneNumber) }
+                                            </div>
+                                            <div>
+                                                <Form.Group controlId="formBasicCheckbox">
+                                                    <Form.Check value={mailIsVisible} onChange={() => _handleShowHideInfo(mailIsVisible, setMailIsVisible)} type="checkbox" label="Show email" />
+                                                </Form.Group>
+                                            </div>
+                                            <div>
+                                                <Form.Group controlId="formBasicCheckbox">
+                                                    <Form.Check value={telephoneIsVisible} onChange={() => setTelephoneIsVisible(!telephoneIsVisible)} type="checkbox" label="Show phone number" />
+                                                </Form.Group>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <Form.Group controlId="formBasicCheckbox">
-                                                <Form.Check value={mailIsVisible} onChange={() => setMailIsVisible(!mailIsVisible)} type="checkbox" label="Show email" />
-                                            </Form.Group>
+                                    </Col>
+                                    <Col xs={12} md={12} lg={6}>
+                                        <div id={styles.galleryDataContainer}>
+                                            <div>
+                                                <h5>Name</h5>
+                                                { renderInfo("nomeIstitutoProprietario", nomeIstitutoProprietario, setNomeIstitutoProprietario) }
+                                            </div>
+                                            <div>
+                                                <h5>Istituto</h5>
+                                                { renderInfo("titoloIstitutoProprietario", titoloIstitutoProprietario, setTitoloIstitutoProprietario) }
+                                            </div>
+                                            <div>
+                                                <h5>Descrizione</h5>
+                                                { renderInfo("descrizioneIstitutoProprietario", descrizioneIstitutoProprietario, setDescrizioneIstitutoProprietario) }
+                                            </div>
                                         </div>
-                                        <div>
-                                            <Form.Group controlId="formBasicCheckbox">
-                                                <Form.Check value={telephoneIsVisible} onChange={() => setTelephoneIsVisible(!telephoneIsVisible)} type="checkbox" label="Show phone number" />
-                                            </Form.Group>
-                                        </div>
-                                    </div>
-                                </Col>
-                                <Col xs={12} md={12} lg={6}>
-                                    <div id={styles.galleryDataContainer}>
-                                        <div>
-                                            <h5>Name</h5>
-                                            <p>{nomeIstitutoProprietario ? nomeIstitutoProprietario : (<i>No info</i>)} <a href="#"><Edit fontSize="small" /></a> </p>
-                                        </div>
-                                        <div>
-                                            <h5>Istituto</h5>
-                                            <p>{titoloIstitutoProprietario ? titoloIstitutoProprietario : (<i>No info</i>)} <a href="#"><Edit fontSize="small" /></a> </p>
-                                        </div>
-                                        <div>
-                                            <h5>Descrizione</h5>
-                                            <p>{descrizioneIstitutoProprietario ? descrizioneIstitutoProprietario : (<i>No info</i>)} <a href="#"><Edit fontSize="small" /></a> </p>
-                                        </div>
-                                    </div>
-                                </Col>
-                                <Col id={styles.saveButtonContainer} xs={12}>
-                                    <Button disabled={profileModified ? false : true}>Save profile</Button>
-                                </Col>
+                                    </Col>
+                                    <Col id={styles.saveButtonContainer} xs={12}>
+                                        <Button className={profileModified ? styles["pulse"] : ""} disabled={profileModified ? false : true}>Save profile</Button>
+                                    </Col>
                                 </Row>
 
                             </Paper>
