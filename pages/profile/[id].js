@@ -25,7 +25,7 @@ import {Paper, Avatar, Accordion, AccordionSummary, Typography, AccordionDetails
 import styles from '../../styles/ProfilePage.module.css'
 import { useAuth } from '../../hooks/auth';
 import httpClient from '../../utilities/http-client';
-import { ContactSupportOutlined, Edit } from '@material-ui/icons';
+import { Publish, Edit } from '@material-ui/icons';
 
 
 //variables
@@ -129,6 +129,7 @@ function ProfilePage(props) {
 
         console.log(postNewInfoAnswer, postNewInfoAnswer.data)
 
+        setProfileModified(false);
     }
 
 
@@ -169,6 +170,9 @@ function ProfilePage(props) {
                                     <Col xs={12} md={12} lg={6}>
                                         <div id={styles.avatarContainer}>
                                             <Image src={urlImageVideoProfile} />
+                                            <a href="#" className={styles.imageOverlay}>
+                                                   <Publish id={styles.imageOverlayIcon} /> 
+                                            </a>
                                         </div>
                                         <div id={styles.userDataContainer}>
                                             <div>
