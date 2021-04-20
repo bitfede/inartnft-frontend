@@ -48,6 +48,8 @@ function ProfilePage(props) {
     const [telephoneIsVisible, setTelephoneIsVisible] = useState(false);
     const [profileModified, setProfileModified] = useState(false);
     const [valueToEdit, setValueToEdit] = useState(null);
+    const [avatarImages, setAvatarImages] = useState(null);
+    const [avatarImgModal, setAvatarImgModal] = useState(false);
 
     useEffect( async () => {
         if (!authToken) { return }
@@ -76,8 +78,30 @@ function ProfilePage(props) {
         setMailIsVisible(mailIsVisible)
         setTelephoneIsVisible(telephoneIsVisible)
 
-
     }, [authToken]);
+
+    useEffect( async () => {
+        if (avatarImgModal === false) {
+            return
+        }
+
+        console.log("FETCHING IMAGES")
+        const payload = {
+            userid: userId
+        }
+        let userImgDataRaw
+        
+        try {
+            userImgDataRaw = await httpClient.post("/UserListImages", payload);
+        } catch (error) {
+            return console.error("[E]", error)
+        }
+
+        console.log("REPLY", userImgDataRaw)
+        const userImgData = userImgDataRaw.data
+        setAvatarImages(userImgData)
+
+    }, [avatarImgModal])
 
 
     //functions ---
@@ -131,6 +155,18 @@ function ProfilePage(props) {
         setProfileModified(false);
     }
 
+    const _handleChangeAvatar = (e) => {
+        e.preventDefault()
+        setAvatarImgModal(true)
+
+    }
+
+    const _handleNewImgUpload = (e) => {
+        const fileUploaded = e.target.files[0];
+
+        console.log(3, fileUploaded)
+    }
+
 
     //render functions
     const renderInfo = (attributeName, info, setter) => {
@@ -155,6 +191,48 @@ function ProfilePage(props) {
         )
     }
 
+    const renderModalBody = () => {
+
+        let allTheImages;
+
+        console.log("AVAA", avatarImages)
+
+        if (!avatarImages) {
+            return (
+                <p>Loading..</p>
+            )
+        }
+        
+        
+        if (avatarImages.length <= 0) {
+            allTheImages = (
+                <p>No images</p>
+            )
+        } else {
+            allTheImages = avatarImages.map( (imgData, i) => {
+                return (
+                    <Image src={imgData} />
+                )
+            })
+        }
+        
+
+
+
+        return (
+            <div>
+                <div >
+                    {allTheImages}
+                </div>
+                <hr />
+                <Form.File id="formcheck-api-regular">
+                    <Form.File.Label>File input</Form.File.Label>
+                    <Form.File.Input onChange={ (e) => _handleNewImgUpload(e)} />
+                </Form.File>
+            </div>
+        )
+    }
+
     //render
     return (
 
@@ -169,7 +247,7 @@ function ProfilePage(props) {
                                     <Col xs={12} md={12} lg={6}>
                                         <div id={styles.avatarContainer}>
                                             <Image src={urlImageVideoProfile} />
-                                            <a href="#" className={styles.imageOverlay}>
+                                            <a href="#" onClick={(e) => _handleChangeAvatar(e)} className={styles.imageOverlay}>
                                                    <Publish id={styles.imageOverlayIcon} /> 
                                             </a>
                                         </div>
@@ -223,7 +301,29 @@ function ProfilePage(props) {
                         </Col>
                     </Row>
                 </Container>
-            
+
+                <Modal
+                show={avatarImgModal}
+                onHide={() => setAvatarImgModal(false)}
+                size="lg"
+                aria-labelledby="contained-modal-title-vcenter"
+                centered
+                >
+                
+                    <Modal.Header closeButton>
+                        <Modal.Title id="contained-modal-title-vcenter">
+                        Change Profile Image    
+                        </Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        { renderModalBody() }
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button onClick={() => setAvatarImgModal(false)}>Close</Button>
+                    </Modal.Footer>
+                </Modal>
+
+
             </div>
         </Layout>
     );
