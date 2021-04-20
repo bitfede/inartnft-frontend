@@ -40,6 +40,10 @@
     margin-top: 0.5rem;
 }
 
+#metamaskAddressString {
+    overflow-x: scroll;
+}
+
 #userDataContainer {
     margin-top: 1.5rem;
     margin-left: .5rem;

@@ -25,7 +25,7 @@ import {Paper, Avatar, Accordion, AccordionSummary, Typography, AccordionDetails
 import styles from '../../styles/ProfilePage.module.css'
 import { useAuth } from '../../hooks/auth';
 import httpClient from '../../utilities/http-client';
-import { Edit } from '@material-ui/icons';
+import { ContactSupportOutlined, Edit } from '@material-ui/icons';
 
 
 //variables
@@ -104,6 +104,33 @@ function ProfilePage(props) {
         setter(e.target.value)
     }
 
+    const _handleSaveNewProfileInfo = async () => {
+        //build the payload
+        const payload = {
+            nomeIstitutoProprietario: nomeIstitutoProprietario,
+            titoloIstitutoProprietario: titoloIstitutoProprietario,
+            descrizioneIstitutoProprietario: descrizioneIstitutoProprietario,
+            phoneNumber: phoneNumber,
+            email: userEmail,
+            mailIsVisible: mailIsVisible,
+            telephoneIsVisible: telephoneIsVisible
+        }
+
+        let postNewInfoAnswer;
+        
+        try {
+            postNewInfoAnswer = await httpClient.post("/UserInfo/Update", payload);
+        } catch (error) {
+            return console.error("[E]", error)
+        }
+
+        // TODO handle all statuses here
+        console.log("STATUS", postNewInfoAnswer.status)
+
+        console.log(postNewInfoAnswer, postNewInfoAnswer.data)
+
+    }
+
 
     //render functions
     const renderInfo = (attributeName, info, setter) => {
@@ -159,13 +186,17 @@ function ProfilePage(props) {
                                             </div>
                                             <div>
                                                 <Form.Group controlId="formBasicCheckbox">
-                                                    <Form.Check value={telephoneIsVisible} onChange={() => setTelephoneIsVisible(!telephoneIsVisible)} type="checkbox" label="Show phone number" />
+                                                    <Form.Check value={telephoneIsVisible} onChange={() => _handleShowHideInfo(telephoneIsVisible, setTelephoneIsVisible)} type="checkbox" label="Show phone number" />
                                                 </Form.Group>
                                             </div>
                                         </div>
                                     </Col>
                                     <Col xs={12} md={12} lg={6}>
                                         <div id={styles.galleryDataContainer}>
+                                            <div>
+                                                <h5>Metamask Address</h5>
+                                                <p id={styles.metamaskAddressString}>{ account }</p>
+                                            </div>
                                             <div>
                                                 <h5>Name</h5>
                                                 { renderInfo("nomeIstitutoProprietario", nomeIstitutoProprietario, setNomeIstitutoProprietario) }
@@ -181,7 +212,7 @@ function ProfilePage(props) {
                                         </div>
                                     </Col>
                                     <Col id={styles.saveButtonContainer} xs={12}>
-                                        <Button className={profileModified ? styles["pulse"] : ""} disabled={profileModified ? false : true}>Save profile</Button>
+                                        <Button className={profileModified ? styles["pulse"] : ""} disabled={profileModified ? false : true} onClick={() => _handleSaveNewProfileInfo()} variant="success">Save new profile info  </Button>
                                     </Col>
                                 </Row>
 
