@@ -90,7 +90,7 @@ function Login(props) {
 			saveAuth(token, profileId);
 
 			setTimeout(function () {
-				router.push(`/`);
+				router.push(`/profile/${profileId}`);
 			}, 2000);
 		}
 	};

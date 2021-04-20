@@ -137,20 +137,21 @@ function Home({products}) {
 
 
 export async function getStaticProps(context) {
-  const products = await httpClient.post("/PublicListProducts", {
-    "pagenumber": 0,
-    "numberrecords": 5,
-    "orderSelection": 0,
-    "ascDesc": 0
-  });
+  
+  // const products = await httpClient.post("/PublicListProducts", {
+  //   "pagenumber": 0,
+  //   "numberrecords": 5,
+  //   "orderSelection": 0,
+  //   "ascDesc": 0
+  // });
 
-  if (!products) {
-    return {
-      notFound: true,
-    }
-  }
+  // if (!products) {
+  //   return {
+  //     notFound: true,
+  //   }
+  // }
 
-  console.log("PRODU", products);
+  // console.log("PRODU", products);
  
   const products2 = [
     {

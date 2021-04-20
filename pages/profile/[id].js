@@ -27,7 +27,6 @@ import { useAuth } from '../../hooks/auth';
 import httpClient from '../../utilities/http-client';
 import { Publish, Edit } from '@material-ui/icons';
 
-
 //variables
 
 // COMPONENT STARTS HERE
@@ -177,7 +176,7 @@ function ProfilePage(props) {
                                         <div id={styles.userDataContainer}>
                                             <div>
                                                 <h5>Email</h5>
-                                                { renderInfo("userEmail", userEmail, setUserEmail) }
+                                                <p>{ userEmail }</p>
                                             </div>
                                             <div>
                                                 <h5>Phone Number</h5>
@@ -185,12 +184,12 @@ function ProfilePage(props) {
                                             </div>
                                             <div>
                                                 <Form.Group controlId="formBasicCheckbox">
-                                                    <Form.Check value={mailIsVisible} onChange={() => _handleShowHideInfo(mailIsVisible, setMailIsVisible)} type="checkbox" label="Show email" />
+                                                    <Form.Check checked={mailIsVisible} onChange={() => _handleShowHideInfo(mailIsVisible, setMailIsVisible)} type="checkbox" label="Show email" />
                                                 </Form.Group>
                                             </div>
                                             <div>
                                                 <Form.Group controlId="formBasicCheckbox">
-                                                    <Form.Check value={telephoneIsVisible} onChange={() => _handleShowHideInfo(telephoneIsVisible, setTelephoneIsVisible)} type="checkbox" label="Show phone number" />
+                                                    <Form.Check checked={telephoneIsVisible} onChange={() => _handleShowHideInfo(telephoneIsVisible, setTelephoneIsVisible)} type="checkbox" label="Show phone number" />
                                                 </Form.Group>
                                             </div>
                                         </div>
