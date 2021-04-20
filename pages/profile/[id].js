@@ -48,7 +48,6 @@ function ProfilePage(props) {
     const [mailIsVisible, setMailIsVisible] = useState(false);
     const [telephoneIsVisible, setTelephoneIsVisible] = useState(false);
     const [profileModified, setProfileModified] = useState(false);
-    const [modalEditOpen, setModalEditOpen] = useState(false);
     const [valueToEdit, setValueToEdit] = useState(null);
 
     useEffect( async () => {
@@ -129,36 +128,6 @@ function ProfilePage(props) {
         )
     }
 
-
-    const renderEditModal = () => {
-        
-        console.log("value to edit:", valueToEdit)
-        
-        return (
-            <Modal
-                show={modalEditOpen}
-                onHide={() => setModalEditOpen(false)}
-                backdrop="static"
-                keyboard={false}
-                centered
-            >
-                <Modal.Header closeButton>
-                <Modal.Title>Modal title</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                I will not close if you click outside me. Don't even try to press
-                escape key.
-                </Modal.Body>
-                <Modal.Footer>
-                <Button variant="secondary" onClick={() => setModalEditOpen(false)}>
-                    Close
-                </Button>
-                <Button variant="primary">Understood</Button>
-                </Modal.Footer>
-            </Modal>
-        )
-    }
-
     //render
     return (
 
@@ -220,9 +189,7 @@ function ProfilePage(props) {
                         </Col>
                     </Row>
                 </Container>
-                
-                {renderEditModal()}
-
+            
             </div>
         </Layout>
     );
