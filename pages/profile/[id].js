@@ -7,22 +7,26 @@
 
 //dependencies
 import React, {useState} from 'react';
-// import { MuiPickersUtilsProvider, KeyboardTimePicker, KeyboardDatePicker } from '@material-ui/pickers';
-import DateFnsUtils from '@date-io/date-fns';
 
 //hooks
 import { useEffect } from 'react';
 import { useEthers, account } from '@usedapp/core';
 
-// library components
-import {Container, Row, Col, Image, Button, Form} from 'react-bootstrap';
+//my components
+import Layout from '../../components/Layout';
+
+
+//library components
+import {Container, Row, Col, Image, Button, Form, Modal} from 'react-bootstrap';
 import {Paper, Avatar, Accordion, AccordionSummary, Typography, AccordionDetails} from '@material-ui/core';
+
 
 //assets and icons
 import styles from '../../styles/ProfilePage.module.css'
 import { useAuth } from '../../hooks/auth';
 import httpClient from '../../utilities/http-client';
-import Layout from '../../components/Layout';
+import { Edit } from '@material-ui/icons';
+
 
 //variables
 
@@ -43,6 +47,9 @@ function ProfilePage(props) {
     const [userEmail, setUserEmail] = useState(null);
     const [mailIsVisible, setMailIsVisible] = useState(false);
     const [telephoneIsVisible, setTelephoneIsVisible] = useState(false);
+    const [profileModified, setProfileModified] = useState(false);
+    const [modalEditOpen, setModalEditOpen] = useState(false);
+    const [valueToEdit, setValueToEdit] = useState(null);
 
     useEffect( async () => {
         if (!authToken) { return }
@@ -76,8 +83,47 @@ function ProfilePage(props) {
 
 
     //functions ---
+    const _handleEditProfileInfo = (info, setter) => {
+
+        // USE SETTER FUNCTION 
+        console.log("Editing", info)
+        setModalEditOpen(true);
+        setValueToEdit(info);
+    }
+
+    // const _handleEditModalClose = () => {
+
+    // }
 
     //render functions
+    const renderEditModal = () => {
+        
+        console.log("value to edit:", )
+        
+        return (
+            <Modal
+                show={modalEditOpen}
+                onHide={() => setModalEditOpen(false)}
+                backdrop="static"
+                keyboard={false}
+                centered
+            >
+                <Modal.Header closeButton>
+                <Modal.Title>Modal title</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                I will not close if you click outside me. Don't even try to press
+                escape key.
+                </Modal.Body>
+                <Modal.Footer>
+                <Button variant="secondary" onClick={() => setModalEditOpen(false)}>
+                    Close
+                </Button>
+                <Button variant="primary">Understood</Button>
+                </Modal.Footer>
+            </Modal>
+        )
+    }
 
     //render
     return (
@@ -89,47 +135,60 @@ function ProfilePage(props) {
                         <Col>
                             <Typography id={styles.profileInfoTitle} variant="h4">Profile Info</Typography>
                             <Paper id={styles.profileInfoCard} elevation={3}>
-                                <div id={styles.avatarContainer}>
-                                    <Image src={urlImageVideoProfile} />
-                                </div>
-                                <div class={styles.formContainer}>
-                                    <Form>
-                                        <Form.Group controlId="userEmail">
-                                            <Form.Label>Email</Form.Label>
-                                            <Form.Control as={"input"} type="string" placeholder=""
-                                            value={userEmail}
-                                            onChange={(e => setUserEmail(e.target.value))} />
-                                        </Form.Group>
-                                        <Form.Group controlId="nomeIstitutoProprietario">
-                                            <Form.Label>Name</Form.Label>
-                                            <Form.Control as={"input"} type="string" placeholder=""
-                                            value={nomeIstitutoProprietario}
-                                            onChange={(e => setNomeIstitutoProprietario(e.target.value))} />
-                                        </Form.Group>
-                                        <Form.Group controlId="titoloIstitutoProprietario">
-                                            <Form.Label>Institution</Form.Label>
-                                            <Form.Control as={"input"} type="string" placeholder=""
-                                            value={titoloIstitutoProprietario}
-                                            onChange={(e => setTitoloIstitutoProprietario(e.target.value))} />
-                                        </Form.Group>
-                                        <Form.Group controlId="descrizioneIstitutoProprietario">
-                                            <Form.Label>Description</Form.Label>
-                                            <Form.Control as={'textarea'} type="string" placeholder=""
-                                            value={descrizioneIstitutoProprietario}
-                                            onChange={(e => setDescrizioneIstitutoProprietario(e.target.value))} />
-                                        </Form.Group>
-                                        <Form.Group controlId="phoneNumber">
-                                            <Form.Label>Phone Number</Form.Label>
-                                            <Form.Control as={'input'} type="string" placeholder=""
-                                            value={phoneNumber}
-                                            onChange={(e => setPhoneNumber(e.target.value))} />
-                                        </Form.Group>
-                                    </Form>
-                                </div>
+                                <Row id={styles.cardRowFirst}>
+                                <Col xs={12} md={12} lg={6}>
+                                    <div id={styles.avatarContainer}>
+                                        <Image src={urlImageVideoProfile} />
+                                    </div>
+                                    <div id={styles.userDataContainer}>
+                                        <div>
+                                            <h5>Email</h5>
+                                            <p>{userEmail ? userEmail : (<i>No info</i>)} <a href="#" onClick={() => _handleEditProfileInfo("userEmail", setUserEmail)}><Edit fontSize="small" /></a> </p>
+                                        </div>
+                                        <div>
+                                            <h5>Phone Number</h5>
+                                            <p>{phoneNumber ? phoneNumber : (<i>No info</i>)} <a href="#"><Edit fontSize="small" /></a> </p>
+                                        </div>
+                                        <div>
+                                            <Form.Group controlId="formBasicCheckbox">
+                                                <Form.Check value={mailIsVisible} onChange={() => setMailIsVisible(!mailIsVisible)} type="checkbox" label="Show email" />
+                                            </Form.Group>
+                                        </div>
+                                        <div>
+                                            <Form.Group controlId="formBasicCheckbox">
+                                                <Form.Check value={telephoneIsVisible} onChange={() => setTelephoneIsVisible(!telephoneIsVisible)} type="checkbox" label="Show phone number" />
+                                            </Form.Group>
+                                        </div>
+                                    </div>
+                                </Col>
+                                <Col xs={12} md={12} lg={6}>
+                                    <div id={styles.galleryDataContainer}>
+                                        <div>
+                                            <h5>Name</h5>
+                                            <p>{nomeIstitutoProprietario ? nomeIstitutoProprietario : (<i>No info</i>)} <a href="#"><Edit fontSize="small" /></a> </p>
+                                        </div>
+                                        <div>
+                                            <h5>Istituto</h5>
+                                            <p>{titoloIstitutoProprietario ? titoloIstitutoProprietario : (<i>No info</i>)} <a href="#"><Edit fontSize="small" /></a> </p>
+                                        </div>
+                                        <div>
+                                            <h5>Descrizione</h5>
+                                            <p>{descrizioneIstitutoProprietario ? descrizioneIstitutoProprietario : (<i>No info</i>)} <a href="#"><Edit fontSize="small" /></a> </p>
+                                        </div>
+                                    </div>
+                                </Col>
+                                <Col id={styles.saveButtonContainer} xs={12}>
+                                    <Button disabled={profileModified ? false : true}>Save profile</Button>
+                                </Col>
+                                </Row>
+
                             </Paper>
                         </Col>
                     </Row>
                 </Container>
+                
+                {renderEditModal()}
+
             </div>
         </Layout>
     );
