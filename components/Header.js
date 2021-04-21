@@ -61,7 +61,7 @@ const Header = () => {
 	
 			const loginAnswerData = loginAnswer.data;
 
-			console.log("DATAAAAA", loginAnswerData);
+			console.log("Get first user data", loginAnswerData);
 			setIsLoading(false);
 			setUserData(loginAnswerData)
 
@@ -153,7 +153,7 @@ const Header = () => {
 
 		const loginAnswerData = loginAnswer.data;
 
-		console.log("DATAAAAA", loginAnswerData);
+		console.log("Res registration API call", loginAnswerData);
 
 		setIsLoading(false);
 		setUserData(loginAnswerData)
