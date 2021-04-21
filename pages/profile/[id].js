@@ -7,6 +7,7 @@
 
 //dependencies
 import React, {useState} from 'react';
+import httpClient from '../../utilities/http-client';
 
 //hooks
 import { useEffect } from 'react';
@@ -24,7 +25,6 @@ import {Paper, Avatar, Accordion, AccordionSummary, Typography, AccordionDetails
 //assets and icons
 import styles from '../../styles/ProfilePage.module.css'
 import { useAuth } from '../../hooks/auth';
-import httpClient from '../../utilities/http-client';
 import { Publish, Edit } from '@material-ui/icons';
 
 //variables

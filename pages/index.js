@@ -30,7 +30,7 @@ import Layout from '../components/Layout';
 
 // COMPONENT STARTS HERE
 function Home({products}) {
-  console.log(products)
+  // console.log(products)
 
   const { activate, account } = useEthers();
 
