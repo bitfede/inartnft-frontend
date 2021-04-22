@@ -9,6 +9,11 @@ import React from "react";
 import { DAppProvider, ChainId } from "@usedapp/core";
 import settings from "../settings";
 
+//hooks
+import { AuthProvider } from "../hooks/auth";
+import { LoginProvider } from "../hooks/login";
+
+
 // assets
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../styles/globals.css";
@@ -16,7 +21,6 @@ import "../styles/Header.css";
 import "../styles/Footer.css";
 import "../styles/Home.css";
 import "../styles/ArtProductDetailPage.css";
-import { AuthProvider } from "../hooks/auth";
 
 // global variables
 const config = {
@@ -30,7 +34,9 @@ function MyApp({ Component, pageProps }) {
 	return (
 		<DAppProvider config={config}>
 			<AuthProvider>
-				<Component {...pageProps} />
+        <LoginProvider>
+          <Component {...pageProps} />
+        </LoginProvider>
 			</AuthProvider>
 		</DAppProvider>
 	);
