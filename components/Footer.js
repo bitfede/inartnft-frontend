@@ -2,8 +2,6 @@ import {Container, Row, Col } from 'react-bootstrap';
 
 const Footer = (props) => {
 
-    const authenticated = false;
-
     return (
         <div className={"footer-container"}>
             <Container>
