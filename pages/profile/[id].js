@@ -32,7 +32,7 @@ import { Publish, Edit, TrendingUpOutlined } from '@material-ui/icons';
 // COMPONENT STARTS HERE
 function ProfilePage(props) {
     const { authToken } = useAuth();
-    console.log("PROPPI", props)
+    // console.log("PROPPI", props)
 
     const { activate, account } = useEthers();
 
@@ -53,35 +53,15 @@ function ProfilePage(props) {
     const [imageToUpload, setImageToUpload] = useState(null);
     const [isUploading, setIsUploading] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
+    const [isChangingProfilePic, setIsChangingProfilePic] = useState(false);
 
     useEffect( async () => {
         if (!authToken) { return }
+        if (isChangingProfilePic) {return}
 
-        let profileRawData;
-        
-        try {
-            profileRawData = await httpClient.get("/UserInfo/me")
-        } catch (e) {
-            return console.error("[E]", e)
-        }
+        fetchProfileData()
 
-        const profileData = profileRawData.data;
-
-        console.log("DATA", profileData);
-
-        const {id, nomeIstitutoProprietario, titoloIstitutoProprietario, descrizioneIstitutoProprietario, urlImageVideoProfile, phoneNumber, email, mailIsVisible, telephoneIsVisible} = profileData;
-
-        setUserId(id)
-        setNomeIstitutoProprietario(nomeIstitutoProprietario);
-        setTitoloIstitutoProprietario(titoloIstitutoProprietario);
-        setDescrizioneIstitutoProprietario(descrizioneIstitutoProprietario);
-        setUrlImageVideoProfile(urlImageVideoProfile);
-        setPhoneNumber(phoneNumber);
-        setUserEmail(email);
-        setMailIsVisible(mailIsVisible)
-        setTelephoneIsVisible(telephoneIsVisible)
-
-    }, [authToken]);
+    }, [authToken, isChangingProfilePic]);
 
     useEffect( async () => {
 
@@ -94,15 +74,41 @@ function ProfilePage(props) {
 
 
     //functions ---
+    const fetchProfileData = async () => {
+        let profileRawData;
+        
+        try {
+            profileRawData = await httpClient.get("/UserInfo/me")
+        } catch (e) {
+            return console.error("[E]", e)
+        }
+
+        const profileData = profileRawData.data;
+
+        // console.log("DATA", profileData);
+
+        const {id, nomeIstitutoProprietario, titoloIstitutoProprietario, descrizioneIstitutoProprietario, urlImageVideoProfile, phoneNumber, email, mailIsVisible, telephoneIsVisible} = profileData;
+
+        setUserId(id)
+        setNomeIstitutoProprietario(nomeIstitutoProprietario);
+        setTitoloIstitutoProprietario(titoloIstitutoProprietario);
+        setDescrizioneIstitutoProprietario(descrizioneIstitutoProprietario);
+        setUrlImageVideoProfile(urlImageVideoProfile);
+        setPhoneNumber(phoneNumber);
+        setUserEmail(email);
+        setMailIsVisible(mailIsVisible)
+        setTelephoneIsVisible(telephoneIsVisible)
+    }
+
     const _handleEditInfo = (e, info, setter) => {
         e.preventDefault();
 
-        console.log("Editing", info)
+        // console.log("Editing", info)
         setValueToEdit(info)        
     }
 
     const _handleDoneEditInfo = () => {
-        console.log("Done editing")
+        // console.log("Done editing")
         setValueToEdit(null)
     }
 
@@ -137,9 +143,9 @@ function ProfilePage(props) {
         }
 
         // TODO handle all statuses here
-        console.log("STATUS", postNewInfoAnswer.status)
+        // console.log("STATUS", postNewInfoAnswer.status)
 
-        console.log(postNewInfoAnswer, postNewInfoAnswer.data)
+        // console.log(postNewInfoAnswer, postNewInfoAnswer.data)
 
         setProfileModified(false);
     }
@@ -151,7 +157,7 @@ function ProfilePage(props) {
     }
 
     const fetchProfileImages = async () => {
-        console.log("FETCHING IMAGES")
+        // console.log("FETCHING IMAGES")
         const payload = {
             userid: userId
         }
@@ -163,7 +169,7 @@ function ProfilePage(props) {
             return console.error("[E]", error)
         }
 
-        console.log("REPLY", userImgDataRaw)
+        // console.log("REPLY", userImgDataRaw)
         const userImgData = userImgDataRaw.data
         setAvatarImages(userImgData)
     }
@@ -171,7 +177,7 @@ function ProfilePage(props) {
     const _handleNewImgUpload = (e) => {
         const fileUploaded = e.target.files[0];
 
-        console.log("let's go, upload img")
+        // console.log("let's go, upload img")
 
         setImageToUpload(fileUploaded);
     }
@@ -190,18 +196,34 @@ function ProfilePage(props) {
         const responseUpload = await httpClient.post("/Upload/UploadImage", formData, config); 
         //CHECK HTTP STATUSES!!!!! TO-DO
 
-        console.log(4, responseUpload)
+        // console.log(4, responseUpload)
         setIsUploading(false)
-    }
-
-    const saveSelectedProfileInfo = () => {
-        console.log("yaman")
+        setSelectedImage(avatarImages.length - 1)
     }
 
     const selectImageFromGrid = (e) => {
         const imgIdSelected = e.target.attributes.imgid.nodeValue;
         
         setSelectedImage(imgIdSelected);
+
+    }
+
+    const saveSelectedProfileInfo = async () => {
+        setIsChangingProfilePic(true)
+        const newProfileImg = avatarImages[selectedImage];
+
+        const payload = {
+            urlImageVideoProfile : newProfileImg.url
+        }
+
+        const changeProfileImgResponse = await httpClient.post("/UserInfo/UpdateProfileImage", payload);
+
+        // console.log("THE REPLY FOR CHANGING PROFILE PIC", changeProfileImgResponse)
+
+        setSelectedImage(null);
+        setIsChangingProfilePic(false);
+        setImageToUpload(null);
+        setAvatarImgModal(false);
 
     }
 
@@ -233,8 +255,6 @@ function ProfilePage(props) {
 
         let allTheImages;
 
-        console.log("AVAA", avatarImages)
-
         if (!avatarImages) {
             return (
                 <p>Loading..</p>
@@ -248,7 +268,6 @@ function ProfilePage(props) {
             )
         } else {
             allTheImages = avatarImages.map( (imgData, i) => {
-                console.log(imgData, 5)
 
                 const currentImgId = i.toString()
                 let selectedClass = "";
@@ -256,8 +275,6 @@ function ProfilePage(props) {
                 if (currentImgId === selectedImage) {
                     selectedClass = styles.selectedImage;
                 }
-
-                console.log(selectedClass, 111)
 
                 return (
                     <a key={i} href="#1" >
@@ -272,15 +289,15 @@ function ProfilePage(props) {
 
         return (
             <div>
-                <div >
-                    {allTheImages}
-                </div>
-                <hr />
                 { isUploading ? (<Spinner className={styles.loadingSpinner} animation="grow" />) : (<Form.File id="formcheck-api-regular">
                     <Form.File.Label>File input</Form.File.Label>
                     <Form.File.Input onChange={ (e) => _handleNewImgUpload(e)} />
                     <Button id={styles.uploadSelectedImgBtn} disabled={!imageToUpload ? true : false} onClick={()=> _finalizeImageUpload()} size="sm" variant="success" >Upload</Button>
                 </Form.File>) }
+                <hr />
+                <div >
+                    {allTheImages}
+                </div>
             </div>
         )
     }
@@ -371,7 +388,7 @@ function ProfilePage(props) {
                         { renderModalBody() }
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button disabled={!selectedImage ? true : false} onClick={() => saveSelectedProfileInfo()} variant="success">Select Profile Image</Button>
+                        {isChangingProfilePic ? (<Button variant="primary" disabled><Spinner as="span" animation="grow" size="sm" role="status" aria-hidden="true" />Loading...</Button>) : (<Button disabled={!selectedImage ? true : false} onClick={() => saveSelectedProfileInfo()} variant="success">Select Profile Image</Button>)}
                         <Button onClick={() => setAvatarImgModal(false)}>Close</Button>
                     </Modal.Footer>
                 </Modal>

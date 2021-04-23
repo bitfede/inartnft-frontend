@@ -29,8 +29,11 @@ import Layout from '../components/Layout';
 //variables
 
 // COMPONENT STARTS HERE
-function Home({products}) {
-  // console.log(products)
+function Home(props) {
+
+  const {products, apiCall} = props;
+
+  console.log("proppi", props)
 
   const { activate, account } = useEthers();
 
@@ -125,7 +128,9 @@ function Home({products}) {
 								</div>
 							</Col>
 							<Col xs={12} lg={8}>
-								<Row className="cards-wrapper">{renderProductCards()}</Row>
+								<Row className="cards-wrapper">
+                  { products.length > 0 ? renderProductCards() : (<p id={styles.noProductsText}>There are no art pieces available to purchase</p>)}
+                </Row>
 							</Col>
 						</Row>
 					</Container>
@@ -138,22 +143,18 @@ function Home({products}) {
 
 export async function getStaticProps(context) {
   
-  // const products = await httpClient.post("/PublicListProducts", {
-  //   "pagenumber": 0,
-  //   "numberrecords": 5,
-  //   "orderSelection": 0,
-  //   "ascDesc": 0
-  // });
+  const productsApiCall = await httpClient.post("/PublicListProducts", {
+    "pagenumber": 0,
+    "numberrecords": 5,
+    "orderSelection": 0,
+    "ascDesc": 0
+  });
 
-  // if (!products) {
-  //   return {
-  //     notFound: true,
-  //   }
-  // }
+  //DA FARE: WRAP IN TRY CATCH AND MANAGE STATUSES (!!!)
 
-  // console.log("PRODU", products);
+  const productsData = productsApiCall.data;
  
-  const products2 = [
+  const products2 = [ 
     {
       "id": "76b32f75-d15d-4e0a-b60d-93e29dfa77cc",
       "userId": null,
@@ -187,7 +188,10 @@ export async function getStaticProps(context) {
   ]
 
   return {
-    props: { products: products2 }, // will be passed to the page component as props
+    props: {
+      // products: products2, //use fake data
+      products: productsData //use real data
+     },
   }
 }
 

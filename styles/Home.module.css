@@ -1,3 +1,7 @@
 .cardArtDescription {
   color: #585858;
 }
+
+#noProductsText {
+  margin-left: 1rem;
+}
