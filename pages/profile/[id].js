@@ -18,14 +18,14 @@ import Layout from '../../components/Layout';
 
 
 //library components
-import {Container, Row, Col, Image, Button, Form, Modal} from 'react-bootstrap';
+import {Container, Row, Col, Image, Button, Form, Modal, Spinner} from 'react-bootstrap';
 import {Paper, Avatar, Accordion, AccordionSummary, Typography, AccordionDetails} from '@material-ui/core';
 
 
 //assets and icons
 import styles from '../../styles/ProfilePage.module.css'
 import { useAuth } from '../../hooks/auth';
-import { Publish, Edit } from '@material-ui/icons';
+import { Publish, Edit, TrendingUpOutlined } from '@material-ui/icons';
 
 //variables
 
@@ -50,6 +50,9 @@ function ProfilePage(props) {
     const [valueToEdit, setValueToEdit] = useState(null);
     const [avatarImages, setAvatarImages] = useState(null);
     const [avatarImgModal, setAvatarImgModal] = useState(false);
+    const [imageToUpload, setImageToUpload] = useState(null);
+    const [isUploading, setIsUploading] = useState(false);
+    const [selectedImage, setSelectedImage] = useState(null);
 
     useEffect( async () => {
         if (!authToken) { return }
@@ -81,27 +84,13 @@ function ProfilePage(props) {
     }, [authToken]);
 
     useEffect( async () => {
-        if (avatarImgModal === false) {
-            return
-        }
 
-        console.log("FETCHING IMAGES")
-        const payload = {
-            userid: userId
-        }
-        let userImgDataRaw
-        
-        try {
-            userImgDataRaw = await httpClient.post("/UserListImages", payload);
-        } catch (error) {
-            return console.error("[E]", error)
-        }
+        if (avatarImgModal === false) { return }
+        if (isUploading === true) { return }
 
-        console.log("REPLY", userImgDataRaw)
-        const userImgData = userImgDataRaw.data
-        setAvatarImages(userImgData)
+        fetchProfileImages()
 
-    }, [avatarImgModal])
+    }, [avatarImgModal, isUploading])
 
 
     //functions ---
@@ -161,13 +150,36 @@ function ProfilePage(props) {
 
     }
 
-    const _handleNewImgUpload = async (e) => {
+    const fetchProfileImages = async () => {
+        console.log("FETCHING IMAGES")
+        const payload = {
+            userid: userId
+        }
+        let userImgDataRaw
+        
+        try {
+            userImgDataRaw = await httpClient.post("/UserListImages", payload);
+        } catch (error) {
+            return console.error("[E]", error)
+        }
+
+        console.log("REPLY", userImgDataRaw)
+        const userImgData = userImgDataRaw.data
+        setAvatarImages(userImgData)
+    }
+
+    const _handleNewImgUpload = (e) => {
         const fileUploaded = e.target.files[0];
 
         console.log("let's go, upload img")
 
+        setImageToUpload(fileUploaded);
+    }
+
+    const _finalizeImageUpload = async () => {
+        setIsUploading(true)
         const formData = new FormData();
-        formData.append('image',fileUploaded)
+        formData.append('image',imageToUpload)
         formData.append('tag',"Uploaded Profile Image")
         const config = {
             headers: {
@@ -176,10 +188,21 @@ function ProfilePage(props) {
         }
         
         const responseUpload = await httpClient.post("/Upload/UploadImage", formData, config); 
-
-        //CHECK STATUSES!!!! TODO
+        //CHECK HTTP STATUSES!!!!! TO-DO
 
         console.log(4, responseUpload)
+        setIsUploading(false)
+    }
+
+    const saveSelectedProfileInfo = () => {
+        console.log("yaman")
+    }
+
+    const selectImageFromGrid = (e) => {
+        const imgIdSelected = e.target.attributes.imgid.nodeValue;
+        
+        setSelectedImage(imgIdSelected);
+
     }
 
 
@@ -226,9 +249,19 @@ function ProfilePage(props) {
         } else {
             allTheImages = avatarImages.map( (imgData, i) => {
                 console.log(imgData, 5)
+
+                const currentImgId = i.toString()
+                let selectedClass = "";
+                
+                if (currentImgId === selectedImage) {
+                    selectedClass = styles.selectedImage;
+                }
+
+                console.log(selectedClass, 111)
+
                 return (
-                    <a href="#">
-                        <Image className={styles.avatarImageGridItem} key={i} src={imgData.url} />
+                    <a key={i} href="#1" >
+                        <Image imgid={i} onClick={(e) => selectImageFromGrid(e)} className={`${styles.avatarImageGridItem} ${selectedClass}`} key={i} src={imgData.url} />
                     </a>
                 )
             })
@@ -243,10 +276,11 @@ function ProfilePage(props) {
                     {allTheImages}
                 </div>
                 <hr />
-                <Form.File id="formcheck-api-regular">
+                { isUploading ? (<Spinner className={styles.loadingSpinner} animation="grow" />) : (<Form.File id="formcheck-api-regular">
                     <Form.File.Label>File input</Form.File.Label>
                     <Form.File.Input onChange={ (e) => _handleNewImgUpload(e)} />
-                </Form.File>
+                    <Button id={styles.uploadSelectedImgBtn} disabled={!imageToUpload ? true : false} onClick={()=> _finalizeImageUpload()} size="sm" variant="success" >Upload</Button>
+                </Form.File>) }
             </div>
         )
     }
@@ -337,6 +371,7 @@ function ProfilePage(props) {
                         { renderModalBody() }
                     </Modal.Body>
                     <Modal.Footer>
+                        <Button disabled={!selectedImage ? true : false} onClick={() => saveSelectedProfileInfo()} variant="success">Select Profile Image</Button>
                         <Button onClick={() => setAvatarImgModal(false)}>Close</Button>
                     </Modal.Footer>
                 </Modal>
