@@ -111,15 +111,28 @@
     border: green solid 4px;
 }
 
+#NftProductsTitle {
+    text-align: center;
+    margin-top: 2rem;
+    margin-bottom: 1.5rem;
+}
 
+#userProductsRow {
+    padding: 1.5rem;
+}
 
+#userProductsContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
 
-
-
-
-
-
-
+.theProductCard {
+    width: 250px;
+    margin-bottom: 1rem;
+    margin-right: 1rem;
+}
 
 
 

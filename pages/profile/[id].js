@@ -18,14 +18,15 @@ import Layout from '../../components/Layout';
 
 
 //library components
+import Link from 'next/link';
 import {Container, Row, Col, Image, Button, Form, Modal, Spinner} from 'react-bootstrap';
-import {Paper, Avatar, Accordion, AccordionSummary, Typography, AccordionDetails} from '@material-ui/core';
+import {Paper, Card, CardActionArea, CardMedia, CardContent, CardActions, Typography, AccordionDetails} from '@material-ui/core';
 
 
 //assets and icons
 import styles from '../../styles/ProfilePage.module.css'
 import { useAuth } from '../../hooks/auth';
-import { Publish, Edit, TrendingUpOutlined } from '@material-ui/icons';
+import { Publish, Edit } from '@material-ui/icons';
 
 //variables
 
@@ -46,6 +47,7 @@ function ProfilePage(props) {
     const [userEmail, setUserEmail] = useState(null);
     const [mailIsVisible, setMailIsVisible] = useState(false);
     const [telephoneIsVisible, setTelephoneIsVisible] = useState(false);
+    const [userProducts, setUserProducts] = useState(null);
     const [profileModified, setProfileModified] = useState(false);
     const [valueToEdit, setValueToEdit] = useState(null);
     const [avatarImages, setAvatarImages] = useState(null);
@@ -85,9 +87,9 @@ function ProfilePage(props) {
 
         const profileData = profileRawData.data;
 
-        // console.log("DATA", profileData);
+        console.log("DATA", profileData);
 
-        const {id, nomeIstitutoProprietario, titoloIstitutoProprietario, descrizioneIstitutoProprietario, urlImageVideoProfile, phoneNumber, email, mailIsVisible, telephoneIsVisible} = profileData;
+        const {id, nomeIstitutoProprietario, titoloIstitutoProprietario, descrizioneIstitutoProprietario, urlImageVideoProfile, phoneNumber, email, mailIsVisible, telephoneIsVisible, userProducts} = profileData;
 
         setUserId(id)
         setNomeIstitutoProprietario(nomeIstitutoProprietario);
@@ -98,6 +100,7 @@ function ProfilePage(props) {
         setUserEmail(email);
         setMailIsVisible(mailIsVisible)
         setTelephoneIsVisible(telephoneIsVisible)
+        setUserProducts(userProducts)
     }
 
     const _handleEditInfo = (e, info, setter) => {
@@ -302,6 +305,55 @@ function ProfilePage(props) {
         )
     }
 
+    const renderUserProductsGrid = () => {
+
+        if (!userProducts) {
+            return (
+                <p>Loading..</p>
+            )
+        }
+
+        if (userProducts.length === 0) {
+            return 
+        }
+
+        const theProducts = userProducts.map( (product, i) => {
+            return (
+                <Card className={styles.theProductCard}>
+                    <CardActionArea>
+                    <CardMedia
+                        component={"img"}
+                        image="https://picsum.photos/200"
+                        title="Contemplative Reptile"
+                    />
+                    <CardContent>
+                        <Typography gutterBottom variant="h5" component="h2">
+                        NFT
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary" component="p">
+                        This is the description of an nft
+                        </Typography>
+                    </CardContent>
+                    </CardActionArea>
+                    <CardActions>
+                    <Button size="small" color="primary">
+                        Share
+                    </Button>
+                    <Button size="small" color="primary">
+                        Learn More
+                    </Button>
+                    </CardActions>
+                </Card>
+            )
+        })
+
+        return (
+            <>
+                {theProducts}
+            </>
+        )
+    }
+
     //render
     return (
 
@@ -367,6 +419,42 @@ function ProfilePage(props) {
                                 </Row>
 
                             </Paper>
+
+                            {/* user products section below */}
+
+                            <Typography id={styles.NftProductsTitle} variant="h4">NFT Products</Typography>
+                            <Paper id={styles.profileInfoCard} elevation={3}>
+                                <Row id={styles.userProductsRow}>
+                                    <Col id={styles.userProductsContainer}>
+                                        {renderUserProductsGrid()}
+
+                                        <Card className={styles.theProductCard}>
+                                            <CardActionArea>
+                                            <CardMedia
+                                                component={"img"}
+                                                image="https://gazette-eu-west2.azureedge.net/media/39152/sothebys-imps-and-mods-2318nedi.jpg"
+                                                title="Sell your Art"
+                                            />
+                                            <CardContent>
+                                                <Typography gutterBottom variant="h5" component="h2">
+                                                Sell Art
+                                                </Typography>
+                                                <Typography variant="body2" color="textSecondary" component="p">
+                                                Sell your art now!
+                                                </Typography>
+                                            </CardContent>
+                                            </CardActionArea>
+                                            <CardActions>
+                                            <Link href="/profile/new-nft"><Button size="small" color="primary">
+                                                Create New NFT Art
+                                            </Button></Link>
+                                            </CardActions>
+                                        </Card>
+                                    </Col>
+                                </Row>
+                            </Paper>
+
+
                         </Col>
                     </Row>
                 </Container>
