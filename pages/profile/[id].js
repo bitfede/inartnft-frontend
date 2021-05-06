@@ -357,7 +357,7 @@ function ProfilePage(props) {
     //render
     return (
 
-        <Layout title="Profilo">
+        <Layout title="Profile">
             <div id={styles.profilePageContainer}>
                 <Container>
                     <Row>
@@ -445,9 +445,11 @@ function ProfilePage(props) {
                                             </CardContent>
                                             </CardActionArea>
                                             <CardActions>
-                                            <Link href="/profile/new-nft"><Button size="small" color="primary">
-                                                Create New NFT Art
-                                            </Button></Link>
+                                                <Link href="/profile/new-nft">
+                                                    <Button size="small" color="primary">
+                                                    Create New NFT Art
+                                                    </Button>
+                                                </Link>
                                             </CardActions>
                                         </Card>
                                     </Col>

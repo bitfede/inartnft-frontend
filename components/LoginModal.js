@@ -21,7 +21,7 @@ const LoginModal = (props) => {
             userData
         } = props;
 
-    const { account } = useEthers();
+    const { account, activateBrowserWallet } = useEthers();
 
     //UI render functions
     const renderLoginModalContent = () => {

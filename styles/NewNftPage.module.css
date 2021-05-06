@@ -1,0 +1,14 @@
+#createNftPageContainer {
+    min-height: 70vh;
+}
+
+#profileInfoTitle {
+    text-align: center;
+    margin-top: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.inputAreaRow {
+    margin-top: 5rem;
+    margin-bottom: 1rem;
+}
