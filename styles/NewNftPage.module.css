@@ -12,3 +12,14 @@
     margin-top: 5rem;
     margin-bottom: 1rem;
 }
+
+#mainImgModalBodyContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#mainImgModalPreview {
+    width: 80%;
+}

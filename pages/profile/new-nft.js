@@ -46,7 +46,9 @@ function NewNftPage(props) {
     const [newNftDescription, setNewNftDescription] = useState(null);
     const [newNftHistory, setNewNftHistory] = useState(null);
     const [newNftMainImage, setNewNftMainImage] = useState(null);
+    const [mainImgModalOpen, setMainImgModalOpen] = useState(false);
     const [mainImgToUpload, setMainImgToUpload] = useState(null);
+    const [mainImgToUploadPreview, setMainImgToUploadPreview] = useState(null);
 
 
     useEffect( async () => {
@@ -54,6 +56,19 @@ function NewNftPage(props) {
         console.log("PAGE LOADED! LETS MAKE NFTs")
 
     }, []);
+
+    useEffect ( async () => {
+
+        if (!mainImgToUpload) return
+
+        const fileSrc = URL.createObjectURL(mainImgToUpload);
+
+        setMainImgToUploadPreview(fileSrc)
+
+        // free memory when ever this component is unmounted
+        return () => URL.revokeObjectURL(objectUrl)
+
+    }, [mainImgToUpload])
 
     const progressSteps = [ "NFT Title", "Add info", "Upload documents", "Finalize" ];
 
@@ -88,9 +103,26 @@ function NewNftPage(props) {
 
         const fileUploaded = e.target.files[0];
 
-        setMainImgToUpload(fileUploaded)
+        console.log(fileUploaded, "<><>")
+
+        setMainImgModalOpen(true);
+        setMainImgToUpload(fileUploaded);
 
         return
+    }
+
+    const _handleCloseImgPreviewModal = () => {
+
+        setMainImgToUpload(null);
+        setMainImgToUploadPreview(null);
+        setMainImgModalOpen(false);
+        
+
+    }
+
+    const _handleResetImg = (e) => {
+        //empty the FileList every time you click on choose file
+        e.target.value = "";
     }
 
     //render functions
@@ -153,7 +185,7 @@ function NewNftPage(props) {
                         </Form.Group>
 
                         <Form.Group controlId="formHistory">
-                            <Form.File onChange={ (e) => _handleNewNftMainImg(e)} id="exampleFormControlFile1" label="NFT Image" />
+                            <Form.File onClick={(e) => _handleResetImg(e)} onChange={ (e) => _handleNewNftMainImg(e)} id="exampleFormControlFile1" label="NFT Image" />
                             <Form.Text className="text-muted">
                                 (The history of the art piece)
                             </Form.Text>
@@ -171,6 +203,17 @@ function NewNftPage(props) {
 
         return (
             <p>Diocane!!!</p>
+        )
+    }
+
+    const renderMainImgModalBody = () => {
+
+        
+
+        return (
+            <div id={styles.mainImgModalBodyContainer}>
+                <Image id={styles.mainImgModalPreview} src={mainImgToUploadPreview} />
+            </div>
         )
     }
 
@@ -200,6 +243,30 @@ function NewNftPage(props) {
                     </Row>
                 </Col>
             </Container>
+
+            
+            <Modal
+                show={mainImgModalOpen}
+                onHide={() => _handleCloseImgPreviewModal()}
+                size="lg"
+                aria-labelledby="contained-modal-title-vcenter"
+                centered
+                >
+                
+                    <Modal.Header closeButton>
+                        <Modal.Title id="contained-modal-title-vcenter">
+                            Do you want to upload this image?
+                        </Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        { renderMainImgModalBody() }
+                    </Modal.Body>
+                    <Modal.Footer>
+                        { <Button onClick={() => console.log()} variant="success">Yes</Button> }
+                        <Button onClick={() => _handleCloseImgPreviewModal()} variant="danger" >No</Button>
+                    </Modal.Footer>
+                </Modal>
+
         </Layout>
     );
 }
