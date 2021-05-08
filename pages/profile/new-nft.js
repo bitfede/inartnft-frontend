@@ -49,6 +49,7 @@ function NewNftPage(props) {
     const [mainImgModalOpen, setMainImgModalOpen] = useState(false);
     const [mainImgToUpload, setMainImgToUpload] = useState(null);
     const [mainImgToUploadPreview, setMainImgToUploadPreview] = useState(null);
+    const [isMainImgUploading, setIsMainImgUploading] = useState(false)
 
 
     useEffect( async () => {
@@ -123,6 +124,28 @@ function NewNftPage(props) {
     const _handleResetImg = (e) => {
         //empty the FileList every time you click on choose file
         e.target.value = "";
+    }
+
+    const _handleFinalizeMainImgUpload = async () => {
+        console.log("DAI MONA, ADESSO MANDA l'IMG AL SERVER")
+        
+        setIsMainImgUploading(true)
+        const formData = new FormData();
+        formData.append('image', mainImgToUpload)
+        formData.append('tag', newNftTitle)
+        const config = {
+            headers: {
+                'content-type': 'multipart/form-data'
+            }
+        }
+        
+        const responseUpload = await httpClient.post("/Upload/UploadImage", formData, config); 
+        //CHECK HTTP STATUSES!!!!! TO-DO
+
+        console.log("UPL MAIN IMG", responseUpload)
+        setIsMainImgUploading(false)
+        // setMainImgToUploadPreview()
+
     }
 
     //render functions
@@ -262,7 +285,7 @@ function NewNftPage(props) {
                         { renderMainImgModalBody() }
                     </Modal.Body>
                     <Modal.Footer>
-                        { <Button onClick={() => console.log()} variant="success">Yes</Button> }
+                        { <Button onClick={() => _handleFinalizeMainImgUpload()} variant="success">Yes</Button> }
                         <Button onClick={() => _handleCloseImgPreviewModal()} variant="danger" >No</Button>
                     </Modal.Footer>
                 </Modal>
