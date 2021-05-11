@@ -1,5 +1,6 @@
 #createNftPageContainer {
     min-height: 70vh;
+    margin-bottom: 1.5rem;
 }
 
 #profileInfoTitle {
@@ -22,4 +23,8 @@
 
 #mainImgModalPreview {
     width: 80%;
+}
+
+#mainImgThumbnailPreview {
+    width: 45%;
 }

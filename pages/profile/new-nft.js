@@ -143,8 +143,12 @@ function NewNftPage(props) {
         //CHECK HTTP STATUSES!!!!! TO-DO
 
         console.log("UPL MAIN IMG", responseUpload)
+
+        const uploadedImgUrl = responseUpload.data.url
         setIsMainImgUploading(false)
-        // setMainImgToUploadPreview()
+        setNewNftMainImage(uploadedImgUrl)
+        setMainImgModalOpen(false);
+        setMainImgToUploadPreview(null)
 
     }
 
@@ -210,8 +214,11 @@ function NewNftPage(props) {
                         <Form.Group controlId="formHistory">
                             <Form.File onClick={(e) => _handleResetImg(e)} onChange={ (e) => _handleNewNftMainImg(e)} id="exampleFormControlFile1" label="NFT Image" />
                             <Form.Text className="text-muted">
-                                (The history of the art piece)
+                                (The main image of the art piece)
                             </Form.Text>
+                            {
+                                newNftMainImage ? (<Image src={newNftMainImage} id={styles.mainImgThumbnailPreview} />) : ""
+                            }
                         </Form.Group>
 
 

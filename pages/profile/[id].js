@@ -161,13 +161,13 @@ function ProfilePage(props) {
 
     const fetchProfileImages = async () => {
         // console.log("FETCHING IMAGES")
-        const payload = {
-            userid: userId
-        }
+        // const payload = {
+        //     userid: userId
+        // }
         let userImgDataRaw
         
         try {
-            userImgDataRaw = await httpClient.post("/UserListImages", payload);
+            userImgDataRaw = await httpClient.get("/UserListFiles  ");
         } catch (error) {
             return console.error("[E]", error)
         }
@@ -199,7 +199,7 @@ function ProfilePage(props) {
         const responseUpload = await httpClient.post("/Upload/UploadImage", formData, config); 
         //CHECK HTTP STATUSES!!!!! TO-DO
 
-        // console.log(4, responseUpload)
+        console.log(4, responseUpload)
         setIsUploading(false)
         setSelectedImage(avatarImages.length - 1)
     }
@@ -319,7 +319,7 @@ function ProfilePage(props) {
 
         const theProducts = userProducts.map( (product, i) => {
             return (
-                <Card className={styles.theProductCard}>
+                <Card key={i} className={styles.theProductCard}>
                     <CardActionArea>
                     <CardMedia
                         component={"img"}
