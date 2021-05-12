@@ -71,7 +71,7 @@ function NewNftPage(props) {
 
     }, [mainImgToUpload])
 
-    const progressSteps = [ "NFT Title", "Add info", "Upload documents", "Finalize" ];
+    const progressSteps = [ "NFT Title", "Add info", "Upload multimedia", "Finalize" ];
 
 
     //functions ---
@@ -93,7 +93,21 @@ function NewNftPage(props) {
 
         if (activeStep === 1) {
             //here as payload put object with id, avatar url, descr, etc
-            const payload = JSON.stringify("")
+            const payload = {
+                id: newNftId,
+                urlImageVideoPresentation: newNftMainImage,
+                author: newNftAuthor,
+                contract_price: newNftPrice,
+                title: newNftTitle,
+                describtion: newNftDescription,
+                history: newNftHistory
+            }
+
+
+            const res = await httpClient.post("/InsertProducts/Update", payload);
+            //TODO Handle all statuses, 200, 400 etc
+
+            console.log("POST PROD INFO", res)
         }
 
         let currentStep = activeStep;
