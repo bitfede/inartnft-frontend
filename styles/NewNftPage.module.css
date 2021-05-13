@@ -28,3 +28,8 @@
 #mainImgThumbnailPreview {
     width: 45%;
 }
+
+.mainTitleOfSection {
+    margin-top: 2rem;
+    margin-bottom: 1.5rem;
+}

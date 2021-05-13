@@ -27,6 +27,8 @@ import {Stepper, Step, StepLabel, CardMedia, CardContent, CardActions, Typograph
 
 //assets and icons
 import styles from '../../styles/NewNftPage.module.css';
+import { ContactSupportOutlined } from '@material-ui/icons';
+import { set } from 'date-fns';
 
 //variables
 
@@ -38,19 +40,25 @@ function NewNftPage(props) {
     const { activate, account } = useEthers();
 
     //state
+    //step 1
     const [activeStep, setActiveStep] = useState(0);
     const [newNftTitle, setNewNftTitle] = useState(null);
+    //step 2
     const [newNftId, setNewNftId] = useState(null);
     const [newNftAuthor, setNewNftAuthor] = useState(null);
     const [newNftPrice, setNewNftPrice] = useState(null);
     const [newNftDescription, setNewNftDescription] = useState(null);
     const [newNftHistory, setNewNftHistory] = useState(null);
     const [newNftMainImage, setNewNftMainImage] = useState(null);
-    const [mainImgModalOpen, setMainImgModalOpen] = useState(false);
-    const [mainImgToUpload, setMainImgToUpload] = useState(null);
-    const [mainImgToUploadPreview, setMainImgToUploadPreview] = useState(null);
-    const [isMainImgUploading, setIsMainImgUploading] = useState(false)
-
+    const [imgModalOpen, setImgModalOpen] = useState(false);
+    const [imgToUpload, setImgToUpload] = useState(null);
+    const [imgDestination, setImgDestination] = useState(null);
+    const [imgToUploadPreview, setImgToUploadPreview] = useState(null);
+    const [isImgUploading, setIsImgUploading] = useState(false);
+    //step 3
+    const [encryptedDocs, setEncryptedDocs] = useState([]);
+    const [additionalImage, setAdditionalImage] = useState(null);
+    const [newNftVideo, setNewNftVideo] = useState(null)
 
     useEffect( async () => {
 
@@ -60,16 +68,21 @@ function NewNftPage(props) {
 
     useEffect ( async () => {
 
-        if (!mainImgToUpload) return
+        if (!imgToUpload) return
 
-        const fileSrc = URL.createObjectURL(mainImgToUpload);
+        console.log(1111, imgToUpload.type)
 
-        setMainImgToUploadPreview(fileSrc)
+        const fileSrc = URL.createObjectURL(imgToUpload);
+
+        console.log(2222, fileSrc)
+
+
+        setImgToUploadPreview(fileSrc)
 
         // free memory when ever this component is unmounted
         return () => URL.revokeObjectURL(objectUrl)
 
-    }, [mainImgToUpload])
+    }, [imgToUpload])
 
     const progressSteps = [ "NFT Title", "Add info", "Upload multimedia", "Finalize" ];
 
@@ -110,27 +123,44 @@ function NewNftPage(props) {
             console.log("POST PROD INFO", res)
         }
 
+        if (activeStep === 2) {
+
+            //upload docs
+            console.log(encryptedDocs, "ready")
+
+            //upload img
+            console.log(additionalImage, "ready")
+
+            //upload video
+            
+
+            return
+
+        }
+
         let currentStep = activeStep;
         setActiveStep(currentStep + 1)
     }
 
-    const _handleNewNftMainImg = (e) => {
+    const _handleNewImg = (e, imageType) => {
 
         const fileUploaded = e.target.files[0];
 
-        console.log(fileUploaded, "<><>")
 
-        setMainImgModalOpen(true);
-        setMainImgToUpload(fileUploaded);
+        setImgToUpload(fileUploaded);
+        setImgDestination(imageType)
+
+        setImgModalOpen(true);
+
 
         return
     }
 
     const _handleCloseImgPreviewModal = () => {
 
-        setMainImgToUpload(null);
-        setMainImgToUploadPreview(null);
-        setMainImgModalOpen(false);
+        setImgToUpload(null);
+        setImgToUploadPreview(null);
+        setImgModalOpen(false);
         
 
     }
@@ -140,12 +170,18 @@ function NewNftPage(props) {
         e.target.value = "";
     }
 
-    const _handleFinalizeMainImgUpload = async () => {
+    const _handleFinalizeImgUpload = async () => {
         console.log("DAI MONA, ADESSO MANDA l'IMG AL SERVER")
-        
-        setIsMainImgUploading(true)
+
+        setIsImgUploading(true)
+
+        let apiPath = "UploadImage";
+        if (imgToUpload.type.split("/")[0] === "video") {
+            apiPath = "UploadVideo"
+        }
+ 
         const formData = new FormData();
-        formData.append('image', mainImgToUpload)
+        formData.append('image', imgToUpload)
         formData.append('tag', newNftTitle)
         const config = {
             headers: {
@@ -153,17 +189,38 @@ function NewNftPage(props) {
             }
         }
         
-        const responseUpload = await httpClient.post("/Upload/UploadImage", formData, config); 
+        const responseUpload = await httpClient.post(`/Upload/${apiPath}`, formData, config); 
         //CHECK HTTP STATUSES!!!!! TO-DO
 
-        console.log("UPL MAIN IMG", responseUpload)
+        console.log("UPL IMG", responseUpload)
 
         const uploadedImgUrl = responseUpload.data.url
-        setIsMainImgUploading(false)
-        setNewNftMainImage(uploadedImgUrl)
-        setMainImgModalOpen(false);
-        setMainImgToUploadPreview(null)
 
+
+        if (imgDestination === "profile_main_image") {
+            setNewNftMainImage(uploadedImgUrl)
+        }
+
+        if (imgDestination === "additional_image") {
+            setAdditionalImage(uploadedImgUrl)
+        }
+
+        if (imgDestination === "main_video") {
+            setNewNftVideo(uploadedImgUrl)
+            console.log("VIDEO UPL:", uploadedImgUrl)
+        }
+
+        setIsImgUploading(false)
+        setImgModalOpen(false);
+        setImgToUploadPreview(null);
+
+    }
+
+    const _handleAddEncryptedDocs = (e) => {
+        const docAdded = e.target.files[0];
+        let encryptedDocsClone = encryptedDocs;
+        encryptedDocsClone.push(docAdded);
+        setEncryptedDocs(encryptedDocsClone);
     }
 
     //render functions
@@ -226,7 +283,7 @@ function NewNftPage(props) {
                         </Form.Group>
 
                         <Form.Group controlId="formHistory">
-                            <Form.File onClick={(e) => _handleResetImg(e)} onChange={ (e) => _handleNewNftMainImg(e)} id="exampleFormControlFile1" label="NFT Image" />
+                            <Form.File onClick={(e) => _handleResetImg(e)} onChange={ (e) => _handleNewImg(e, "profile_main_image")} id="exampleFormControlFile1" label="NFT Image" />
                             <Form.Text className="text-muted">
                                 (The main image of the art piece)
                             </Form.Text>
@@ -244,6 +301,62 @@ function NewNftPage(props) {
         }
 
 
+        if (activeStep === 2) {
+
+            
+            return (
+                <div>
+                <h5 className={styles.mainTitleOfSection}>Insert documents about this NFT (Max 4)</h5>
+                <Form>
+
+                    <Form.Group controlId="formDoc1">
+                        <Form.File onClick={(e) => console.log(e)} onChange={ (e) => _handleAddEncryptedDocs(e)} id="nftDocumentsForm1" label="NFT Encrypted Document 1" />
+                    </Form.Group>
+
+                    <Form.Group controlId="formDoc2">
+                        <Form.File onClick={(e) => console.log(e)} onChange={ (e) => _handleAddEncryptedDocs(e)} id="nftDocumentsForm2" label="NFT Encrypted Document 2" />
+                    </Form.Group>
+
+                    <Form.Group controlId="formDoc3">
+                        <Form.File onClick={(e) => console.log(e)} onChange={ (e) => _handleAddEncryptedDocs(e)} id="nftDocumentsForm3" label="NFT Encrypted Document 3" />
+                    </Form.Group>
+
+                    <Form.Group controlId="formDoc2">
+                        <Form.File onClick={(e) => console.log(e)} onChange={ (e) => _handleAddEncryptedDocs(e)} id="nftDocumentsForm4" label="NFT Encrypted Document 4" />
+                    </Form.Group>
+
+
+                </Form>
+
+
+                <h5 className={styles.mainTitleOfSection}>Insert additional images</h5>
+                <Form>
+
+                    <Form.Group controlId="formDoc1">
+                        <Form.File onClick={(e) => _handleResetImg(e)} onChange={ (e) => _handleNewImg(e, "additional_image")} id="nftDocumentsForm1" label="NFT Additional Image" />
+                    </Form.Group>
+                    {
+                        additionalImage ? (<Image src={additionalImage} id={styles.mainImgThumbnailPreview} />) : ""
+                    }
+                </Form>
+
+                <h5 className={styles.mainTitleOfSection}>Insert video</h5>
+                <Form>
+
+                    <Form.Group controlId="formDoc1">
+                        <Form.File onClick={(e) => _handleResetImg(e)} onChange={ (e) => _handleNewImg(e, "main_video")} id="nftDocumentsForm1" label="NFT Encrypted Document 1" />
+                    </Form.Group>
+                    {
+                        newNftVideo ? (<video controls id={styles.mainImgModalPreview} ><source src={newNftVideo} type="video/mp4" />Sorry, your browser doesn't support embedded videos.</video>) : ("")
+                    }
+                    
+                </Form>
+
+            </div>
+                )
+        }
+
+
 
         return (
             <p>Diocane!!!</p>
@@ -252,11 +365,24 @@ function NewNftPage(props) {
 
     const renderMainImgModalBody = () => {
 
-        
+        console.log(imgToUploadPreview, imgDestination)
+
+        if (imgDestination === "main_video" ) {
+
+            const videoFormat = imgToUpload
+
+            return (
+                <div id={styles.mainImgModalBodyContainer}>
+                    <video controls id={styles.mainImgModalPreview} >
+                        <source src={imgToUploadPreview} type={videoFormat ? videoFormat.type : "video/mp4"} />
+                    </video>
+                </div>
+            )
+        }
 
         return (
             <div id={styles.mainImgModalBodyContainer}>
-                <Image id={styles.mainImgModalPreview} src={mainImgToUploadPreview} />
+                <Image id={styles.mainImgModalPreview} src={imgToUploadPreview} />
             </div>
         )
     }
@@ -290,26 +416,26 @@ function NewNftPage(props) {
 
             
             <Modal
-                show={mainImgModalOpen}
+                show={imgModalOpen}
                 onHide={() => _handleCloseImgPreviewModal()}
                 size="lg"
                 aria-labelledby="contained-modal-title-vcenter"
                 centered
-                >
+            >
                 
-                    <Modal.Header closeButton>
-                        <Modal.Title id="contained-modal-title-vcenter">
-                            Do you want to upload this image?
-                        </Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        { renderMainImgModalBody() }
-                    </Modal.Body>
-                    <Modal.Footer>
-                        { <Button onClick={() => _handleFinalizeMainImgUpload()} variant="success">Yes</Button> }
-                        <Button onClick={() => _handleCloseImgPreviewModal()} variant="danger" >No</Button>
-                    </Modal.Footer>
-                </Modal>
+                <Modal.Header closeButton>
+                    <Modal.Title id="contained-modal-title-vcenter">
+                        Do you want to upload this file?
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    { renderMainImgModalBody() }
+                </Modal.Body>
+                <Modal.Footer>
+                    { <Button onClick={() => _handleFinalizeImgUpload()} variant="success">Yes</Button> }
+                    <Button onClick={() => _handleCloseImgPreviewModal()} variant="danger" >No</Button>
+                </Modal.Footer>
+            </Modal>
 
         </Layout>
     );
