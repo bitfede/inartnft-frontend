@@ -58,7 +58,11 @@ function NewNftPage(props) {
     //step 3
     const [encryptedDocs, setEncryptedDocs] = useState([]);
     const [additionalImage, setAdditionalImage] = useState(null);
-    const [newNftVideo, setNewNftVideo] = useState(null)
+    const [additionalImageTitle, setAdditionalImageTitle] = useState(null);
+    const [additionalImageDesc, setAdditionalImageDesc] = useState(null)
+    const [newNftVideo, setNewNftVideo] = useState(null);
+    const [newNftVideoTitle, setNewNftVideoTitle] = useState(null);
+    const [newNftVideoDesc, setNewNftVideoDesc] = useState(null);
 
     useEffect( async () => {
 
@@ -126,16 +130,62 @@ function NewNftPage(props) {
         if (activeStep === 2) {
 
             //upload docs
-            console.log(encryptedDocs, "ready")
+     
+            const formData = new FormData();
 
+            encryptedDocs.map( (doc, i) => {
+                console.log(i, doc)
+                formData.append('documentsImagesVideosMusic', doc)
+            })
+            
+            formData.append('productsId', newNftId);
+            const config = {
+                headers: {
+                    'content-type': 'multipart/form-data'
+                }
+            }
+            
+            const step3DocsRes = await httpClient.post(`/InsertProducts/InsertElementsForEncypt`, formData, config); 
+            //CHECK HTTP STATUSES!!!!! TO-DO
+    
+            console.log("UPL DOCS", step3DocsRes)
+    
+            // const uploadedImgUrl = responseUpload.data.url
+            
             //upload img
             console.log(additionalImage, "ready")
 
+            const payloadImg = {
+                "productsId" : newNftId,
+                "titleImage" : additionalImageTitle, 
+                "descriptionImage" : additionalImageDesc,
+                "url" : additionalImage,
+                "tag" : newNftTitle
+            }
+
+            const step3ImgRes = await httpClient.post("/InsertProducts/InsertUpdateImage", payloadImg);
+            //TODO Handle all statuses, 200, 400 etc
+
+            console.log("UPL IMG", step3ImgRes)
+
+
             //upload video
-            
+            console.log(newNftVideo, "video ready")
+
+            const payloadVideo = {
+                "productsId" : newNftId,
+                "titleVideo" : newNftVideoTitle, 
+                "descriptionVideo" : newNftVideoDesc,
+                "url" : newNftVideo,
+                "tag" : newNftTitle
+            }
+
+            const step3VideoRes = await httpClient.post("/InsertProducts/InsertUpdateImage", payloadVideo);
+            //TODO Handle all statuses, 200, 400 etc
+
+            console.log("UPL VID", step3VideoRes)
 
             return
-
         }
 
         let currentStep = activeStep;
@@ -176,6 +226,7 @@ function NewNftPage(props) {
         setIsImgUploading(true)
 
         let apiPath = "UploadImage";
+        console.log("TESTIN", imgToUpload.type.split("/")[0], "=", "video")
         if (imgToUpload.type.split("/")[0] === "video") {
             apiPath = "UploadVideo"
         }
@@ -335,6 +386,16 @@ function NewNftPage(props) {
                     <Form.Group controlId="formDoc1">
                         <Form.File onClick={(e) => _handleResetImg(e)} onChange={ (e) => _handleNewImg(e, "additional_image")} id="nftDocumentsForm1" label="NFT Additional Image" />
                     </Form.Group>
+
+                    <Form.Group controlId="formPrice">
+                        <Form.Label>Image Title</Form.Label>
+                        <Form.Control onChange={(e) => setAdditionalImageTitle(e.target.value)} as="input" placeholder="" />
+                    </Form.Group>
+
+                    <Form.Group controlId="formDescription">
+                        <Form.Label>Image Description</Form.Label>
+                        <Form.Control onChange={(e) => setAdditionalImageDesc(e.target.value)} as="textarea" placeholder="Write your image description here...." />
+                    </Form.Group>
                     {
                         additionalImage ? (<Image src={additionalImage} id={styles.mainImgThumbnailPreview} />) : ""
                     }
@@ -344,8 +405,19 @@ function NewNftPage(props) {
                 <Form>
 
                     <Form.Group controlId="formDoc1">
-                        <Form.File onClick={(e) => _handleResetImg(e)} onChange={ (e) => _handleNewImg(e, "main_video")} id="nftDocumentsForm1" label="NFT Encrypted Document 1" />
+                        <Form.File onClick={(e) => _handleResetImg(e)} onChange={ (e) => _handleNewImg(e, "main_video")} id="nftDocumentsForm1" label="NFT Main Video" />
                     </Form.Group>
+
+                    <Form.Group controlId="formPrice">
+                        <Form.Label>Image Title</Form.Label>
+                        <Form.Control onChange={(e) => setNewNftVideoTitle(e.target.value)} as="input" placeholder="" />
+                    </Form.Group>
+
+                    <Form.Group controlId="formDescription">
+                        <Form.Label>Image Description</Form.Label>
+                        <Form.Control onChange={(e) => setNewNftVideoDesc(e.target.value)} as="textarea" placeholder="Write your image description here...." />
+                    </Form.Group>
+                    
                     {
                         newNftVideo ? (<video controls id={styles.mainImgModalPreview} ><source src={newNftVideo} type="video/mp4" />Sorry, your browser doesn't support embedded videos.</video>) : ("")
                     }
@@ -354,6 +426,12 @@ function NewNftPage(props) {
 
             </div>
                 )
+        }
+
+        if (activeStep === 3) {
+            return (
+                <p>wysiwyg</p>
+            )
         }
 
 
