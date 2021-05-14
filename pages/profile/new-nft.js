@@ -180,12 +180,12 @@ function NewNftPage(props) {
                 "tag" : newNftTitle
             }
 
-            const step3VideoRes = await httpClient.post("/InsertProducts/InsertUpdateImage", payloadVideo);
+            const step3VideoRes = await httpClient.post("/InsertProducts/InsertUpdateVideo", payloadVideo);
             //TODO Handle all statuses, 200, 400 etc
 
             console.log("UPL VID", step3VideoRes)
 
-            return
+            // do not continue, return here if there were problems  
         }
 
         let currentStep = activeStep;
@@ -380,7 +380,7 @@ function NewNftPage(props) {
                 </Form>
 
 
-                <h5 className={styles.mainTitleOfSection}>Insert additional images</h5>
+                <h5 className={styles.mainTitleOfSection}>Insert an additional image</h5>
                 <Form>
 
                     <Form.Group controlId="formDoc1">
@@ -409,12 +409,12 @@ function NewNftPage(props) {
                     </Form.Group>
 
                     <Form.Group controlId="formPrice">
-                        <Form.Label>Image Title</Form.Label>
+                        <Form.Label>Video Title</Form.Label>
                         <Form.Control onChange={(e) => setNewNftVideoTitle(e.target.value)} as="input" placeholder="" />
                     </Form.Group>
 
                     <Form.Group controlId="formDescription">
-                        <Form.Label>Image Description</Form.Label>
+                        <Form.Label>Video Description</Form.Label>
                         <Form.Control onChange={(e) => setNewNftVideoDesc(e.target.value)} as="textarea" placeholder="Write your image description here...." />
                     </Form.Group>
                     
@@ -430,7 +430,9 @@ function NewNftPage(props) {
 
         if (activeStep === 3) {
             return (
-                <p>wysiwyg</p>
+                <div>
+                    <h5 className={styles.mainTitleOfSection}>Insert documents about this NFT (Max 4)</h5>
+                </div>
             )
         }
 
