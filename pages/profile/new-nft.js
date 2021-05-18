@@ -7,7 +7,12 @@
 
 //dependencies
 import React, {useState} from 'react';
+import dynamic from 'next/dynamic';
 import httpClient from '../../utilities/http-client';
+// import { Editor } from 'react-draft-wysiwyg';
+import { EditorState, convertToRaw } from 'draft-js';
+const Editor = dynamic(() => import('react-draft-wysiwyg').then(mod => mod.Editor), { ssr: false });
+
 
 //hooks
 import { useEffect } from 'react';
@@ -27,6 +32,7 @@ import {Stepper, Step, StepLabel, CardMedia, CardContent, CardActions, Typograph
 
 //assets and icons
 import styles from '../../styles/NewNftPage.module.css';
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { ContactSupportOutlined } from '@material-ui/icons';
 import { set } from 'date-fns';
 
@@ -38,6 +44,8 @@ function NewNftPage(props) {
     // console.log("PROPPI", props)
 
     const { activate, account } = useEthers();
+
+    const editorStateNew = EditorState.createEmpty();
 
     //state
     //step 1
@@ -63,6 +71,9 @@ function NewNftPage(props) {
     const [newNftVideo, setNewNftVideo] = useState(null);
     const [newNftVideoTitle, setNewNftVideoTitle] = useState(null);
     const [newNftVideoDesc, setNewNftVideoDesc] = useState(null);
+    //step 4
+    const [editorState, setEditorState] = useState(editorStateNew);
+
 
     useEffect( async () => {
 
@@ -88,7 +99,7 @@ function NewNftPage(props) {
 
     }, [imgToUpload])
 
-    const progressSteps = [ "NFT Title", "Add info", "Upload multimedia", "Finalize" ];
+    const progressSteps = [ "NFT Title", "Add info", "Upload multimedia", "Add long description" ];
 
 
     //functions ---
@@ -274,6 +285,32 @@ function NewNftPage(props) {
         setEncryptedDocs(encryptedDocsClone);
     }
 
+    const _handleTextEditorImgUpload = async (e) => {
+
+        const fileToUpload = e;
+
+        const formData = new FormData();
+        formData.append('image', fileToUpload)
+        formData.append('tag', fileToUpload.name)
+        const config = {
+            headers: {
+                'content-type': 'multipart/form-data'
+            }
+        }
+
+        const response = await httpClient.post(`/Upload/UploadImage`, formData, config);
+        console.log(response)
+
+        const retVal = new Promise((resolve, reject) => {
+
+            resolve({ data: { link: response.data.url}} )
+        });
+
+        return retVal
+
+
+    }
+
     //render functions
     const renderNewArtInputs = () => {
 
@@ -429,9 +466,21 @@ function NewNftPage(props) {
         }
 
         if (activeStep === 3) {
+
+            // TODO IMPLEMENT THE WYSIWYG EDITOR  and call the final api!!!!!!!
+
             return (
                 <div>
-                    <h5 className={styles.mainTitleOfSection}>Insert documents about this NFT (Max 4)</h5>
+                    <h5 className={styles.mainTitleOfSection}>Insert a detailed description about this NFT</h5>
+                    <Editor
+                        editorState={editorState}
+                        toolbarClassName={styles.rdwToolbarMain}
+                        wrapperClassName="wrapperClassName"
+                        editorClassName={styles.rdwEditorMain}
+                        onEditorStateChange={(newState) => setEditorState(newState)}
+                        uploadEnabled={true}
+                        uploadCallback={(e) => _handleTextEditorImgUpload(e)}
+                />
                 </div>
             )
         }

@@ -33,3 +33,12 @@
     margin-top: 2rem;
     margin-bottom: 1.5rem;
 }
+
+.rdwEditorMain {
+    border: 1px solid #F1F1F1;
+    padding: 10px;
+}
+
+.rdwToolbarMain {
+    background: #f9f9f9;
+}
