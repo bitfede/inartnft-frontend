@@ -9,9 +9,9 @@
 import React, {useState} from 'react';
 import dynamic from 'next/dynamic';
 import httpClient from '../../utilities/http-client';
-// import { Editor } from 'react-draft-wysiwyg';
-import { EditorState, convertToRaw } from 'draft-js';
 const Editor = dynamic(() => import('react-draft-wysiwyg').then(mod => mod.Editor), { ssr: false });
+import draftToHtml from 'draftjs-to-html';
+import { EditorState, convertToRaw } from 'draft-js';
 
 
 //hooks
@@ -197,6 +197,33 @@ function NewNftPage(props) {
             console.log("UPL VID", step3VideoRes)
 
             // do not continue, return here if there were problems  
+        }
+
+        if (activeStep === 3) {
+
+            console.log(editorState)
+
+            const hashConfig = {
+                trigger: "#",
+                separator: " ",
+            }
+
+            const contentBlocksRaw  = convertToRaw(editorState.getCurrentContent())
+            const markup = draftToHtml(contentBlocksRaw, hashConfig)
+            console.log("MARKUP", markup)
+
+            const payload = {
+                productsId: newNftId,
+                titleDocuments: newNftTitle,
+                descriptionDocuments: markup
+            }
+
+
+            const res = await httpClient.post("/InsertProducts/InsertUpdateDocument", payload);
+            //TODO Handle all statuses, 200, 400 etc
+
+            console.log("POST DESCR LONG INFO", res)
+
         }
 
         let currentStep = activeStep;
@@ -480,6 +507,7 @@ function NewNftPage(props) {
                         onEditorStateChange={(newState) => setEditorState(newState)}
                         uploadEnabled={true}
                         uploadCallback={(e) => _handleTextEditorImgUpload(e)}
+                        previewImage={true}
                 />
                 </div>
             )
@@ -488,7 +516,7 @@ function NewNftPage(props) {
 
 
         return (
-            <p>Diocane!!!</p>
+            <p>Congratulations! "{`${newNftTitle}`}" was succesfully created</p>
         )
     }
 
@@ -538,7 +566,7 @@ function NewNftPage(props) {
                         {renderNewArtInputs()}
                     </Row>
                     <Row>
-                        <Button onClick={() => _handleNextStep()}>Next</Button>
+                        <Button onClick={() => _handleNextStep()}>{ activeStep <= 3 ? "Next" : "Go Back To Profile Page"}</Button>
                     </Row>
                 </Col>
             </Container>
