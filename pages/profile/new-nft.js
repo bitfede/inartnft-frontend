@@ -8,6 +8,7 @@
 //dependencies
 import React, {useState} from 'react';
 import dynamic from 'next/dynamic';
+import Router from "next/router";
 import httpClient from '../../utilities/http-client';
 const Editor = dynamic(() => import('react-draft-wysiwyg').then(mod => mod.Editor), { ssr: false });
 import draftToHtml from 'draftjs-to-html';
@@ -224,6 +225,10 @@ function NewNftPage(props) {
 
             console.log("POST DESCR LONG INFO", res)
 
+        }
+
+        if (activeStep === 4) {
+            Router.push("/profile/me")
         }
 
         let currentStep = activeStep;
@@ -516,7 +521,7 @@ function NewNftPage(props) {
 
 
         return (
-            <p>Congratulations! "{`${newNftTitle}`}" was succesfully created</p>
+            <p>Congratulations! <b><i>"{`${newNftTitle}`}"</i></b> was succesfully created</p>
         )
     }
 

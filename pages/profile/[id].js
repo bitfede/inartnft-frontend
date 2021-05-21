@@ -318,29 +318,32 @@ function ProfilePage(props) {
         }
 
         const theProducts = userProducts.map( (product, i) => {
+
+            console.log("PROD>", product)
+            
             return (
                 <Card key={i} className={styles.theProductCard}>
                     <CardActionArea>
                     <CardMedia
                         component={"img"}
-                        image="https://picsum.photos/200"
-                        title="Contemplative Reptile"
+                        image={product.urlImageVideoPresentation}
+                        title={product.title}
                     />
                     <CardContent>
                         <Typography gutterBottom variant="h5" component="h2">
-                        NFT
+                        {product.title}
                         </Typography>
                         <Typography variant="body2" color="textSecondary" component="p">
-                        This is the description of an nft
+                        {product.describtion}
                         </Typography>
                     </CardContent>
                     </CardActionArea>
                     <CardActions>
-                    <Button size="small" color="primary">
-                        Share
+                    <Button size="small"  variant="success" >
+                        Publish
                     </Button>
-                    <Button size="small" color="primary">
-                        Learn More
+                    <Button size="small" variant="primary">
+                        Edit
                     </Button>
                     </CardActions>
                 </Card>
@@ -432,7 +435,7 @@ function ProfilePage(props) {
                                             <CardActionArea>
                                             <CardMedia
                                                 component={"img"}
-                                                image="https://gazette-eu-west2.azureedge.net/media/39152/sothebys-imps-and-mods-2318nedi.jpg"
+                                                image="https://picsum.photos/250"
                                                 title="Sell your Art"
                                             />
                                             <CardContent>
