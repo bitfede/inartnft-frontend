@@ -115,23 +115,23 @@ function NewNftPage(props) {
 
 		if (activeStep === 1) {
 			if (!newNftAuthor?.trim()) {
-				setErrors({ title: "Missing author" });
+				setErrors({ author: "Missing author" });
 				return false;
 			}
 			if (!newNftPrice?.trim()) {
-				setErrors({ title: "Missing price" });
+				setErrors({ price: "Missing price" });
 				return false;
 			}
 			if (!newNftDescription?.trim()) {
-				setErrors({ title: "Missing description" });
+				setErrors({ description: "Missing description" });
 				return false;
 			}
 			if (!newNftHistory?.trim()) {
-				setErrors({ title: "Missing history" });
+				setErrors({ history: "Missing history" });
 				return false;
 			}
 			if (!newNftMainImage?.trim()) {
-				setErrors({ title: "Missing main image" });
+				setErrors({ image: "Missing main image" });
 				return false;
 			}
 		}
@@ -459,29 +459,34 @@ function NewNftPage(props) {
 										<Form.Group controlId="formAuthor">
 											<Form.Label>Author</Form.Label>
 											<Form.Control value={newNftAuthor ? newNftAuthor : ""} onChange={e => setNewNftAuthor(e.target.value)} placeholder="Enter the author" />
+											<Form.Control.Feedback type="invalid">{isTouched && errors?.author}</Form.Control.Feedback>
 											<Form.Text className="text-muted">(The author of the art piece)</Form.Text>
 										</Form.Group>
 
 										<Form.Group controlId="formPrice">
 											<Form.Label>Price</Form.Label>
 											<Form.Control onChange={e => setNewNftPrice(e.target.value)} as="input" placeholder="110" />
+											<Form.Control.Feedback type="invalid">{isTouched && errors?.price}</Form.Control.Feedback>
 											<Form.Text className="text-muted">(The price of the art piece in ETH)</Form.Text>
 										</Form.Group>
 
 										<Form.Group controlId="formDescription">
 											<Form.Label>Description</Form.Label>
 											<Form.Control onChange={e => setNewNftDescription(e.target.value)} as="textarea" placeholder="Write your description here...." />
+											<Form.Control.Feedback type="invalid">{isTouched && errors?.description}</Form.Control.Feedback>
 											<Form.Text className="text-muted">(The description of the art piece)</Form.Text>
 										</Form.Group>
 
 										<Form.Group controlId="formHistory">
 											<Form.Label>History</Form.Label>
 											<Form.Control onChange={e => setNewNftHistory(e.target.value)} as="textarea" placeholder="Write the history of the NFT here...." />
+											<Form.Control.Feedback type="invalid">{isTouched && errors?.history}</Form.Control.Feedback>
 											<Form.Text className="text-muted">(The history of the art piece)</Form.Text>
 										</Form.Group>
 
 										<Form.Group controlId="formHistory">
 											<Form.File onClick={e => _handleResetImg(e)} onChange={e => _handleNewImg(e, "profile_main_image")} id="exampleFormControlFile1" label="NFT Image" />
+											<Form.Control.Feedback type="invalid">{isTouched && errors?.image}</Form.Control.Feedback>
 											<Form.Text className="text-muted">(The main image of the art piece)</Form.Text>
 											{newNftMainImage ? <Image src={newNftMainImage} id={styles.mainImgThumbnailPreview} /> : ""}
 										</Form.Group>
