@@ -8,12 +8,10 @@ import { useAuth } from "../hooks/auth";
 import { useLogin } from "../hooks/login";
 
 //assets
-import styles from '../styles/Header.module.css'
-
+import styles from "../styles/Header.module.css";
 
 const Header = () => {
-
-    //hooks
+	//hooks
 	const { authToken, userId, logout } = useAuth();
 	const { startLogin } = useLogin();
 
@@ -48,7 +46,7 @@ const Header = () => {
 							</NavDropdown.Item>
 						</NavDropdown>
 						<Nav.Item>
-							<Nav.Link className={"nav-link hvr-underline-from-left"} href="/create">
+							<Nav.Link className={"nav-link hvr-underline-from-left"} href="/profile/new-nft">
 								Create
 							</Nav.Link>
 						</Nav.Item>
@@ -79,7 +77,6 @@ const Header = () => {
 					</Nav>
 				</Navbar.Collapse>
 			</Navbar>
-
 		</div>
 	);
 };

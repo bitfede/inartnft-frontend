@@ -44,6 +44,7 @@ function NewNftPage(props) {
 	const editorStateNew = EditorState.createEmpty();
 
 	//state
+	const [isTouched, setIsTouched] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const [errors, setErrors] = useState(null);
 
@@ -82,6 +83,7 @@ function NewNftPage(props) {
 	}, []);
 
 	useEffect(async () => {
+		setIsTouched(false);
 		_handleValidate();
 	}, [newNftAuthor, newNftDescription, newNftHistory, newNftMainImage, newNftPrice, newNftTitle, newNftVideo, newNftVideoDesc, newNftVideoTitle]);
 
@@ -97,7 +99,7 @@ function NewNftPage(props) {
 		setImgToUploadPreview(fileSrc);
 
 		// free memory when ever this component is unmounted
-		return () => URL.revokeObjectURL(objectUrl);
+		return () => URL.revokeObjectURL(imgToUpload);
 	}, [imgToUpload]);
 
 	const progressSteps = ["NFT Title", "Add info", "Upload multimedia", "Add long description"];
@@ -106,16 +108,49 @@ function NewNftPage(props) {
 	const _handleValidate = () => {
 		if (activeStep === 0) {
 			if (!newNftTitle?.trim()) {
-				setErrors({ title: "Missing title field" });
+				setErrors({ title: "Missing title" });
 				return false;
 			}
 		}
+
+		if (activeStep === 1) {
+			if (!newNftAuthor?.trim()) {
+				setErrors({ title: "Missing author" });
+				return false;
+			}
+			if (!newNftPrice?.trim()) {
+				setErrors({ title: "Missing price" });
+				return false;
+			}
+			if (!newNftDescription?.trim()) {
+				setErrors({ title: "Missing description" });
+				return false;
+			}
+			if (!newNftHistory?.trim()) {
+				setErrors({ title: "Missing history" });
+				return false;
+			}
+			if (!newNftMainImage?.trim()) {
+				setErrors({ title: "Missing main image" });
+				return false;
+			}
+		}
+
+		if (activeStep === 2) {
+			// TODO: Set errors here
+		}
+
+		if (activeStep === 3) {
+			// TODO: Set errors here
+		}
+
 		setErrors(null);
 		return true;
 	};
 
 	const _handleNextStep = async () => {
 		try {
+			setIsTouched(true);
 			const isValid = _handleValidate();
 			if (!isValid) {
 				return;
@@ -242,6 +277,7 @@ function NewNftPage(props) {
 				Router.push("/profile/me");
 			}
 
+			setIsTouched(false);
 			setActiveStep(activeStep + 1);
 		} catch (e) {
 			console.error(e);
@@ -320,7 +356,7 @@ function NewNftPage(props) {
 
 	const _handleAddEncryptedDocs = e => {
 		const docAdded = e.target.files[0];
-		let encryptedDocsClone = encryptedDocs;
+		const encryptedDocsClone = encryptedDocs;
 		encryptedDocsClone.push(docAdded);
 		setEncryptedDocs(encryptedDocsClone);
 	};
@@ -404,11 +440,11 @@ function NewNftPage(props) {
 												type="email"
 												placeholder="Enter the title"
 												value={newNftTitle || ""}
-												isInvalid={errors?.title}
+												isInvalid={isTouched && errors?.title}
 												onChange={e => setNewNftTitle(e.target.value)}
 												required
 											/>
-											<Form.Control.Feedback type="invalid">{errors?.title}</Form.Control.Feedback>
+											<Form.Control.Feedback type="invalid">{isTouched && errors?.title}</Form.Control.Feedback>
 											<Form.Text className="text-muted">(This will be the main title of the NFT)</Form.Text>
 										</Form.Group>
 									</Form>
