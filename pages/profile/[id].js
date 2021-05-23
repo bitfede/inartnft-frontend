@@ -8,10 +8,12 @@
 //dependencies
 import React, {useState} from 'react';
 import httpClient from '../../utilities/http-client';
+import { utils } from 'ethers'
+import { Contract } from '@ethersproject/contracts'
 
 //hooks
 import { useEffect } from 'react';
-import { useEthers, account } from '@usedapp/core';
+import { useEthers, account, useContractFunction } from '@usedapp/core';
 
 //my components
 import Layout from '../../components/Layout';
@@ -29,6 +31,10 @@ import { useAuth } from '../../hooks/auth';
 import { Publish, Edit } from '@material-ui/icons';
 
 //variables
+const WethAbi = '../../contracts/NftShop/NftShop.json';
+const wethInterface = new utils.Interface(WethAbi)
+const wethContractAddress = '0xC48140E34B2d38e87E66317A22697514Fb0D54d4'
+const contract = new Contract(wethContractAddress, wethInterface)
 
 // COMPONENT STARTS HERE
 function ProfilePage(props) {
@@ -56,6 +62,10 @@ function ProfilePage(props) {
     const [isUploading, setIsUploading] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
     const [isChangingProfilePic, setIsChangingProfilePic] = useState(false);
+    const [addressForPublish, setAddressForPublish] = useState(null);
+    const [priceForPublish, setPriceForPublish] = useState(null);
+    const [titleForPublish, setTitleForPublish] = useState(null);
+    const [tokenUriForPublish, setTokenUriForPublish] = useState(null);
 
     useEffect( async () => {
         if (!authToken) { return }
@@ -230,6 +240,20 @@ function ProfilePage(props) {
 
     }
 
+    const _handlePublishNft = async (prodId) => {
+
+        const payload = JSON.stringify(prodId);
+
+        const res = await httpClient.post("/InsertProducts/Publish", payload);
+
+        console.log("res PUBLISH", res)
+
+        // const { id } = res.data;
+
+        // setNewNftId(id)
+
+    }
+
 
     //render functions
     const renderInfo = (attributeName, info, setter) => {
@@ -339,7 +363,7 @@ function ProfilePage(props) {
                     </CardContent>
                     </CardActionArea>
                     <CardActions>
-                    <Button size="small"  variant="success" >
+                    <Button size="small" onClick={ () => _handlePublishNft(product.id)}  variant="success" >
                         Publish
                     </Button>
                     <Button size="small" variant="primary">
