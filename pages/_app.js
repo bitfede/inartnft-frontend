@@ -13,9 +13,9 @@ import settings from "../settings";
 import { AuthProvider } from "../hooks/auth";
 import { LoginProvider } from "../hooks/login";
 
-
 // assets
 import "bootstrap/dist/css/bootstrap.min.css";
+import "loaders.css/src/animations/ball-pulse.scss";
 import "../styles/globals.css";
 import "../styles/Header.css";
 import "../styles/Footer.css";
@@ -34,9 +34,9 @@ function MyApp({ Component, pageProps }) {
 	return (
 		<DAppProvider config={config}>
 			<AuthProvider>
-        <LoginProvider>
-          <Component {...pageProps} />
-        </LoginProvider>
+				<LoginProvider>
+					<Component {...pageProps} />
+				</LoginProvider>
 			</AuthProvider>
 		</DAppProvider>
 	);
