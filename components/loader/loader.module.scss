@@ -1,0 +1,32 @@
+.Loader {
+	position: relative;
+}
+
+.Loader__content {
+	opacity: 1;
+}
+
+.Loader__background {
+	display: block;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: 10;
+}
+
+.Loader__foreground {
+	display: table;
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	z-index: 20;
+	color: white;
+}
+
+.Loader__message {
+	display: table-cell;
+	vertical-align: middle;
+}
