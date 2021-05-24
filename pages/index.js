@@ -56,7 +56,7 @@ function Home(props) {
               </Card.Body>
               <ListGroup className="list-group-flush list-group-nftcard">
                   <ListGroupItem><span>AUTHOR:</span> {product.author}</ListGroupItem>
-                  <ListGroupItem><span>PRICE:</span> 5,273.80 Ξ</ListGroupItem>
+                  <ListGroupItem><span>PRICE:</span> {product.price} Ξ</ListGroupItem>
                   <ListGroupItem><span>OWNER:</span> {product.nameUser ? product.nameUser : "Gallery"}</ListGroupItem>
               </ListGroup>
               <Card.Body>
