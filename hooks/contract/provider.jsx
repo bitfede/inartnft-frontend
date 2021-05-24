@@ -15,7 +15,7 @@ const ContractProvider = ({ children }) => {
 		}
 	}, []);
 
-	async function getAccount() {
+	async function getAccountAsync() {
 		// Metamask already opened
 		if (account) {
 			console.log("Getting existent account");
@@ -37,7 +37,7 @@ const ContractProvider = ({ children }) => {
 		setContract(contract);
 	}
 
-	return <ContractContext.Provider value={{ contract, getAccount }}>{children}</ContractContext.Provider>;
+	return <ContractContext.Provider value={{ contract, getAccountAsync }}>{children}</ContractContext.Provider>;
 };
 
 export default ContractProvider;

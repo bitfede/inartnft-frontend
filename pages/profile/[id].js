@@ -29,7 +29,7 @@ import { Publish, Edit } from "@material-ui/icons";
 // COMPONENT STARTS HERE
 function ProfilePage(props) {
 	const { authToken } = useAuth();
-	const { contract, getAccount } = useContract();
+	const { contract, getAccountAsync } = useContract();
 
 	const [account, setAccount] = useState("");
 	const [userId, setUserId] = useState(null);
