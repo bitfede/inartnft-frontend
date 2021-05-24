@@ -1,31 +1,43 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ContractContext from "./context";
+import { ethers, utils } from "ethers";
+import nftShopAbi from "../../contracts/NftShop/NftShop.json";
 
-import { InjectedConnector } from "@web3-react/injected-connector";
-import httpClient from '../../utilities/http-client';
+const nftShopContractAddress = "0xC48140E34B2d38e87E66317A22697514Fb0D54d4";
 
-//hooks
-import { useEthers } from "@usedapp/core";
-
-//global variables
-
-// Provider
 const ContractProvider = ({ children }) => {
-    
-    //state
-   
-    //hooks
+	const [account, setAccount] = useState();
+	const [contract, setContract] = useState();
 
+	useEffect(() => {
+		if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
+			loadContract();
+		}
+	}, []);
 
-    // useEffect functions
-  
-    //functions
+	async function getAccount() {
+		// Metamask already opened
+		if (account) {
+			console.log("Getting existent account");
+			return account;
+		}
+		// Open metamask window
+		console.log("Requesting user account");
+		const response = await window.ethereum.request({ method: "eth_requestAccounts" });
+		setAccount(response.account);
+		return account;
+	}
 
-	return (
-        <ContractContext.Provider value={{ }}>
-            {children}
-        </ContractContext.Provider>
-    );
+	async function loadContract() {
+		const nftShopInterface = new utils.Interface(nftShopAbi);
+		const provider = new ethers.providers.Web3Provider(window.ethereum);
+		const signer = provider.getSigner();
+		const contract = new ethers.Contract(nftShopContractAddress, nftShopInterface, signer);
+		console.log("contract", contract);
+		setContract(contract);
+	}
+
+	return <ContractContext.Provider value={{ contract, getAccount }}>{children}</ContractContext.Provider>;
 };
 
 export default ContractProvider;

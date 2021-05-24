@@ -4,42 +4,26 @@
  PURPOSE: This is the page where users can create NFTs.
 */
 
-//dependencies
-import React, { useState } from "react";
+import { Step, StepLabel, Stepper, Typography } from "@material-ui/core";
+import { convertToRaw, EditorState } from "draft-js";
+import draftToHtml from "draftjs-to-html";
 import dynamic from "next/dynamic";
 import Router from "next/router";
-import httpClient from "../../utilities/http-client";
-const Editor = dynamic(() => import("react-draft-wysiwyg").then(mod => mod.Editor), { ssr: false });
-import draftToHtml from "draftjs-to-html";
-import { EditorState, convertToRaw } from "draft-js";
-
-//hooks
-import { useEffect } from "react";
-import { useEthers, account } from "@usedapp/core";
-
-//my hooks
-import { useAuth } from "../../hooks/auth";
-
-//my components
+import React, { useEffect, useState } from "react";
+import { Button, Col, Container, Form, Image, Modal, Row } from "react-bootstrap";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import Layout from "../../components/Layout";
 import Loader from "../../components/loader/loader";
-
-//library components
-import { Container, Row, Col, Image, Button, Form, Modal, Spinner } from "react-bootstrap";
-import { Stepper, Step, StepLabel, CardMedia, CardContent, CardActions, Typography, AccordionDetails } from "@material-ui/core";
-
-//assets and icons
+import { useAuth } from "../../hooks/auth";
+import { useContract } from "../../hooks/contract";
 import styles from "../../styles/NewNftPage.module.css";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-
-//variables
+import httpClient from "../../utilities/http-client";
+const Editor = dynamic(() => import("react-draft-wysiwyg").then(mod => mod.Editor), { ssr: false });
 
 // COMPONENT STARTS HERE
 function NewNftPage(props) {
 	const { authToken } = useAuth();
-	// console.log("PROPPI", props)
-
-	const { activate, account } = useEthers();
+	const { contract } = useContract();
 
 	const editorStateNew = EditorState.createEmpty();
 
@@ -85,7 +69,21 @@ function NewNftPage(props) {
 	useEffect(async () => {
 		setIsTouched(false);
 		_handleValidate();
-	}, [newNftAuthor, newNftDescription, newNftHistory, newNftMainImage, newNftPrice, newNftTitle, newNftVideo, newNftVideoDesc, newNftVideoTitle]);
+	}, [
+		newNftAuthor,
+		newNftDescription,
+		newNftHistory,
+		newNftMainImage,
+		newNftPrice,
+		newNftTitle,
+		encryptedDocs,
+		additionalImage,
+		additionalImageTitle,
+		additionalImageDesc,
+		newNftVideo,
+		newNftVideoDesc,
+		newNftVideoTitle,
+	]);
 
 	useEffect(async () => {
 		if (!imgToUpload) return;
@@ -137,7 +135,22 @@ function NewNftPage(props) {
 		}
 
 		if (activeStep === 2) {
-			// TODO: Set errors here
+			if (!encryptedDocs?.length) {
+				setErrors({ encryptedDocs: "Missing documents" });
+				return false;
+			}
+			if (!additionalImage?.trim()) {
+				setErrors({ additionalImage: "Missing additional image" });
+				return false;
+			}
+			if (!additionalImageTitle?.trim()) {
+				setErrors({ additionalImage: "Missing additional image's title" });
+				return false;
+			}
+			if (!additionalImageDesc?.trim()) {
+				setErrors({ additionalImage: "Missing additional image's description" });
+				return false;
+			}
 		}
 
 		if (activeStep === 3) {
@@ -425,6 +438,7 @@ function NewNftPage(props) {
 						</div>
 					</Col>
 				</Row>
+
 				<Loader show={isLoading}>
 					<Row className>
 						<Col xs={12} md={6} className={styles.inputAreaRow}>
@@ -500,19 +514,43 @@ function NewNftPage(props) {
 									<h5 className={styles.mainTitleOfSection}>Insert documents about this NFT (Max 4)</h5>
 									<Form>
 										<Form.Group controlId="formDoc1">
-											<Form.File onClick={e => console.log(e)} onChange={e => _handleAddEncryptedDocs(e)} id="nftDocumentsForm1" label="NFT Encrypted Document 1" />
+											<Form.File
+												accept={"application/pdf"}
+												onClick={e => console.log(e)}
+												onChange={e => _handleAddEncryptedDocs(e)}
+												id="nftDocumentsForm1"
+												label="NFT Encrypted Document 1"
+											/>
 										</Form.Group>
 
 										<Form.Group controlId="formDoc2">
-											<Form.File onClick={e => console.log(e)} onChange={e => _handleAddEncryptedDocs(e)} id="nftDocumentsForm2" label="NFT Encrypted Document 2" />
+											<Form.File
+												accept={"application/pdf"}
+												onClick={e => console.log(e)}
+												onChange={e => _handleAddEncryptedDocs(e)}
+												id="nftDocumentsForm2"
+												label="NFT Encrypted Document 2"
+											/>
 										</Form.Group>
 
 										<Form.Group controlId="formDoc3">
-											<Form.File onClick={e => console.log(e)} onChange={e => _handleAddEncryptedDocs(e)} id="nftDocumentsForm3" label="NFT Encrypted Document 3" />
+											<Form.File
+												accept={"application/pdf"}
+												onClick={e => console.log(e)}
+												onChange={e => _handleAddEncryptedDocs(e)}
+												id="nftDocumentsForm3"
+												label="NFT Encrypted Document 3"
+											/>
 										</Form.Group>
 
 										<Form.Group controlId="formDoc2">
-											<Form.File onClick={e => console.log(e)} onChange={e => _handleAddEncryptedDocs(e)} id="nftDocumentsForm4" label="NFT Encrypted Document 4" />
+											<Form.File
+												accept={"application/pdf"}
+												onClick={e => console.log(e)}
+												onChange={e => _handleAddEncryptedDocs(e)}
+												id="nftDocumentsForm4"
+												label="NFT Encrypted Document 4"
+											/>
 										</Form.Group>
 									</Form>
 
@@ -610,13 +648,13 @@ function NewNftPage(props) {
 				<Modal.Header closeButton>
 					<Modal.Title id="contained-modal-title-vcenter">Do you want to upload this file?</Modal.Title>
 				</Modal.Header>
-				<Modal.Body>{renderMainImgModalBody()}</Modal.Body>
+				<Modal.Body>
+					<Loader show={isImgUploading}>{renderMainImgModalBody()}</Loader>
+				</Modal.Body>
 				<Modal.Footer>
-					{
-						<Button onClick={() => _handleFinalizeImgUpload()} variant="success">
-							Yes
-						</Button>
-					}
+					<Button onClick={() => _handleFinalizeImgUpload()} variant="success">
+						Yes
+					</Button>
 					<Button onClick={() => _handleCloseImgPreviewModal()} variant="danger">
 						No
 					</Button>
