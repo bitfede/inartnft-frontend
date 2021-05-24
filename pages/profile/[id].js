@@ -13,7 +13,7 @@ import { Contract } from '@ethersproject/contracts'
 
 //hooks
 import { useEffect } from 'react';
-import { useEthers, account, useContractFunction } from '@usedapp/core';
+import { useEthers, useContractFunction } from '@usedapp/core';
 
 //my components
 import Layout from '../../components/Layout';
@@ -36,15 +36,24 @@ import nftShopAbi from '../../contracts/NftShop/NftShop.json';
 // COMPONENT STARTS HERE
 function ProfilePage(props) {
 
+    const nftShopInterface = new utils.Interface(nftShopAbi);
+    const nftShopContractAddress = '0xC48140E34B2d38e87E66317A22697514Fb0D54d4';
+    const contract = new Contract(nftShopContractAddress, nftShopInterface);
+    console.log("CONTRACT>>", contract)
+
     // console.log("PROPPI", props)
 
     const { authToken } = useAuth();
-    const { activate, account } = useEthers();
-    // const { state, send } = useContractFunction(contract, 'addNewOpera')
+    const { account, activate, library } = useEthers();
 
+    // const signer = new ethers.VoidSigner(account, library);
+    // const signer = library.getSigner();
 
-    // const provider = new ethers.providers.Web3Provider(window.ethereum);
-    // const signer = new ethers.VoidSigner(account, provider);
+    console.log(1, account, library)
+
+    const { state, send } = useContractFunction(contract, 'addNewOpera', library)
+
+    console.log(2, state, send)
 
     // console.log(signer);
 
@@ -71,6 +80,8 @@ function ProfilePage(props) {
     const [priceForPublish, setPriceForPublish] = useState(null);
     const [titleForPublish, setTitleForPublish] = useState(null);
     const [tokenUriForPublish, setTokenUriForPublish] = useState(null);
+    const [nftShopContract, setNftShopContract] = useState(null)
+    const [theSigner, setTheSigner] = useState(null)
 
 
     useEffect( async () => {
@@ -84,19 +95,30 @@ function ProfilePage(props) {
             // console.log("CONTRACT>>", contract)
 
             // >>> qui viene usato ethers direttamente
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
-            const signer = provider.getSigner()
+            // const provider = new ethers.providers.Web3Provider(window.ethereum);
+            // const signer = provider.getSigner()
         
-            console.log("Signer", signer);
+            // console.log("Signer", signer);
+            // setTheSigner(signer)
 
-            const contract = new ethers.Contract("0xC48140E34B2d38e87E66317A22697514Fb0D54d4", nftShopAbi, signer);
+            // const contract = new ethers.Contract("0xC48140E34B2d38e87E66317A22697514Fb0D54d4", nftShopAbi, signer);
 
-            console.log("Contract", contract);
+            // console.log("Contract", contract);
 
+            // setNftShopContract(contract)
 
 
 
     }, []);
+
+
+    useEffect( () => {
+
+        if (!theSigner) return
+
+
+
+    }, [nftShopContract])
 
 
     useEffect( async () => {
@@ -280,9 +302,9 @@ function ProfilePage(props) {
 
         console.log("res PUBLISH", res)
 
-        // const { id } = res.data;
+        const { address, title, tokenUri } = res.data;
 
-        // setNewNftId(id)
+        send({ value: utils.parseEther("33"), price: 1110000000000000000000000000, sellerAddress: address, title: title, tokenUri: tokenUri })
 
     }
 

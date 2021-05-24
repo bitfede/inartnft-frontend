@@ -12,6 +12,7 @@ import settings from "../settings";
 //hooks
 import { AuthProvider } from "../hooks/auth";
 import { LoginProvider } from "../hooks/login";
+import {ContractProvider} from '../hooks/contract';
 
 // assets
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -35,7 +36,9 @@ function MyApp({ Component, pageProps }) {
 		<DAppProvider config={config}>
 			<AuthProvider>
 				<LoginProvider>
-					<Component {...pageProps} />
+					<ContractProvider>
+						<Component {...pageProps} />
+					</ContractProvider>
 				</LoginProvider>
 			</AuthProvider>
 		</DAppProvider>
