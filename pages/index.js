@@ -35,7 +35,7 @@ function Home(props) {
 
   console.log("proppi", props)
 
-  const { activate, account } = useEthers();
+  // const { activate, account } = useEthers();
 
   //functions ---
   

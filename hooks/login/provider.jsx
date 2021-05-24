@@ -34,10 +34,10 @@ const LoginProvider = ({ children }) => {
     useEffect(() => {
 		injected.isAuthorized().then(isAuthorized => {
 			if (isAuthorized) {
-				activate(injected);
+				activateBrowserWallet(injected);
 			}
 		});
-	}, [activate]);
+	}, [activateBrowserWallet]);
 
     useEffect( async () => {
 		console.log("LOGINSTATE CHANGED", loginState)

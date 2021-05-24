@@ -8,7 +8,7 @@
 //dependencies
 import React, {useState} from 'react';
 import httpClient from '../../utilities/http-client';
-import { utils } from 'ethers'
+import { ethers, utils } from 'ethers'
 import { Contract } from '@ethersproject/contracts'
 
 //hooks
@@ -31,17 +31,22 @@ import { useAuth } from '../../hooks/auth';
 import { Publish, Edit } from '@material-ui/icons';
 
 //variables
-const WethAbi = '../../contracts/NftShop/NftShop.json';
-const wethInterface = new utils.Interface(WethAbi)
-const wethContractAddress = '0xC48140E34B2d38e87E66317A22697514Fb0D54d4'
-const contract = new Contract(wethContractAddress, wethInterface)
+import nftShopAbi from '../../contracts/NftShop/NftShop.json';
 
 // COMPONENT STARTS HERE
 function ProfilePage(props) {
-    const { authToken } = useAuth();
+
     // console.log("PROPPI", props)
 
+    const { authToken } = useAuth();
     const { activate, account } = useEthers();
+    // const { state, send } = useContractFunction(contract, 'addNewOpera')
+
+
+    // const provider = new ethers.providers.Web3Provider(window.ethereum);
+    // const signer = new ethers.VoidSigner(account, provider);
+
+    // console.log(signer);
 
     //state
     const [userId, setUserId] = useState(null);
@@ -66,6 +71,33 @@ function ProfilePage(props) {
     const [priceForPublish, setPriceForPublish] = useState(null);
     const [titleForPublish, setTitleForPublish] = useState(null);
     const [tokenUriForPublish, setTokenUriForPublish] = useState(null);
+
+
+    useEffect( async () => {
+        
+        console.log("@ PAGE LOAD!")
+
+            // >>>  qui e' come dice di fare la documentazione di useDapp (https://usedapp.readthedocs.io/en/latest/core.html#usecontractfunction)
+            // const nftShopInterface = new utils.Interface(nftShopAbi);
+            // const nftShopContractAddress = '0xC48140E34B2d38e87E66317A22697514Fb0D54d4';
+            // const contract = new Contract(nftShopContractAddress, nftShopInterface);
+            // console.log("CONTRACT>>", contract)
+
+            // >>> qui viene usato ethers direttamente
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const signer = provider.getSigner()
+        
+            console.log("Signer", signer);
+
+            const contract = new ethers.Contract("0xC48140E34B2d38e87E66317A22697514Fb0D54d4", nftShopAbi, signer);
+
+            console.log("Contract", contract);
+
+
+
+
+    }, []);
+
 
     useEffect( async () => {
         if (!authToken) { return }
