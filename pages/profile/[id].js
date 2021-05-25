@@ -384,7 +384,7 @@ function ProfilePage(props) {
 						<Button size="small" onClick={() => _handlePublishNft(product.id)} variant="success">
 							Publish
 						</Button>
-						<Button size="small" variant="primary">
+						<Button href={`/profile/edit-nft/${product.id}`} size="small" variant="primary">
 							Edit
 						</Button>
 					</CardActions>
