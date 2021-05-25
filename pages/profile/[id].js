@@ -264,6 +264,18 @@ function ProfilePage(props) {
 
 	}
 
+	const _handleDeleteNFT = async (productIndex) => {
+
+		const productSelected = userProducts[productIndex];
+
+		const payload = JSON.stringify(productSelected.id);
+
+		const resDel = await httpClient.post("/Remove/Product", payload);
+
+		console.log("DELETE RES", resDel)
+
+	}
+
 	//render functions
 	const renderInfo = (attributeName, info, setter) => {
 		if (valueToEdit === attributeName) {
@@ -380,7 +392,7 @@ function ProfilePage(props) {
 						<Button size="small" onClick={() => _handleChangePriceModalOpen(i)} variant="info">
 							Change Price
 						</Button>
-						<Button size="small" variant="danger">
+						<Button size="small" onClick={() => _handleDeleteNFT(i)} variant="danger">
 							Delete
 						</Button>
 					</CardActions>
