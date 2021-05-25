@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import ContractContext from "./context";
 import { ethers, utils } from "ethers";
 import nftShopAbi from "../../contracts/NftShop/NftShop.json";
-
-const nftShopContractAddress = "0xC48140E34B2d38e87E66317A22697514Fb0D54d4";
+import settings from "../../settings";
 
 const ContractProvider = ({ children }) => {
 	const [account, setAccount] = useState();
@@ -30,6 +29,7 @@ const ContractProvider = ({ children }) => {
 	}
 
 	async function loadContract() {
+		const nftShopContractAddress = settings.Contract.Address;
 		const nftShopInterface = new utils.Interface(nftShopAbi);
 		const provider = new ethers.providers.Web3Provider(window.ethereum);
 		const signer = provider.getSigner();
