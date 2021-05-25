@@ -23,6 +23,7 @@ const ContractProvider = ({ children }) => {
 		}
 		// Open metamask window
 		console.log("Requesting user account");
+        //purtroppo qua mi da errore window not defined
 		const response = await window.ethereum.request({ method: "eth_requestAccounts" });
 		setAccount(response.account);
 		return account;

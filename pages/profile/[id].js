@@ -7,13 +7,14 @@
 //dependencies
 import React, { useState } from "react";
 import httpClient from "../../utilities/http-client";
-import { ethers, utils } from "ethers";
+import { useEthers } from "@usedapp/core";
 
 //hooks
 import { useEffect } from "react";
 
 //my components
 import Layout from "../../components/Layout";
+import PriceEditorModal from '../../components/PriceEditorModal';
 
 //library components
 import Link from "next/link";
@@ -28,10 +29,12 @@ import { Publish, Edit } from "@material-ui/icons";
 
 // COMPONENT STARTS HERE
 function ProfilePage(props) {
+
 	const { authToken } = useAuth();
 	const { contract, getAccountAsync } = useContract();
+	const {account} = useEthers();
 
-	const [account, setAccount] = useState("");
+	// const [account, setAccount] = useState("");
 	const [userId, setUserId] = useState(null);
 	const [nomeIstitutoProprietario, setNomeIstitutoProprietario] = useState(null);
 	const [titoloIstitutoProprietario, setTitoloIstitutoProprietario] = useState(null);
@@ -50,9 +53,12 @@ function ProfilePage(props) {
 	const [isUploading, setIsUploading] = useState(false);
 	const [selectedImage, setSelectedImage] = useState(null);
 	const [isChangingProfilePic, setIsChangingProfilePic] = useState(false);
+	const [editPriceModalOpen, setEditPriceModalOpen ] = useState(false);
+	const [productDataForModal, setProductDataForModal] = useState(null)
 
 	useEffect(async () => {
 		console.log("@ PAGE LOAD!");
+		console.log("ACCOUNT", account)
 	}, []);
 
 	useEffect(async () => {
@@ -250,6 +256,14 @@ function ProfilePage(props) {
 		await transaction.wait();
 	};
 
+	const _handleChangePriceModalOpen = (productIndex) => {
+
+		const productSelected = userProducts[productIndex]
+		setProductDataForModal(productSelected)
+		setEditPriceModalOpen(true)
+
+	}
+
 	//render functions
 	const renderInfo = (attributeName, info, setter) => {
 		if (valueToEdit === attributeName) {
@@ -340,6 +354,7 @@ function ProfilePage(props) {
 		}
 
 		const theProducts = userProducts.map((product, i) => {
+            console.log(product, "PROD");
 			return (
 				<Card key={i} className={styles.theProductCard}>
 					<CardActionArea>
@@ -359,6 +374,14 @@ function ProfilePage(props) {
 						</Button>
 						<Button size="small" variant="primary">
 							Edit
+						</Button>
+					</CardActions>
+					<CardActions>
+						<Button size="small" onClick={() => _handleChangePriceModalOpen(i)} variant="info">
+							Change Price
+						</Button>
+						<Button size="small" variant="danger">
+							Delete
 						</Button>
 					</CardActions>
 				</Card>
@@ -501,6 +524,8 @@ function ProfilePage(props) {
 						<Button onClick={() => setAvatarImgModal(false)}>Close</Button>
 					</Modal.Footer>
 				</Modal>
+
+				<PriceEditorModal contract={contract} productDataForModal={productDataForModal} editPriceModalOpen={editPriceModalOpen} setEditPriceModalOpen={setEditPriceModalOpen} />
 			</div>
 		</Layout>
 	);
