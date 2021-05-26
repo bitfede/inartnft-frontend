@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { utils } from "ethers";
 import {Modal, Row, Col, Button, Form } from 'react-bootstrap';
 
@@ -8,15 +8,33 @@ const PriceEditorModal = (props) => {
     console.log("PROPPI>>", props)
     const {setEditPriceModalOpen, editPriceModalOpen, productDataForModal, contract} = props;
 
-    const [newPrice, setNewPrice] = useState(null)
+    const [newPrice, setNewPrice] = useState(null);
+    const [theTransaction, setTheTransaction] = useState(null);
+
+    useEffect( () => {
+
+        console.log("TRANSACTION UPDATE --> ", theTransaction)
+
+    }, [theTransaction])
 
     //functions
     const _handleChangePrice = async () => {
 
-		const transaction = await contract.modifyOperaPrice(productDataForModal.mappingContractId, newPrice);
+        let overrides = {
+            gasLimit: 1000000
+        };
+
+        const newPriceInt = parseInt(newPrice)
+        if (newPrice === NaN) {return}
+
+        // console.log(utils.parseEther(newPrice))
+
+		const transaction = await contract.modifyOperaPrice({operaId: productDataForModal.mappingContractId, newprice: utils.parseUnits(newPrice, 18)}, overrides);
 		await transaction.wait();
 
-        // console.log("TX", transaction)
+        setTheTransaction(transaction);
+
+        console.log("TX", transaction)
 	};
 
 

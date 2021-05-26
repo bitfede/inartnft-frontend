@@ -139,6 +139,10 @@ function NewNftPage(props) {
 				setErrors({ encryptedDocs: "Missing documents" });
 				return false;
 			}
+		}
+
+		if (activeStep === 3) {
+			// TODO: Set errors here
 			if (!additionalImage?.trim()) {
 				setErrors({ additionalImage: "Missing additional image" });
 				return false;
@@ -151,10 +155,6 @@ function NewNftPage(props) {
 				setErrors({ additionalImage: "Missing additional image's description" });
 				return false;
 			}
-		}
-
-		if (activeStep === 3) {
-			// TODO: Set errors here
 		}
 
 		setErrors(null);
@@ -223,8 +223,33 @@ function NewNftPage(props) {
 				//CHECK HTTP STATUSES!!!!! TO-DO
 
 				console.log("UPL DOCS", step3DocsRes);
+			}
 
-				// const uploadedImgUrl = responseUpload.data.url
+			if (activeStep === 3) {
+				console.log(editorState);
+
+				const hashConfig = {
+					trigger: "#",
+					separator: " ",
+				};
+
+				const contentBlocksRaw = convertToRaw(editorState.getCurrentContent());
+				const markup = draftToHtml(contentBlocksRaw, hashConfig);
+				console.log("MARKUP", markup);
+
+				const payload = {
+					productsId: newNftId,
+					titleDocuments: newNftTitle,
+					descriptionDocuments: markup,
+				};
+
+				setIsLoading(true);
+				const res = await httpClient.post("/InsertProducts/InsertUpdateDocument", payload);
+				//TODO Handle all statuses, 200, 400 etc
+
+				console.log("POST DESCR LONG INFO", res);
+
+				// ---
 
 				//upload img
 				console.log(additionalImage, "ready");
@@ -259,31 +284,7 @@ function NewNftPage(props) {
 				console.log("UPL VID", step3VideoRes);
 
 				// do not continue, return here if there were problems
-			}
-
-			if (activeStep === 3) {
-				console.log(editorState);
-
-				const hashConfig = {
-					trigger: "#",
-					separator: " ",
-				};
-
-				const contentBlocksRaw = convertToRaw(editorState.getCurrentContent());
-				const markup = draftToHtml(contentBlocksRaw, hashConfig);
-				console.log("MARKUP", markup);
-
-				const payload = {
-					productsId: newNftId,
-					titleDocuments: newNftTitle,
-					descriptionDocuments: markup,
-				};
-
-				setIsLoading(true);
-				const res = await httpClient.post("/InsertProducts/InsertUpdateDocument", payload);
-				//TODO Handle all statuses, 200, 400 etc
-
-				console.log("POST DESCR LONG INFO", res);
+				
 			}
 
 			if (activeStep === 4) {
@@ -552,6 +553,23 @@ function NewNftPage(props) {
 											/>
 										</Form.Group>
 									</Form>
+								</div>
+							)}
+
+							{/* Step 3 */}
+							{activeStep === 3 && (
+								<div>
+									<h5 className={styles.mainTitleOfSection}>Insert a detailed description about this NFT</h5>
+									<Editor
+										editorState={editorState}
+										toolbarClassName={styles.rdwToolbarMain}
+										wrapperClassName="wrapperClassName"
+										editorClassName={styles.rdwEditorMain}
+										onEditorStateChange={newState => setEditorState(newState)}
+										uploadEnabled={true}
+										uploadCallback={e => _handleTextEditorImgUpload(e)}
+										previewImage={true}
+									/>
 
 									<h5 className={styles.mainTitleOfSection}>Insert an additional image</h5>
 									<Form>
@@ -596,23 +614,7 @@ function NewNftPage(props) {
 											""
 										)}
 									</Form>
-								</div>
-							)}
 
-							{/* Step 3 */}
-							{activeStep === 3 && (
-								<div>
-									<h5 className={styles.mainTitleOfSection}>Insert a detailed description about this NFT</h5>
-									<Editor
-										editorState={editorState}
-										toolbarClassName={styles.rdwToolbarMain}
-										wrapperClassName="wrapperClassName"
-										editorClassName={styles.rdwEditorMain}
-										onEditorStateChange={newState => setEditorState(newState)}
-										uploadEnabled={true}
-										uploadCallback={e => _handleTextEditorImgUpload(e)}
-										previewImage={true}
-									/>
 								</div>
 							)}
 
