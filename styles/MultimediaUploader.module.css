@@ -1,0 +1,14 @@
+.multimediaThumbnailPreview {
+    width: 45%;
+}
+
+#mainMediaModalBodyContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#mainMediaModalPreview {
+    width: 80%;
+}

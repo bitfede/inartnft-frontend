@@ -14,6 +14,7 @@ import { useEffect } from "react";
 
 //my components
 import Layout from "../../../components/Layout";
+import MultimediaUploader from "../../../components/MultimediaUploader";
 
 //library components
 import Link from "next/link";
@@ -36,7 +37,8 @@ function ProfilePage(props) {
 	const [errors, setErrors] = useState(null);
 	const [isLoading, setIsLoading] = useState(false);
 	const [isTouched, setIsTouched] = useState(false);
-	const [productObj, setProductObj] = useState(null)
+	const [productObj, setProductObj] = useState(null);
+	const [mainNftImageUrl, setMainNftImageUrl] = useState(null);
 
 
 	useEffect(async () => {
@@ -50,6 +52,10 @@ function ProfilePage(props) {
 
 
 	//functions ---
+	const _handleSubmitBasicInfo = () => {
+
+
+	}
 
 	//render functions
 
@@ -59,15 +65,16 @@ function ProfilePage(props) {
 			<Container id={styles.editArtPageContainer}>
 				<div className={styles.inputCards}>
 
-					{/* Title */}
+					{/* Title & basic info */}
 					<div className={styles.inputCard}>
-						<h5>Edit the title of the art piece</h5>
+						<h5 className={styles.sectionh5Title}>Edit the basic info about the NFT</h5>
 						<Form>
+
 							<Form.Group controlId="formTitle">
 								<Form.Label>Title of the NFT</Form.Label>
 								<Form.Control
 									name="title"
-									type="email"
+									type="text"
 									placeholder="Enter the title"
 									value={productObj ? productObj.title : ""}                                                         
 									onChange={e => setProductObj({...productObj, title: e.target.value})}
@@ -76,13 +83,7 @@ function ProfilePage(props) {
 								<Form.Control.Feedback type="invalid">{isTouched && errors?.title}</Form.Control.Feedback>
 								<Form.Text className="text-muted">(This will be the main title of the NFT)</Form.Text>
 							</Form.Group>
-						</Form>
-					</div>
 
-					{/* basic info */}
-					<div className={styles.inputCard}>
-						<h5>Edit additional data about the art piece</h5>
-						<Form>
 							<Form.Group controlId="formAuthor">
 								<Form.Label>Author</Form.Label>
 								<Form.Control value={productObj ? productObj.author : ""} onChange={e => setProductObj({...productObj, author: e.target.value})} placeholder="Enter the author" />
@@ -110,15 +111,18 @@ function ProfilePage(props) {
 								<Form.Control.Feedback type="invalid">{isTouched && errors?.history}</Form.Control.Feedback>
 								<Form.Text className="text-muted">(The history of the art piece)</Form.Text>
 							</Form.Group>
-							{/* 
-							<Form.Group controlId="mainNftImg">
-								<Form.File accept={"image/*"} onClick={e => _handleResetImg(e)} onChange={e => _handleNewImg(e, "profile_main_image")} id="exampleFormControlFile1" label="NFT Image" />
-								<Form.Control.Feedback type="invalid">{isTouched && errors?.image}</Form.Control.Feedback>
-								<Form.Text className="text-muted">(The main image of the art piece)</Form.Text>
-								{newNftMainImage ? <Image src={newNftMainImage} id={styles.mainImgThumbnailPreview} /> : ""}
-							</Form.Group>
-							*/}	
+
+							<MultimediaUploader
+								mediaLabel={"urlImageVideoPresentation"}
+								mediaType={"image"}
+								mediaUrl={productObj ? productObj.urlImageVideoPresentation : ""}
+								productObj={productObj ? productObj : ""}
+								setProductObj={setProductObj}
+								nftTitle={productObj ? productObj.title : ""}
+							/>
+
 						</Form>
+						<Button variant="success" onClick={() => _handleSubmitBasicInfo()}>Save Data</Button>
 					</div>
 
 				</div>
