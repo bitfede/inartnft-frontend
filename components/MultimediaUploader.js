@@ -8,7 +8,6 @@ import Loader from '../components/loader/loader';
 import styles from '../styles/MultimediaUploader.module.css';
 
 const MultimediaUploader = (props) => {
-    console.log("PROPPI>>", props)
     const { mediaLabel, mediaType, mediaUrl, productObj, setProductObj, nftTitle } = props;
 
     // state
@@ -18,12 +17,6 @@ const MultimediaUploader = (props) => {
     const [mediaModalOpen, setMediaModalOpen] = useState(false);
     const [mediaToUpload, setMediaToUpload] = useState(null);
     const [mediaToUploadPreview, setMediaToUploadPreview] = useState(null);
-
-
-    useEffect( () => {
-        console.log('component MediaUploader loaded');
-
-    }, [])
 
     useEffect(async () => {
 		if (!mediaToUpload) return;
@@ -78,9 +71,7 @@ const MultimediaUploader = (props) => {
 		const uploadedMediaUrl = responseUpload.data.url;
 
         let productObjClone = {...productObj};
-        console.log("Cloned obj before", productObjClone);
         productObjClone[mediaLabel] = uploadedMediaUrl;
-        console.log("Cloned obj after", productObjClone);
 		setProductObj(productObjClone);
 
 		setIsLoading(false);
@@ -90,7 +81,6 @@ const MultimediaUploader = (props) => {
 
     //render functions
     const renderMainMediaModalBody = () => {
-        console.log("MEDIATYPE", mediaType);
 
 		if (mediaType === "video") {
 			const videoFormat = mediaToUpload.type;

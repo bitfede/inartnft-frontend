@@ -52,9 +52,35 @@ function ProfilePage(props) {
 
 
 	//functions ---
-	const _handleSubmitBasicInfo = () => {
+	const _handleSubmitBasicInfo = async () => {
 
+		setIsLoading(true)
 
+		let res;
+		const {id, urlImageVideoPresentation, author, price, title, describtion, history} = productObj;
+		const payload = {
+			id: id,
+			urlImageVideoPresentation: urlImageVideoPresentation,
+			author: author,
+			contract_price: price,
+			title: title,
+			describtion: describtion,
+			history: history
+		}
+
+		try {
+			res = await httpClient.post('/InsertProducts/Update', payload)
+		} catch (error) {
+			return console.error(error)
+		}
+
+		// TODO manage statuses
+		if (res.status === 200) {
+			console.log("XXXX", res.data)
+			setProductObj(res.data)
+		}
+
+		setIsLoading(false)
 	}
 
 	//render functions
