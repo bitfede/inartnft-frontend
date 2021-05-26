@@ -33,6 +33,9 @@ function ProfilePage(props) {
 	const { authToken } = useAuth();
 	const {account} = useEthers();
 
+	const [errors, setErrors] = useState(null);
+	const [isLoading, setIsLoading] = useState(false);
+	const [isTouched, setIsTouched] = useState(false);
 	const [productObj, setProductObj] = useState(null)
 
 
@@ -54,8 +57,70 @@ function ProfilePage(props) {
 	return (
 		<Layout title="Profile">
 			<Container id={styles.editArtPageContainer}>
-				<div className={"inputsCard"}>
-					
+				<div className={styles.inputCards}>
+
+					{/* Title */}
+					<div className={styles.inputCard}>
+						<h5>Edit the title of the art piece</h5>
+						<Form>
+							<Form.Group controlId="formTitle">
+								<Form.Label>Title of the NFT</Form.Label>
+								<Form.Control
+									name="title"
+									type="email"
+									placeholder="Enter the title"
+									value={productObj ? productObj.title : ""}                                                         
+									onChange={e => setProductObj({...productObj, title: e.target.value})}
+									required
+								/>
+								<Form.Control.Feedback type="invalid">{isTouched && errors?.title}</Form.Control.Feedback>
+								<Form.Text className="text-muted">(This will be the main title of the NFT)</Form.Text>
+							</Form.Group>
+						</Form>
+					</div>
+
+					{/* basic info */}
+					<div className={styles.inputCard}>
+						<h5>Edit additional data about the art piece</h5>
+						<Form>
+							<Form.Group controlId="formAuthor">
+								<Form.Label>Author</Form.Label>
+								<Form.Control value={productObj ? productObj.author : ""} onChange={e => setProductObj({...productObj, author: e.target.value})} placeholder="Enter the author" />
+								<Form.Control.Feedback type="invalid">{isTouched && errors?.author}</Form.Control.Feedback>
+								<Form.Text className="text-muted">(The author of the art piece)</Form.Text>
+							</Form.Group>
+
+							<Form.Group controlId="formPrice">
+								<Form.Label>Price</Form.Label>
+								<Form.Control value={productObj ? productObj.price : ""} onChange={e => setProductObj({...productObj, price: e.target.value})} as="input" placeholder="110" />
+								<Form.Control.Feedback type="invalid">{isTouched && errors?.price}</Form.Control.Feedback>
+								<Form.Text className="text-muted">(The price of the art piece in ETH)</Form.Text>
+							</Form.Group>
+
+							<Form.Group controlId="formDescription">
+								<Form.Label>Description</Form.Label>
+								<Form.Control value={productObj ? productObj.describtion : ""} onChange={e => setProductObj({...productObj, describtion: e.target.value})} as="textarea" placeholder="Write your description here...." />
+								<Form.Control.Feedback type="invalid">{isTouched && errors?.description}</Form.Control.Feedback>
+								<Form.Text className="text-muted">(The description of the art piece)</Form.Text>
+							</Form.Group>
+
+							<Form.Group controlId="formHistory">
+								<Form.Label>History</Form.Label>
+								<Form.Control value={productObj ? productObj.history : ""} onChange={e => setProductObj({...productObj, history: e.target.value})} as="textarea" placeholder="Write the history of the NFT here...." />
+								<Form.Control.Feedback type="invalid">{isTouched && errors?.history}</Form.Control.Feedback>
+								<Form.Text className="text-muted">(The history of the art piece)</Form.Text>
+							</Form.Group>
+							{/* 
+							<Form.Group controlId="mainNftImg">
+								<Form.File accept={"image/*"} onClick={e => _handleResetImg(e)} onChange={e => _handleNewImg(e, "profile_main_image")} id="exampleFormControlFile1" label="NFT Image" />
+								<Form.Control.Feedback type="invalid">{isTouched && errors?.image}</Form.Control.Feedback>
+								<Form.Text className="text-muted">(The main image of the art piece)</Form.Text>
+								{newNftMainImage ? <Image src={newNftMainImage} id={styles.mainImgThumbnailPreview} /> : ""}
+							</Form.Group>
+							*/}	
+						</Form>
+					</div>
+
 				</div>
 			</Container>
 		</Layout>
