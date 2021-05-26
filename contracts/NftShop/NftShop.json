@@ -456,45 +456,44 @@
         "type": "function"
     },
     {
-        "inputs": [],
-        "name": "getListProducts",
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "infoProductArray",
         "outputs": [
             {
-                "components": [
-                    {
-                        "internalType": "uint256",
-                        "name": "infoProductID",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "address",
-                        "name": "sellerAddress",
-                        "type": "address"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "priceProduct",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "string",
-                        "name": "description",
-                        "type": "string"
-                    },
-                    {
-                        "internalType": "string",
-                        "name": "tokenUri",
-                        "type": "string"
-                    },
-                    {
-                        "internalType": "bool",
-                        "name": "isSelled",
-                        "type": "bool"
-                    }
-                ],
-                "internalType": "struct NftShop.InfoProduct[]",
-                "name": "",
-                "type": "tuple[]"
+                "internalType": "uint256",
+                "name": "infoProductID",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "sellerAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "priceProduct",
+                "type": "uint256"
+            },
+            {
+                "internalType": "string",
+                "name": "description",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "tokenUri",
+                "type": "string"
+            },
+            {
+                "internalType": "bool",
+                "name": "isSelled",
+                "type": "bool"
             }
         ],
         "stateMutability": "view",

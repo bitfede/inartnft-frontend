@@ -323,7 +323,6 @@ function NewNftPage(props) {
 	};
 
 	const _handleFinalizeImgUpload = async () => {
-		console.log("DAI MONA, ADESSO MANDA l'IMG AL SERVER");
 
 		setIsImgUploading(true);
 
@@ -498,8 +497,8 @@ function NewNftPage(props) {
 											<Form.Text className="text-muted">(The history of the art piece)</Form.Text>
 										</Form.Group>
 
-										<Form.Group controlId="formHistory">
-											<Form.File onClick={e => _handleResetImg(e)} onChange={e => _handleNewImg(e, "profile_main_image")} id="exampleFormControlFile1" label="NFT Image" />
+										<Form.Group controlId="mainNftImg">
+											<Form.File accept={"image/*"} onClick={e => _handleResetImg(e)} onChange={e => _handleNewImg(e, "profile_main_image")} id="exampleFormControlFile1" label="NFT Image" />
 											<Form.Control.Feedback type="invalid">{isTouched && errors?.image}</Form.Control.Feedback>
 											<Form.Text className="text-muted">(The main image of the art piece)</Form.Text>
 											{newNftMainImage ? <Image src={newNftMainImage} id={styles.mainImgThumbnailPreview} /> : ""}
@@ -515,7 +514,7 @@ function NewNftPage(props) {
 									<Form>
 										<Form.Group controlId="formDoc1">
 											<Form.File
-												accept={"application/pdf"}
+												accept={"application/pdf,image/*,video/*"}
 												onClick={e => console.log(e)}
 												onChange={e => _handleAddEncryptedDocs(e)}
 												id="nftDocumentsForm1"
@@ -525,7 +524,7 @@ function NewNftPage(props) {
 
 										<Form.Group controlId="formDoc2">
 											<Form.File
-												accept={"application/pdf"}
+												accept={"application/pdf,image/*,video/*"}
 												onClick={e => console.log(e)}
 												onChange={e => _handleAddEncryptedDocs(e)}
 												id="nftDocumentsForm2"
@@ -535,7 +534,7 @@ function NewNftPage(props) {
 
 										<Form.Group controlId="formDoc3">
 											<Form.File
-												accept={"application/pdf"}
+												accept={"application/pdf,image/*,video/*"}
 												onClick={e => console.log(e)}
 												onChange={e => _handleAddEncryptedDocs(e)}
 												id="nftDocumentsForm3"
@@ -545,7 +544,7 @@ function NewNftPage(props) {
 
 										<Form.Group controlId="formDoc2">
 											<Form.File
-												accept={"application/pdf"}
+												accept={"application/pdf,image/*,video/*"}
 												onClick={e => console.log(e)}
 												onChange={e => _handleAddEncryptedDocs(e)}
 												id="nftDocumentsForm4"
@@ -557,7 +556,7 @@ function NewNftPage(props) {
 									<h5 className={styles.mainTitleOfSection}>Insert an additional image</h5>
 									<Form>
 										<Form.Group controlId="formDoc1">
-											<Form.File onClick={e => _handleResetImg(e)} onChange={e => _handleNewImg(e, "additional_image")} id="nftDocumentsForm1" label="NFT Additional Image" />
+											<Form.File accept={"image/*"} onClick={e => _handleResetImg(e)} onChange={e => _handleNewImg(e, "additional_image")} id="nftDocumentsForm1" label="NFT Additional Image" />
 										</Form.Group>
 
 										<Form.Group controlId="formPrice">
@@ -574,8 +573,8 @@ function NewNftPage(props) {
 
 									<h5 className={styles.mainTitleOfSection}>Insert video</h5>
 									<Form>
-										<Form.Group controlId="formDoc1">
-											<Form.File onClick={e => _handleResetImg(e)} onChange={e => _handleNewImg(e, "main_video")} id="nftDocumentsForm1" label="NFT Main Video" />
+										<Form.Group controlId="formVideoMain">
+											<Form.File accept={"video/*"} onClick={e => _handleResetImg(e)} onChange={e => _handleNewImg(e, "main_video")} id="nftDocumentsForm1" label="NFT Main Video" />
 										</Form.Group>
 
 										<Form.Group controlId="formPrice">
