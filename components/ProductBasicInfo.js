@@ -26,6 +26,7 @@ const ProductBasicInfo = (props) => {
     const [isTouched, setIsTouched] = useState(false);
     const [errors, setErrors] = useState(null);
     const [descriptionEditorState, setDescriptionEditorState] = useState(null);
+    const [historyEditorState, setHistoryEditorState] = useState(null);
 
 
     useEffect(async () => {
@@ -39,14 +40,21 @@ const ProductBasicInfo = (props) => {
             const descriptionRichText = EditorState.createWithContent(contentState);
             setDescriptionEditorState(descriptionRichText)
         } catch (err) {
+            setErrors([...errors,err])
             console.error(err)
         }
 
-        // try {
-
-        // } catch (err) {
-
-        // }
+        try {
+            const htmlText = productObj.history;
+            const blocksFromHtml = htmlToDraft(htmlText);
+            const { contentBlocks, entityMap } = blocksFromHtml;
+            const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
+            const descriptionRichText = EditorState.createWithContent(contentState);
+            setHistoryEditorState(descriptionRichText)
+        } catch (err) {
+            setErrors([...errors,err])
+            console.error(err)
+        }
 
 	}, [productObj]);
 
@@ -55,15 +63,19 @@ const ProductBasicInfo = (props) => {
 
 		setIsLoading(true)
 
-        //get description from wysiwyg editor
+        //setup hashconfig to extract content from editor   
         const hashConfig = {
             trigger: "#",
             separator: " ",
         };
 
+        //get description from wysiwyg editor
         const contentBlocksRaw = convertToRaw(descriptionEditorState.getCurrentContent());
         const descriptionHtml = draftToHtml(contentBlocksRaw, hashConfig);
-        console.log("descriptionHtml", descriptionHtml);
+
+        //get history from wysiwyg editor
+        const contentBlocksRaw2 = convertToRaw(historyEditorState.getCurrentContent());
+        const historyHtml = draftToHtml(contentBlocksRaw2, hashConfig);
 
 		let res;
 		const {id, urlImageVideoPresentation, author, price, title, describtion, history} = productObj;
@@ -74,7 +86,7 @@ const ProductBasicInfo = (props) => {
 			contract_price: price,
 			title: title,
 			describtion: descriptionHtml,
-			history: history
+			history: historyHtml
 		}
 
 		try {
@@ -167,16 +179,25 @@ const ProductBasicInfo = (props) => {
                             previewImage={true}
                         />
                         <Form.Control.Feedback type="invalid">{isTouched && errors?.description}</Form.Control.Feedback>
-                        <Form.Text className="text-muted">(The description of the art piece)</Form.Text>
                     </Form.Group>
 
 
                     <Form.Group controlId="formHistory">
                         <Form.Label>History</Form.Label>
-                        <Form.Control value={productObj ? productObj.history : ""} onChange={e => setProductObj({...productObj, history: e.target.value})} as="textarea" placeholder="Write the history of the NFT here...." />
+                        <Editor
+                            editorState={historyEditorState}
+                            toolbarClassName={styles.rdwToolbarMain}
+                            wrapperClassName="wrapperClassName"
+                            editorClassName={styles.rdwEditorMain}
+                            onEditorStateChange={newState => setHistoryEditorState(newState)}
+                            uploadEnabled={true}
+                            uploadCallback={e => _handleTextEditorImgUpload(e)}
+                            previewImage={true}
+                        />
                         <Form.Control.Feedback type="invalid">{isTouched && errors?.history}</Form.Control.Feedback>
-                        <Form.Text className="text-muted">(The history of the art piece)</Form.Text>
                     </Form.Group>
+
+                    
 
                     <MultimediaUploader
                         mediaLabel={"urlImageVideoPresentation"}
