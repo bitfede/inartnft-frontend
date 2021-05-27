@@ -52,6 +52,7 @@ const MultimediaUploader = (props) => {
 
 		setIsLoading(true);
 
+        //fix logic here, the fact that is a video does not mean it will go into uploadvideo but could go into encrypted docs
 		let apiMediaPath = mediaToUpload.type.split("/")[0] === "video" ? "UploadVideo" : "UploadImage";
 
 		const formData = new FormData();

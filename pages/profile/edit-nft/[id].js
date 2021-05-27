@@ -14,7 +14,7 @@ import { useEffect } from "react";
 
 //my components
 import Layout from "../../../components/Layout";
-import MultimediaUploader from "../../../components/MultimediaUploader";
+import ProductBasicInfo from "../../../components/ProductBasicInfo";
 
 //library components
 import Link from "next/link";
@@ -38,50 +38,18 @@ function ProfilePage(props) {
 	const [isLoading, setIsLoading] = useState(false);
 	const [isTouched, setIsTouched] = useState(false);
 	const [productObj, setProductObj] = useState(null);
-	const [mainNftImageUrl, setMainNftImageUrl] = useState(null);
-
 
 	useEffect(async () => {
 		console.log("@ PAGE LOAD!");
 		console.log("ACCOUNT", account);
 		console.log("PRODUCT", product);
 
-		setProductObj(product);
+		setProductObj({...product});
 		
 	}, []);
 
 
 	//functions ---
-	const _handleSubmitBasicInfo = async () => {
-
-		setIsLoading(true)
-
-		let res;
-		const {id, urlImageVideoPresentation, author, price, title, describtion, history} = productObj;
-		const payload = {
-			id: id,
-			urlImageVideoPresentation: urlImageVideoPresentation,
-			author: author,
-			contract_price: price,
-			title: title,
-			describtion: describtion,
-			history: history
-		}
-
-		try {
-			res = await httpClient.post('/InsertProducts/Update', payload)
-		} catch (error) {
-			return console.error(error)
-		}
-
-		// TODO manage statuses
-		if (res.status === 200) {
-			console.log("XXXX", res.data)
-			setProductObj(res.data)
-		}
-
-		setIsLoading(false)
-	}
 
 	//render functions
 
@@ -92,64 +60,7 @@ function ProfilePage(props) {
 				<div className={styles.inputCards}>
 
 					{/* Title & basic info */}
-					<div className={styles.inputCard}>
-						<h5 className={styles.sectionh5Title}>Edit the basic info about the NFT</h5>
-						<Form>
-
-							<Form.Group controlId="formTitle">
-								<Form.Label>Title of the NFT</Form.Label>
-								<Form.Control
-									name="title"
-									type="text"
-									placeholder="Enter the title"
-									value={productObj ? productObj.title : ""}                                                         
-									onChange={e => setProductObj({...productObj, title: e.target.value})}
-									required
-								/>
-								<Form.Control.Feedback type="invalid">{isTouched && errors?.title}</Form.Control.Feedback>
-								<Form.Text className="text-muted">(This will be the main title of the NFT)</Form.Text>
-							</Form.Group>
-
-							<Form.Group controlId="formAuthor">
-								<Form.Label>Author</Form.Label>
-								<Form.Control value={productObj ? productObj.author : ""} onChange={e => setProductObj({...productObj, author: e.target.value})} placeholder="Enter the author" />
-								<Form.Control.Feedback type="invalid">{isTouched && errors?.author}</Form.Control.Feedback>
-								<Form.Text className="text-muted">(The author of the art piece)</Form.Text>
-							</Form.Group>
-
-							<Form.Group controlId="formPrice">
-								<Form.Label>Price</Form.Label>
-								<Form.Control value={productObj ? productObj.price : ""} onChange={e => setProductObj({...productObj, price: e.target.value})} as="input" placeholder="110" />
-								<Form.Control.Feedback type="invalid">{isTouched && errors?.price}</Form.Control.Feedback>
-								<Form.Text className="text-muted">(The price of the art piece in ETH)</Form.Text>
-							</Form.Group>
-
-							<Form.Group controlId="formDescription">
-								<Form.Label>Description</Form.Label>
-								<Form.Control value={productObj ? productObj.describtion : ""} onChange={e => setProductObj({...productObj, describtion: e.target.value})} as="textarea" placeholder="Write your description here...." />
-								<Form.Control.Feedback type="invalid">{isTouched && errors?.description}</Form.Control.Feedback>
-								<Form.Text className="text-muted">(The description of the art piece)</Form.Text>
-							</Form.Group>
-
-							<Form.Group controlId="formHistory">
-								<Form.Label>History</Form.Label>
-								<Form.Control value={productObj ? productObj.history : ""} onChange={e => setProductObj({...productObj, history: e.target.value})} as="textarea" placeholder="Write the history of the NFT here...." />
-								<Form.Control.Feedback type="invalid">{isTouched && errors?.history}</Form.Control.Feedback>
-								<Form.Text className="text-muted">(The history of the art piece)</Form.Text>
-							</Form.Group>
-
-							<MultimediaUploader
-								mediaLabel={"urlImageVideoPresentation"}
-								mediaType={"image"}
-								mediaUrl={productObj ? productObj.urlImageVideoPresentation : ""}
-								productObj={productObj ? productObj : ""}
-								setProductObj={setProductObj}
-								nftTitle={productObj ? productObj.title : ""}
-							/>
-
-						</Form>
-						<Button variant="success" onClick={() => _handleSubmitBasicInfo()}>Save Data</Button>
-					</div>
+					<ProductBasicInfo productObj={productObj} setProductObj={setProductObj} />
 
 				</div>
 			</Container>
