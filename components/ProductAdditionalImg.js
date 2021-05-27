@@ -8,7 +8,7 @@ import MultimediaUploader from './MultimediaUploader';
 
 import styles from '../styles/ProductElementsEncrypt.module.css';
 
-const ProductVideo = (props) => {
+const ProductAdditonalImg = (props) => {
     const { productObj, setProductObj } = props;
 
     // state
@@ -26,23 +26,23 @@ const ProductVideo = (props) => {
 		e.target.value = "";
 	};
 
-    const _handleSubmitVideo = async () => {
+    const _handleSubmitImage = async () => {
 
-        console.log("I dati da inviare:", productObj.videosProduct);
+        console.log("I dati da inviare:", productObj.imagesProduct);
 
-        const {id, descriptionVideo, tag, titleVideo, url} = productObj.videosProduct;
+        const {id, descriptionImage, tag, titleImage, url} = productObj.imagesProduct;
 
         const payload = {
             productsId: productObj.id,
-            titleVideo: titleVideo,
-            descriptionVideo: descriptionVideo,
+            titleImage: titleImage,
+            descriptionImage: descriptionImage,
             url: url,
             tag: tag
         }
 
-        const resVideoUpl = await httpClient.post("/InsertProducts/InsertUpdateVideo", payload)
+        const resImageUpl = await httpClient.post("/InsertProducts/InsertUpdateImage", payload)
 
-        console.log("RES VIDO UPPL", resVideoUpl);
+        console.log("RES IMGO UPPL", resImageUpl);
     }
 
     //render functions
@@ -51,36 +51,35 @@ const ProductVideo = (props) => {
 
     return (
         <div className={styles.inputCard}>
-            <h2 className={styles.sectionTitle}>Video</h2>
+            <h2 className={styles.sectionTitle}>Image</h2>
             <Loader show={isLoading}>
             <Form>
 
                 <Form.Group controlId="formPrice">
-                    <Form.Label>Video Title</Form.Label>
-                    <Form.Control value={productObj ? productObj.videosProduct.titleVideo : ""} onChange={e => setProductObj( {...productObj, videosProduct: {...productObj.videosProduct, titleVideo: e.target.value }})  } as="input" placeholder="" />
+                    <Form.Label>Image Title</Form.Label>
+                    <Form.Control value={productObj ? productObj.imagesProduct.titleImage : ""} onChange={e => setProductObj( {...productObj, imagesProduct: {...productObj.imagesProduct, titleImage: e.target.value }})  } as="input" placeholder="" />
                     <Form.Control.Feedback type="invalid">{isTouched && errors?.imgDescription}</Form.Control.Feedback>
                 </Form.Group>
 
                 <Form.Group controlId="formDescription">
-                    <Form.Label>Video Description</Form.Label>
-                    <Form.Control value={productObj ? productObj.videosProduct.descriptionVideo : ""} onChange={e => setProductObj( {...productObj, videosProduct: {...productObj.videosProduct, descriptionVideo: e.target.value}} ) } as="textarea" placeholder="Write your image description here...." />
+                    <Form.Label>Image Description</Form.Label>
+                    <Form.Control value={productObj ? productObj.imagesProduct.descriptionImage : ""} onChange={e => setProductObj( {...productObj, imagesProduct: {...productObj.imagesProduct, descriptionImage: e.target.value}} ) } as="textarea" placeholder="Write your image description here...." />
                     <Form.Control.Feedback type="invalid">{isTouched && errors?.description}</Form.Control.Feedback>
                 </Form.Group>
                 
                 <MultimediaUploader 
-                    mediaLabel={"videosProduct.url"} 
-                    mediaType="video" 
-                    mediaUrl={productObj.videosProduct ? productObj.videosProduct.url : ""} 
+                    mediaLabel={"imagesProduct.url"} 
+                    mediaType="image" 
+                    mediaUrl={productObj.imagesProduct ? productObj.imagesProduct.url : ""} 
                     productObj={productObj ? productObj : ""}        
                     setProductObj={setProductObj}
-                    nftTitle={productObj ? productObj.title : ""}
                 />
 
             </Form>
             </Loader>
-            {!isLoading ? (<Button variant="success" onClick={() => _handleSubmitVideo()}>Save Data</Button>) : (<Button variant="success" disabled><Spinner as="span" animation="grow" size="sm" role="status" aria-hidden="true" />Loading...</Button>)}
+            {!isLoading ? (<Button variant="success" onClick={() => _handleSubmitImage()}>Save Data</Button>) : (<Button variant="success" disabled><Spinner as="span" animation="grow" size="sm" role="status" aria-hidden="true" />Loading...</Button>)}
         </div>
     )
 }
 
-export default ProductVideo;
+export default ProductAdditonalImg;

@@ -17,6 +17,7 @@ import Layout from "../../../components/Layout";
 import ProductBasicInfo from "../../../components/ProductBasicInfo";
 import ProductElementsEncrypt from "../../../components/ProductElementsEncrypt";
 import ProductVideo from "../../../components/ProductVideo";
+import ProductAdditionalImg from "../../../components/ProductAdditionalImg";
 
 //library components
 import Link from "next/link";
@@ -75,8 +76,13 @@ function ProfilePage(props) {
 					{/* Encrypted Docs */}
 					<ProductElementsEncrypt productObj={productObj} setProductObj={setProductObj} />
 					
-					{/* Title & basic info */}
+					{/* Video */}
 					<ProductVideo productObj={productObj} setProductObj={setProductObj}  />
+
+					{/* Image */}
+					<ProductAdditionalImg productObj={productObj} setProductObj={setProductObj} />
+
+					
 				</div>
 			</Container>
 		</Layout>
