@@ -18,6 +18,7 @@ import ProductBasicInfo from "../../../components/ProductBasicInfo";
 import ProductElementsEncrypt from "../../../components/ProductElementsEncrypt";
 import ProductVideo from "../../../components/ProductVideo";
 import ProductAdditionalImg from "../../../components/ProductAdditionalImg";
+import ProductRichDescription from "../../../components/ProductRichDescription";
 
 //library components
 import Link from "next/link";
@@ -82,7 +83,9 @@ function ProfilePage(props) {
 					{/* Image */}
 					<ProductAdditionalImg productObj={productObj} setProductObj={setProductObj} />
 
-					
+					{/* Rich Description */}
+					<ProductRichDescription productObj={productObj} setProductObj={setProductObj} />
+
 				</div>
 			</Container>
 		</Layout>
