@@ -73,6 +73,29 @@ const ProductRichDescription = (props) => {
 
     }
 
+
+	const _handleTextEditorImgUpload = async e => {
+		const fileToUpload = e;
+
+		const formData = new FormData();
+		formData.append("image", fileToUpload);
+		formData.append("tag", fileToUpload.name);
+		const config = {
+			headers: {
+				"content-type": "multipart/form-data",
+			},
+		};
+
+		const response = await httpClient.post(`/Upload/UploadImage`, formData, config);
+		console.log(response);
+
+		const retVal = new Promise((resolve, reject) => {
+			resolve({ data: { link: response.data.url } });
+		});
+
+		return retVal;
+	};
+
     //render functions
 
 
