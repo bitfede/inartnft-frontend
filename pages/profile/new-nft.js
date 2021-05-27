@@ -143,18 +143,18 @@ function NewNftPage(props) {
 
 		if (activeStep === 3) {
 			// TODO: Set errors here
-			if (!additionalImage?.trim()) {
-				setErrors({ additionalImage: "Missing additional image" });
-				return false;
-			}
-			if (!additionalImageTitle?.trim()) {
-				setErrors({ additionalImage: "Missing additional image's title" });
-				return false;
-			}
-			if (!additionalImageDesc?.trim()) {
-				setErrors({ additionalImage: "Missing additional image's description" });
-				return false;
-			}
+			// if (!additionalImage?.trim()) {
+			// 	setErrors({ additionalImage: "Missing additional image" });
+			// 	return false;
+			// }
+			// if (!additionalImageTitle?.trim()) {
+			// 	setErrors({ additionalImage: "Missing additional image's title" });
+			// 	return false;
+			// }
+			// if (!additionalImageDesc?.trim()) {
+			// 	setErrors({ additionalImage: "Missing additional image's description" });
+			// 	return false;
+			// }
 		}
 
 		setErrors(null);
