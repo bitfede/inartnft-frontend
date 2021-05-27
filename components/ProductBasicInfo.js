@@ -60,7 +60,7 @@ const ProductBasicInfo = (props) => {
     //TODO add prop that differentiates between video and img upl
     return (
         <div className={styles.inputCard}>
-            <h5 className={styles.sectionh5Title}>Edit the basic info about the NFT</h5>
+            <h2 className={styles.sectionTitle}>Basic info</h2>
             <Loader show={isLoading}>
                 <Form>
 

@@ -3,7 +3,13 @@
     margin: 1.5rem 1rem;
 }
 
+#mainTitleTop {
+    font-size: 2rem;
+    text-align: center;
+}
+
 .inputCards {
     display: flex;
     flex-direction: column;
 }
+

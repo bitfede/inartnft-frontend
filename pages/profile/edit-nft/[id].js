@@ -15,6 +15,7 @@ import { useEffect } from "react";
 //my components
 import Layout from "../../../components/Layout";
 import ProductBasicInfo from "../../../components/ProductBasicInfo";
+import ProductElementsEncrypt from "../../../components/ProductElementsEncrypt";
 
 //library components
 import Link from "next/link";
@@ -65,9 +66,12 @@ function ProfilePage(props) {
 			<Container id={styles.editArtPageContainer}>
 				<div className={styles.inputCards}>
 
+					<h1 id={styles.mainTitleTop}>NFT Editor</h1>
+
 					{/* Title & basic info */}
 					<ProductBasicInfo productObj={productObj} setProductObj={setProductObj} />
 
+					<ProductElementsEncrypt productObj={productObj} setProductObj={setProductObj} />
 				</div>
 			</Container>
 		</Layout>

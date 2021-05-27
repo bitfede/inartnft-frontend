@@ -1,15 +1,13 @@
 import { useState, useEffect } from "react";
 import {Modal, Row, Col, Button, Form, Image, Spinner } from 'react-bootstrap';
 
-import MultimediaUploader from './MultimediaUploader';
-
 import httpClient from '../utilities/http-client';
 
 import Loader from './loader/loader';
 
-import styles from '../styles/ProductBasicInfo.module.css';
+import styles from '../styles/ProductElementsEncrypt.module.css';
 
-const ProductBasicInfo = (props) => {
+const ProductElementsEncrypt = (props) => {
     const { productObj, setProductObj } = props;
 
     // state
@@ -43,7 +41,7 @@ const ProductBasicInfo = (props) => {
 
     return (
         <div className={styles.inputCard}>
-            <h5 className={styles.sectionh5Title}>Edit encrypted documents</h5>
+            <h2 className={styles.sectionTitle}>Encrypted documents</h2>
             <Loader show={isLoading}>
             <Form>
                 <Form.Group controlId="formDoc1">
@@ -54,7 +52,6 @@ const ProductBasicInfo = (props) => {
                         id="nftDocumentsForm1"
                         label="NFT Encrypted Document 1"
                     />
-                    {}
                 </Form.Group>
 
                 <Form.Group controlId="formDoc2">
@@ -93,4 +90,4 @@ const ProductBasicInfo = (props) => {
     )
 }
 
-export default ProductBasicInfo;
+export default ProductElementsEncrypt;
