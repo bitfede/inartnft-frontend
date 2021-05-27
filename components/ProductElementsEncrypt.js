@@ -53,15 +53,12 @@ const ProductElementsEncrypt = (props) => {
         setIsLoading(true);
         console.log('submittin encrypt doc', tempDocsArr)
 
-        console.log(1, settings.Endpoints.ApiUrl)
-        console.log(2, existingDocs[0])
-
         //delete current docs on DB -- TODO
-        const payload1 = JSON.stringify(`${settings.Endpoints.ApiUrl}${existingDocs[0].substring(4)}`); //test
+        const payload1 = JSON.stringify(productObj.documentsEncrypted.encryptionId); //test
 
         console.log(payload1)
 
-        const deleteDocsRes = await httpClient.post("/Remove/File", payload1);
+        const deleteDocsRes = await httpClient.post("/Remove/EncryptedFiles", payload1);
 
         console.log("DELETE DOCS RES", deleteDocsRes)
 

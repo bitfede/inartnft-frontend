@@ -376,7 +376,7 @@ function ProfilePage(props) {
 								{product.title}
 							</Typography>
 							<Typography variant="body2" color="textSecondary" component="p">
-								{product.describtion}
+								{product.author}
 							</Typography>
 						</CardContent>
 					</CardActionArea>
