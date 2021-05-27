@@ -24,7 +24,7 @@ const ProductBasicInfo = (props) => {
     // state
     const [isLoading, setIsLoading] = useState(false);
     const [isTouched, setIsTouched] = useState(false);
-    const [errors, setErrors] = useState(null);
+    const [errors, setErrors] = useState({});
     const [descriptionEditorState, setDescriptionEditorState] = useState(null);
     const [historyEditorState, setHistoryEditorState] = useState(null);
 
@@ -40,7 +40,6 @@ const ProductBasicInfo = (props) => {
             const descriptionRichText = EditorState.createWithContent(contentState);
             setDescriptionEditorState(descriptionRichText)
         } catch (err) {
-            setErrors([...errors,err])
             console.error(err)
         }
 
@@ -52,7 +51,6 @@ const ProductBasicInfo = (props) => {
             const descriptionRichText = EditorState.createWithContent(contentState);
             setHistoryEditorState(descriptionRichText)
         } catch (err) {
-            setErrors([...errors,err])
             console.error(err)
         }
 
@@ -61,7 +59,11 @@ const ProductBasicInfo = (props) => {
     //functions
     const _handleSubmitBasicInfo = async () => {
 
-		setIsLoading(true)
+        setIsTouched(true);
+        setIsLoading(true)
+
+        const checksAreValid = _handleValidate()
+        if (!checksAreValid) { return false}
 
         //setup hashconfig to extract content from editor   
         const hashConfig = {
@@ -102,6 +104,7 @@ const ProductBasicInfo = (props) => {
 		}
 
 		setIsLoading(false)
+        setIsTouched(false)
 	}
 
 
@@ -126,6 +129,34 @@ const ProductBasicInfo = (props) => {
 
 		return retVal;
 	};
+
+    const _handleValidate = () => {
+
+        if (!productObj.title?.trim()) {
+            setErrors({ title: "Missing title" });
+            setIsLoading(false);
+            alert("Title must not be left blank")
+            return false;
+        }
+
+        if (!String(productObj.price)?.trim()) {
+            setErrors({ price: "Missing price" });
+            setIsLoading(false);
+            alert("Price must not be left blank")
+            return false;
+        }
+
+
+        if (!productObj.urlImageVideoPresentation?.trim()) {
+            setErrors({ image: "Missing image" });
+            setIsLoading(false);
+            alert("Image must not be left blank")
+            return false;
+        }
+
+
+        return true
+    }
 
     //render functions
 
