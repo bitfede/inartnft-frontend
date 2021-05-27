@@ -29,7 +29,7 @@ import { useAuth } from "../../../hooks/auth";
 function ProfilePage(props) {
 
 	console.log("PROPS", props)
-	const {product} = props;
+	const {productId} = props;
 
 	const { authToken } = useAuth();
 	const {account} = useEthers();
@@ -42,7 +42,13 @@ function ProfilePage(props) {
 	useEffect(async () => {
 		console.log("@ PAGE LOAD!");
 		console.log("ACCOUNT", account);
-		console.log("PRODUCT", product);
+		console.log("PRODUCT ID", productId);
+
+		const payload = JSON.stringify(productId);
+		const productRes = await httpClient.post("/PublicProduct", payload);
+		//  TODO Gestire gli status HTTP
+		const product = productRes.data;	
+		console.log("PRODUCT DATA", product)
 
 		setProductObj({...product});
 		
@@ -71,18 +77,18 @@ function ProfilePage(props) {
 export async function getStaticProps(context) {
 	console.log("CONTEXT", context.params.id)
 	const productId = context.params.id;
-	const payload = JSON.stringify(productId);
-	const productRes = await httpClient.post("/PublicProduct", payload);
-	//  TODO Gestire gli status HTTP
-	const product = productRes.data;
-	  if (!product) {
-	    return {
-	      notFound: true,
-	    }
-	  }
-	  console.log(product)
+	// const payload = JSON.stringify(productId);
+	// const productRes = await httpClient.post("/PublicProduct", payload);
+	// //  TODO Gestire gli status HTTP
+	// const product = productRes.data;
+	//   if (!product) {
+	//     return {
+	//       notFound: true,
+	//     }
+	//   }
+	// 	console.log("getStaticProps Call ->",product)
 	return {
-		props: { product: product }, // will be passed to the page component as props
+		props: { productId: context.params.id , /*product: product*/ }, // will be passed to the page component as props
 	};
 }
 
