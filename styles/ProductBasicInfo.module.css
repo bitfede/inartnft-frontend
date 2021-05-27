@@ -10,3 +10,14 @@
     margin-bottom: 2rem;  
     text-align: center;  
 }
+
+
+.rdwEditorMain {
+    border: 1px solid #F1F1F1;
+    padding: 10px;
+    margin-bottom: 2rem;
+}
+
+.rdwToolbarMain {
+    background: #f9f9f9;
+}

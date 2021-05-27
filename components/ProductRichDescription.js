@@ -4,10 +4,7 @@ import {Modal, Row, Col, Button, Form, Image, Spinner } from 'react-bootstrap';
 import httpClient from '../utilities/http-client';
 import { convertToRaw, EditorState, ContentState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
-// import htmlToDraft from 'html-to-draftjs';
 const Editor = dynamic(() => import("react-draft-wysiwyg").then(mod => mod.Editor), { ssr: false });
-// const htmlToDraft = dynamic(() => import("html-to-draftjs").then(mod => mod.htmlToDraft), { ssr: false });
-// import MultimediaUploader from './MultimediaUploader';
 import Loader from './loader/loader';
 
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
@@ -34,7 +31,6 @@ const ProductRichDescription = (props) => {
 
         const htmlText = productObj.documentsProduct.descriptionDocument;
 
-        console.log("YOYO", htmlToDraft(htmlText))
         const blocksFromHtml = htmlToDraft(htmlText);
         const { contentBlocks, entityMap } = blocksFromHtml;
         const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
