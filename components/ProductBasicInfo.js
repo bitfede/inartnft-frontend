@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react";
 import {Modal, Row, Col, Button, Form, Image, Spinner } from 'react-bootstrap';
-
-import MultimediaUploader from './MultimediaUploader';
-
 import httpClient from '../utilities/http-client';
 
+import MultimediaUploader from './MultimediaUploader';
 import Loader from './loader/loader';
 
 import styles from '../styles/ProductBasicInfo.module.css';

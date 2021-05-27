@@ -48,7 +48,7 @@ const MultimediaUploader = (props) => {
 		setMediaModalOpen(false);
     }
 
-    const _handleFinalizeImgUpload = async () => {
+    const _handleFinalizeMediaUpload = async () => {
 
 		setIsLoading(true);
 
@@ -57,7 +57,7 @@ const MultimediaUploader = (props) => {
 
 		const formData = new FormData();
 		formData.append("image", mediaToUpload);
-		formData.append("tag", `${nftTitle}-${mediaLabel}`);
+		formData.append("tag", `${productObj.title}-${mediaLabel}`);
 		const config = {
 			headers: {
 				"content-type": "multipart/form-data",
@@ -72,7 +72,16 @@ const MultimediaUploader = (props) => {
 		const uploadedMediaUrl = responseUpload.data.url;
 
         let productObjClone = {...productObj};
-        productObjClone[mediaLabel] = uploadedMediaUrl;
+
+        if (mediaLabel.split(".").length === 2) {
+            console.log(mediaLabel.split("."))
+            const mediaLabels = mediaLabel.split(".");
+            productObjClone[mediaLabels[0]][mediaLabels[1]] = uploadedMediaUrl;
+        } else {
+            productObjClone[mediaLabel] = uploadedMediaUrl;
+        }
+
+        console.log("FIANAL, CLONE", productObjClone)
 		setProductObj(productObjClone);
 
 		setIsLoading(false);
@@ -83,12 +92,14 @@ const MultimediaUploader = (props) => {
     //render functions
     const renderMainMediaModalBody = () => {
 
+        if (!mediaToUpload) return ("")
+
 		if (mediaType === "video") {
 			const videoFormat = mediaToUpload.type;
 
 			return (
 				<div id={styles.mainMediaModalBodyContainer}>
-					<video controls id={styles.mainMediaModalPreview}>
+					<video key={mediaToUploadPreview} controls className={styles.mainMediaModalPreview}>
 						<source src={mediaToUploadPreview} type={videoFormat ? videoFormat.type : "video/mp4"} />
 					</video>
 				</div>
@@ -97,10 +108,28 @@ const MultimediaUploader = (props) => {
 
 		return (
 			<div id={styles.mainMediaModalBodyContainer}>
-				<Image id={styles.mainMediaModalPreview} src={mediaToUploadPreview} />
+				<Image className={styles.mainMediaModalPreview} src={mediaToUploadPreview} />
 			</div>
 		);
 	};  
+
+    const renderImageOrVideo = () => {
+
+        if (mediaType === "video") {
+            let videoFormat = mediaUrl.split(".").slice(-1).toString()
+            return (
+                <Loader show={isLoading}>{mediaUrl ? <div id={styles.mainImgModalBodyContainer}>
+                <video controls id={styles.mainImgModalPreview}>
+                    <source src={mediaUrl} type={videoFormat ? videoFormat.type : `video/${videoFormat}`} />
+                </video>
+            </div> : ""}</Loader>
+            )
+        }
+
+        return (
+            <Loader show={isLoading}>{mediaUrl ? <Image src={mediaUrl} className={styles.multimediaThumbnailPreview} /> : ""}</Loader>
+        )
+    }
 
     
     //TODO add prop that differentiates between video and img upl
@@ -109,10 +138,10 @@ const MultimediaUploader = (props) => {
 
         <Form>
             <Form.Group controlId="multimediaForm">
-                <Form.File accept={"image/*"} onClick={e => _handleResetImg(e)} onChange={e => _handleNewImg(e, mediaType)} id="formControlFile" label="NFT Multimedia" />
+                <Form.File accept={`${mediaType}/*`} onClick={e => _handleResetImg(e)} onChange={e => _handleNewImg(e, mediaType)} id="formControlFile" label="NFT Multimedia" />
                 <Form.Control.Feedback type="invalid">{isTouched && errors?.media}</Form.Control.Feedback>
                 <Form.Text className="text-muted">(The main image of the art piece)</Form.Text>
-                <Loader show={isLoading}>{mediaUrl ? <Image src={mediaUrl} className={styles.multimediaThumbnailPreview} /> : ""}</Loader>
+                {renderImageOrVideo()}
             </Form.Group>
         </Form>
         
@@ -124,7 +153,7 @@ const MultimediaUploader = (props) => {
 					<Loader show={isLoading}>{renderMainMediaModalBody()}</Loader>
 				</Modal.Body>
 				<Modal.Footer>
-					<Button onClick={() => _handleFinalizeImgUpload()} variant="success">
+					<Button onClick={() => _handleFinalizeMediaUpload()} variant="success">
 						Yes
 					</Button>
 					<Button onClick={() => _handleCloseMediaPreviewModal()} variant="danger">
