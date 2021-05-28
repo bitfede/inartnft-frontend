@@ -48,6 +48,7 @@ const ProductAdditonalImg = (props) => {
     //render functions
 
     if (!productObj) return "";
+    if (!productObj.imagesProduct) return "";
 
     return (
         <div className={styles.inputCard}>

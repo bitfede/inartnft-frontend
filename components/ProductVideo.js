@@ -48,6 +48,7 @@ const ProductVideo = (props) => {
     //render functions
 
     if (!productObj) return "";
+    if (!productObj.videosProduct) {return "";}
 
     return (
         <div className={styles.inputCard}>

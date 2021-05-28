@@ -268,12 +268,12 @@ function ProfilePage(props) {
 
 		const productSelected = userProducts[productIndex];
 
-		const payload = JSON.stringify(productSelected.id);
+		if (productSelected.publish === 0) {
 
-		const resDel = await httpClient.post("/Remove/Product", payload);
-
-		console.log("DELETE RES", resDel)
-
+			const payload = JSON.stringify(productSelected.id);
+			const resDel = await httpClient.post("/Remove/Product", payload);
+			console.log("DELETE RES", resDel);
+		}
 	}
 
 	//render functions

@@ -288,7 +288,7 @@ function NewNftPage(props) {
 			}
 
 			if (activeStep === 4) {
-				Router.push("/profile/me");
+				Router.push(`/edit-nft/${newNftId}`);
 			}
 
 			setIsTouched(false);

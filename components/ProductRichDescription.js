@@ -26,6 +26,9 @@ const ProductRichDescription = (props) => {
 
     console.log(editorState)
 
+    if (!productObj) return ""
+    if (!productObj.documentsProduct) return ""
+
     useEffect( () => {
         if (!productObj) return
 

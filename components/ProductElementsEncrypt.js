@@ -24,6 +24,7 @@ const ProductElementsEncrypt = (props) => {
 
         if (!productObj) return ("");
         if (!productObj.documentsEncrypted) return ("");
+        if (!productObj.documentsEncrypted[0]) return "";
         if (docsCleared === true) return("");
 
         const {documentsEncrypted} = productObj;
