@@ -183,6 +183,18 @@ function NewNftPage(props) {
 			}
 
 			if (activeStep === 1) {
+				// hashconfig to get html from rich editor
+				const hashConfig = {
+					trigger: "#",
+					separator: " ",
+				};
+
+				//description
+				const contentBlocksRaw = convertToRaw(newNftDescription.getCurrentContent());
+				const nftDescriptionHtml = draftToHtml(contentBlocksRaw, hashConfig);
+				//history
+				const contentBlocksRaw2 = convertToRaw(newNftHistory.getCurrentContent());
+				const nftHistoryHtml = draftToHtml(contentBlocksRaw2, hashConfig);
 				//here as payload put object with id, avatar url, descr, etc
 				const payload = {
 					id: newNftId,
@@ -190,8 +202,8 @@ function NewNftPage(props) {
 					author: newNftAuthor,
 					contract_price: newNftPrice,
 					title: newNftTitle,
-					describtion: newNftDescription,
-					history: newNftHistory,
+					describtion: nftDescriptionHtml,
+					history: nftHistoryHtml,
 				};
 
 				setIsLoading(true);
@@ -288,7 +300,7 @@ function NewNftPage(props) {
 			}
 
 			if (activeStep === 4) {
-				Router.push(`/edit-nft/${newNftId}`);
+				Router.push(`profile/edit-nft/${newNftId}`);
 			}
 
 			setIsTouched(false);
@@ -486,16 +498,31 @@ function NewNftPage(props) {
 
 										<Form.Group controlId="formDescription">
 											<Form.Label>Description</Form.Label>
-											<Form.Control onChange={e => setNewNftDescription(e.target.value)} as="textarea" placeholder="Write your description here...." />
-											<Form.Control.Feedback type="invalid">{isTouched && errors?.description}</Form.Control.Feedback>
-											<Form.Text className="text-muted">(The description of the art piece)</Form.Text>
+											<Editor
+												editorState={newNftDescription}
+												toolbarClassName={styles.rdwToolbarMain}
+												wrapperClassName="wrapperClassName"
+												editorClassName={styles.rdwEditorMain}
+												onEditorStateChange={newState => setNewNftDescription(newState)}
+												uploadEnabled={true}
+												uploadCallback={e => _handleTextEditorImgUpload(e)}
+												previewImage={true}
+											/>											<Form.Control.Feedback type="invalid">{isTouched && errors?.description}</Form.Control.Feedback>
 										</Form.Group>
 
 										<Form.Group controlId="formHistory">
 											<Form.Label>History</Form.Label>
-											<Form.Control onChange={e => setNewNftHistory(e.target.value)} as="textarea" placeholder="Write the history of the NFT here...." />
+											<Editor
+												editorState={newNftHistory}
+												toolbarClassName={styles.rdwToolbarMain}
+												wrapperClassName="wrapperClassName"
+												editorClassName={styles.rdwEditorMain}
+												onEditorStateChange={newState => setNewNftHistory(newState)}
+												uploadEnabled={true}
+												uploadCallback={e => _handleTextEditorImgUpload(e)}
+												previewImage={true}
+											/>
 											<Form.Control.Feedback type="invalid">{isTouched && errors?.history}</Form.Control.Feedback>
-											<Form.Text className="text-muted">(The history of the art piece)</Form.Text>
 										</Form.Group>
 
 										<Form.Group controlId="mainNftImg">
@@ -638,7 +665,7 @@ function NewNftPage(props) {
 
 							{/* Next button */}
 							<Button /*disabled={Object.keys(errors || {}).length || false}*/ onClick={() => _handleNextStep()}>
-								{activeStep <= 3 ? "Next" : "Go Back To Profile Page"}
+								{activeStep <= 3 ? "Next" : "Click here to view the NFT Draft"}
 							</Button>
 						</Col>
 					</Row>

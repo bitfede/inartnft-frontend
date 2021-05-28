@@ -26,14 +26,12 @@ const ProductRichDescription = (props) => {
 
     console.log(editorState)
 
-    if (!productObj) return ""
-    if (!productObj.documentsProduct) return ""
-
     useEffect( () => {
         if (!productObj) return
 
         const htmlText = productObj.documentsProduct.descriptionDocument;
 
+        console.log("YOYO", htmlToDraft(htmlText))
         const blocksFromHtml = htmlToDraft(htmlText);
         const { contentBlocks, entityMap } = blocksFromHtml;
         const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
