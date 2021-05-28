@@ -112,22 +112,22 @@ function NewNftPage(props) {
 		}
 
 		if (activeStep === 1) {
-			if (!newNftAuthor?.trim()) {
-				setErrors({ author: "Missing author" });
-				return false;
-			}
+			// if (!newNftAuthor?.trim()) {
+			// 	setErrors({ author: "Missing author" });
+			// 	return false;
+			// }
 			if (!newNftPrice?.trim()) {
 				setErrors({ price: "Missing price" });
 				return false;
 			}
-			if (!newNftDescription?.trim()) {
-				setErrors({ description: "Missing description" });
-				return false;
-			}
-			if (!newNftHistory?.trim()) {
-				setErrors({ history: "Missing history" });
-				return false;
-			}
+			// if (!newNftDescription?.trim()) {
+			// 	setErrors({ description: "Missing description" });
+			// 	return false;
+			// }
+			// if (!newNftHistory?.trim()) {
+			// 	setErrors({ history: "Missing history" });
+			// 	return false;
+			// }
 			if (!newNftMainImage?.trim()) {
 				setErrors({ image: "Missing main image" });
 				return false;
@@ -135,10 +135,10 @@ function NewNftPage(props) {
 		}
 
 		if (activeStep === 2) {
-			if (!encryptedDocs?.length) {
-				setErrors({ encryptedDocs: "Missing documents" });
-				return false;
-			}
+			// if (!encryptedDocs?.length) {
+			// 	setErrors({ encryptedDocs: "Missing documents" });
+			// 	return false;
+			// }
 		}
 
 		if (activeStep === 3) {
@@ -637,7 +637,7 @@ function NewNftPage(props) {
 							</Form.Group>
 
 							{/* Next button */}
-							<Button disabled={Object.keys(errors || {}).length} onClick={() => _handleNextStep()}>
+							<Button /*disabled={Object.keys(errors || {}).length || false}*/ onClick={() => _handleNextStep()}>
 								{activeStep <= 3 ? "Next" : "Go Back To Profile Page"}
 							</Button>
 						</Col>

@@ -60,7 +60,7 @@ const ProductElementsEncrypt = (props) => {
 
         const deleteDocsRes = await httpClient.post("/Remove/EncryptedFiles", payload1);
 
-        console.log("DELETE DOCS RES", deleteDocsRes)
+        console.log("DELETE DOCS RES", deleteDocsRes);
 
         //POST new docs to server
         const formData = new FormData();
