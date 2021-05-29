@@ -1,0 +1,21 @@
+.inputCard {
+    margin: 1rem;
+    padding: 1rem;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}
+
+.sectionTitle {
+    font-size: 1.4rem;
+    margin-top: .5rem;
+    margin-bottom: 2rem;  
+    text-align: center;  
+}
+
+#clearDocsBtn {
+    margin-left: 1rem;
+}
+
+
+.deleteMediaBtn {
+    margin-left: 1rem;
+}

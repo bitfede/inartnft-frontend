@@ -6,7 +6,7 @@ import httpClient from '../utilities/http-client';
 import Loader from './loader/loader';
 import MultimediaUploader from './MultimediaUploader';
 
-import styles from '../styles/ProductElementsEncrypt.module.css';
+import styles from '../styles/ProductVideo.module.css';
 
 const ProductVideo = (props) => {
     const { productObj, setProductObj } = props;
@@ -43,6 +43,32 @@ const ProductVideo = (props) => {
         const resVideoUpl = await httpClient.post("/InsertProducts/InsertUpdateVideo", payload)
 
         console.log("RES VIDO UPPL", resVideoUpl);
+    }
+
+    const _handleDeleteVideo = async () => {
+        
+        const currentUrl = productObj.videosProduct.url;
+        let choice = confirm("Are you sure you want to delete this video?")
+
+        if (choice === false) return;
+
+        let productObjClone = {...productObj};
+        productObjClone.videoProduct = {
+            descriptionVideo: "",
+            tag: "",
+            titleVideo: "",
+            url: ""
+        }
+
+        const payload = JSON.stringify(currentUrl)
+
+        const res = await httpClient.post("/Remove/File", payload)
+
+        console.log("VIDEO DELETION: ", res)
+
+        if (res.status === 200) {
+            setProductObj(productObjClone)
+        }
     }
 
     //render functions
@@ -86,6 +112,7 @@ const ProductVideo = (props) => {
             </Form>
             </Loader>
             {!isLoading ? (<Button variant="success" onClick={() => _handleSubmitVideo()}>Save Data</Button>) : (<Button variant="success" disabled><Spinner as="span" animation="grow" size="sm" role="status" aria-hidden="true" />Loading...</Button>)}
+            <Button className={styles.deleteMediaBtn} disabled={productObj.videosProduct.url === ""} variant="danger" onClick={() => _handleDeleteVideo()}>Delete Video</Button>
         </div>
     )
 }

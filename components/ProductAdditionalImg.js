@@ -6,7 +6,7 @@ import httpClient from '../utilities/http-client';
 import Loader from './loader/loader';
 import MultimediaUploader from './MultimediaUploader';
 
-import styles from '../styles/ProductElementsEncrypt.module.css';
+import styles from '../styles/ProductAdditionalImg.module.css';
 
 const ProductAdditonalImg = (props) => {
     const { productObj, setProductObj } = props;
@@ -43,6 +43,33 @@ const ProductAdditonalImg = (props) => {
         const resImageUpl = await httpClient.post("/InsertProducts/InsertUpdateImage", payload)
 
         console.log("RES IMGO UPPL", resImageUpl);
+    }
+
+    const _handleDeleteImage = () => {
+
+        const currentUrl = productObj.imagesProduct.url;
+        let choice = confirm("Are you sure you want to delete this image?")
+
+        if (choice === false) return;
+
+        let productObjClone = {...productObj};
+        productObjClone.imagesProduct = {
+            descriptionImage: "",
+            tag: "",
+            titleImage: "",
+            url: ""
+        }
+
+        const payload = JSON.stringify(currentUrl)
+
+        const res = await httpClient.post("/Remove/File", payload)
+
+        console.log("VIDEO DELETION: ", res)
+
+        if (res.status === 200) {
+            setProductObj(productObjClone)
+        }
+
     }
 
     //render functions
@@ -86,6 +113,7 @@ const ProductAdditonalImg = (props) => {
             </Form>
             </Loader>
             {!isLoading ? (<Button variant="success" onClick={() => _handleSubmitImage()}>Save Data</Button>) : (<Button variant="success" disabled><Spinner as="span" animation="grow" size="sm" role="status" aria-hidden="true" />Loading...</Button>)}
+            <Button className={styles.deleteMediaBtn} disabled={productObj.imagesProduct.url === ""} variant="danger" onClick={() => _handleDeleteImage()}>Delete Photo</Button>
         </div>
     )
 }

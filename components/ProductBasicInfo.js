@@ -31,6 +31,12 @@ const ProductBasicInfo = (props) => {
 
     useEffect(async () => {
         if (!productObj) return
+        if (!productObj.describtion) {
+            productObj.describtion = " ";
+        }
+        if (!productObj.history) {
+            productObj.history = " ";
+        }
 
         try {
             const htmlText = productObj.describtion;
