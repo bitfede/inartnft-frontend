@@ -45,7 +45,7 @@ const ProductAdditonalImg = (props) => {
         console.log("RES IMGO UPPL", resImageUpl);
     }
 
-    const _handleDeleteImage = () => {
+    const _handleDeleteImage = async () => {
 
         const currentUrl = productObj.imagesProduct.url;
         let choice = confirm("Are you sure you want to delete this image?")
