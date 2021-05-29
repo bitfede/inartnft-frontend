@@ -48,7 +48,13 @@ const ProductVideo = (props) => {
     //render functions
 
     if (!productObj) return "";
-    if (!productObj.videosProduct) {return "";}
+    if (!productObj.videosProduct) {
+        productObj.videosProduct = {
+            tag: "",
+            titleVideo: "",
+            url: "",
+        }
+    }
 
     return (
         <div className={styles.inputCard}>

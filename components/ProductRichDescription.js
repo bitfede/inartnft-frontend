@@ -28,10 +28,15 @@ const ProductRichDescription = (props) => {
 
     useEffect( () => {
         if (!productObj) return
+        if (!productObj.documentsProduct) {
+            productObj.documentsProduct = {
+                descriptionDocument: "",
+                titleDocument: ""
+            }
+        }
 
         const htmlText = productObj.documentsProduct.descriptionDocument;
 
-        console.log("YOYO", htmlToDraft(htmlText))
         const blocksFromHtml = htmlToDraft(htmlText);
         const { contentBlocks, entityMap } = blocksFromHtml;
         const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
@@ -99,7 +104,7 @@ const ProductRichDescription = (props) => {
     
     return (
         <div className={styles.inputCard}>
-            <h2 className={styles.sectionTitle}>Basic info</h2>
+            <h2 className={styles.sectionTitle}>Additional Description</h2>
             <Loader show={isLoading}>
                 <Form>
                     <Editor

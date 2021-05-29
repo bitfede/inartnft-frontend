@@ -102,7 +102,7 @@ const ProductElementsEncrypt = (props) => {
                         label="NFT Encrypted Document 1"
                         disabled={!docsCleared}
                     />
-                    {existingDocs && !docsCleared ? (<Form.Text className="text-muted">File: <a href={"#"} target="_blank">{existingDocs[0]}</a></Form.Text>) : ""}
+                    {existingDocs && !docsCleared ? (<Form.Text className="text-muted">File: <a href={`#`} target="_blank">{existingDocs[0]}</a></Form.Text>) : ""}
                 </Form.Group>
 
                 <Form.Group controlId="formDoc2">
