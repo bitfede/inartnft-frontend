@@ -268,10 +268,10 @@ function NewNftPage(props) {
 
 				const payloadImg = {
 					productsId: newNftId,
-					titleImage: additionalImageTitle,
-					descriptionImage: additionalImageDesc,
-					url: additionalImage,
-					tag: newNftTitle,
+					titleImage: additionalImageTitle ? additionalImageTitle : "",
+					descriptionImage: additionalImageDesc ? additionalImageDesc : "",
+					url: additionalImage ? additionalImage : "",
+					tag: additionalImage ? newNftTitle : "",
 				};
 
 				const step3ImgRes = await httpClient.post("/InsertProducts/InsertUpdateImage", payloadImg);
@@ -463,7 +463,6 @@ function NewNftPage(props) {
 											<Form.Label>Title of the NFT</Form.Label>
 											<Form.Control
 												name="title"
-												type="email"
 												placeholder="Enter the title"
 												value={newNftTitle || ""}
 												isInvalid={isTouched && errors?.title}
