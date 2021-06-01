@@ -51,15 +51,15 @@ function NewNftPage(props) {
 
 	//step 3
 	const [encryptedDocs, setEncryptedDocs] = useState([]);
+
+	//step 4
+	const [editorState, setEditorState] = useState(editorStateNew);
 	const [additionalImage, setAdditionalImage] = useState(null);
 	const [additionalImageTitle, setAdditionalImageTitle] = useState(null);
 	const [additionalImageDesc, setAdditionalImageDesc] = useState(null);
 	const [newNftVideo, setNewNftVideo] = useState(null);
 	const [newNftVideoTitle, setNewNftVideoTitle] = useState(null);
 	const [newNftVideoDesc, setNewNftVideoDesc] = useState(null);
-
-	//step 4
-	const [editorState, setEditorState] = useState(editorStateNew);
 
 	useEffect(async () => {
 		console.log("PAGE LOADED! LETS MAKE NFTs");
@@ -70,19 +70,19 @@ function NewNftPage(props) {
 		setIsTouched(false);
 		_handleValidate();
 	}, [
-		newNftAuthor,
-		newNftDescription,
-		newNftHistory,
+		// newNftAuthor,
+		// newNftDescription,
+		// newNftHistory,
 		newNftMainImage,
 		newNftPrice,
 		newNftTitle,
-		encryptedDocs,
-		additionalImage,
-		additionalImageTitle,
-		additionalImageDesc,
-		newNftVideo,
-		newNftVideoDesc,
-		newNftVideoTitle,
+		// encryptedDocs,
+		// additionalImage,
+		// additionalImageTitle,
+		// additionalImageDesc,
+		// newNftVideo,
+		// newNftVideoDesc,
+		// newNftVideoTitle,
 	]);
 
 	useEffect(async () => {
@@ -170,16 +170,26 @@ function NewNftPage(props) {
 			}
 
 			if (activeStep === 0) {
-				const payload = JSON.stringify(newNftTitle);
-
 				setIsLoading(true);
+
+				//title
+				const payload = JSON.stringify(newNftTitle);
 				const res = await httpClient.post("/InsertProducts/InsertNewProduct", payload);
 
-				console.log("res", res);
+				// to-do finish handling statuses
+				// if (res.status === 200) {
+				// 	 const { id } = res.data;
+				// 	 setNewNftId(id);
+				// } else {
+				// 	 console.error("ERROR", res.status)
+				//   setIsLoading(false);
+				//   return
+				// }
+				// 
 
 				const { id } = res.data;
-
 				setNewNftId(id);
+
 			}
 
 			if (activeStep === 1) {
@@ -214,27 +224,35 @@ function NewNftPage(props) {
 			}
 
 			if (activeStep === 2) {
-				//upload docs
 
-				const formData = new FormData();
+				//check we have encryptedDocs, if not continue to next step without calling API
 
-				encryptedDocs.map((doc, i) => {
-					console.log(i, doc);
-					formData.append("documentsImagesVideosMusic", doc);
-				});
+				if (encryptedDocs.length > 0) {
 
-				formData.append("productsId", newNftId);
-				const config = {
-					headers: {
-						"content-type": "multipart/form-data",
-					},
-				};
 
-				setIsLoading(true);
-				const step3DocsRes = await httpClient.post(`/InsertProducts/InsertElementsForEncypt`, formData, config);
-				//CHECK HTTP STATUSES!!!!! TO-DO
+					//upload docs
+					const formData = new FormData();
 
-				console.log("UPL DOCS", step3DocsRes);
+					encryptedDocs.map((doc, i) => {
+						console.log(i, doc);
+						formData.append("documentsImagesVideosMusic", doc);
+					});
+
+					formData.append("productsId", newNftId);
+					const config = {
+						headers: {
+							"content-type": "multipart/form-data",
+						},
+					};
+
+					setIsLoading(true);
+					const step3DocsRes = await httpClient.post(`/InsertProducts/InsertElementsForEncypt`, formData, config);
+					//CHECK HTTP STATUSES!!!!! TO-DO
+
+					console.log("UPL DOCS", step3DocsRes);
+
+				}
+
 			}
 
 			if (activeStep === 3) {
@@ -266,36 +284,41 @@ function NewNftPage(props) {
 				//upload img
 				console.log(additionalImage, "ready");
 
-				const payloadImg = {
-					productsId: newNftId,
-					titleImage: additionalImageTitle ? additionalImageTitle : "",
-					descriptionImage: additionalImageDesc ? additionalImageDesc : "",
-					url: additionalImage ? additionalImage : "",
-					tag: additionalImage ? newNftTitle : "",
-				};
+				if (additionalImage && additionalImageTitle) {
 
-				const step3ImgRes = await httpClient.post("/InsertProducts/InsertUpdateImage", payloadImg);
-				//TODO Handle all statuses, 200, 400 etc
 
-				console.log("UPL IMG", step3ImgRes);
+					const payloadImg = {
+						productsId: newNftId,
+						titleImage: additionalImageTitle,
+						descriptionImage: additionalImageDesc,
+						url: additionalImage,
+						tag: newNftTitle,
+					};
+
+					const step3ImgRes = await httpClient.post("/InsertProducts/InsertUpdateImage", payloadImg);
+					//TODO Handle all statuses, 200, 400 etc
+					console.log("UPL IMG", step3ImgRes);
+				}
+
 
 				//upload video
 				console.log(newNftVideo, "video ready");
 
-				const payloadVideo = {
-					productsId: newNftId,
-					titleVideo: newNftVideoTitle,
-					descriptionVideo: newNftVideoDesc,
-					url: newNftVideo,
-					tag: newNftTitle,
-				};
+				if (newNftVideo && newNftVideoTitle) {
+		
+					const payloadVideo = {
+						productsId: newNftId,
+						titleVideo: newNftVideoTitle,
+						descriptionVideo: newNftVideoDesc,
+						url: newNftVideo,
+						tag: newNftTitle,
+					};
 
-				const step3VideoRes = await httpClient.post("/InsertProducts/InsertUpdateVideo", payloadVideo);
-				//TODO Handle all statuses, 200, 400 etc
+					const step3VideoRes = await httpClient.post("/InsertProducts/InsertUpdateVideo", payloadVideo);
+					//TODO Handle all statuses, 200, 400 etc
 
-				console.log("UPL VID", step3VideoRes);
-
-				// do not continue, return here if there were problems
+					console.log("UPL VID", step3VideoRes);
+				}
 				
 			}
 
