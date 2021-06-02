@@ -130,6 +130,7 @@ function NewNftPage(props) {
 			// }
 			if (!newNftMainImage?.trim()) {
 				setErrors({ image: "Missing main image" });
+				console.log("diocan")
 				return false;
 			}
 		}
@@ -176,16 +177,16 @@ function NewNftPage(props) {
 				const payload = JSON.stringify(newNftTitle);
 				const res = await httpClient.post("/InsertProducts/InsertNewProduct", payload);
 
-				// to-do finish handling statuses
-				// if (res.status === 200) {
-				// 	 const { id } = res.data;
-				// 	 setNewNftId(id);
-				// } else {
-				// 	 console.error("ERROR", res.status)
-				//   setIsLoading(false);
-				//   return
-				// }
-				// 
+				// check HTTP status of response
+				if (res.status === 200) {
+					const { id } = res.data;
+					setNewNftId(id);
+				} else {
+					console.error("ERROR", res.status)
+					setErrors({ apiCall: `Error ${res.status}: ${res.data.error}` })
+					setIsLoading(false);
+					return
+				}			
 
 				const { id } = res.data;
 				setNewNftId(id);
@@ -200,11 +201,19 @@ function NewNftPage(props) {
 				};
 
 				//description
-				const contentBlocksRaw = convertToRaw(newNftDescription.getCurrentContent());
-				const nftDescriptionHtml = draftToHtml(contentBlocksRaw, hashConfig);
+				let nftDescriptionHtml;
+				if (newNftDescription) {
+					const contentBlocksRaw = convertToRaw(newNftDescription.getCurrentContent());
+					nftDescriptionHtml = draftToHtml(contentBlocksRaw, hashConfig);
+				}
+				console.log("nftDescriptionHtml", nftDescriptionHtml)
 				//history
-				const contentBlocksRaw2 = convertToRaw(newNftHistory.getCurrentContent());
-				const nftHistoryHtml = draftToHtml(contentBlocksRaw2, hashConfig);
+				let nftHistoryHtml;
+				if (newNftHistory) {
+					const contentBlocksRaw2 = convertToRaw(newNftHistory.getCurrentContent());
+					nftHistoryHtml = draftToHtml(contentBlocksRaw2, hashConfig);
+				}
+				console.log("newNftHistory", newNftHistory)
 				//here as payload put object with id, avatar url, descr, etc
 				const payload = {
 					id: newNftId,
@@ -282,7 +291,7 @@ function NewNftPage(props) {
 				// ---
 
 				//upload img
-				console.log(additionalImage, "ready");
+				console.log(additionalImage, "img ready");
 
 				if (additionalImage && additionalImageTitle) {
 
@@ -323,7 +332,7 @@ function NewNftPage(props) {
 			}
 
 			if (activeStep === 4) {
-				Router.push(`profile/edit-nft/${newNftId}`);
+				Router.push(`edit-nft/${newNftId}`);
 			}
 
 			setIsTouched(false);

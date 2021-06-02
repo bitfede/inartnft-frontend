@@ -69,7 +69,11 @@ const ProductBasicInfo = (props) => {
         setIsLoading(true)
 
         const checksAreValid = _handleValidate()
-        if (!checksAreValid) { return false}
+        if (!checksAreValid) { 
+            return false
+        } else {
+            setErrors()
+        }
 
         //setup hashconfig to extract content from editor   
         const hashConfig = {
@@ -85,28 +89,27 @@ const ProductBasicInfo = (props) => {
         const contentBlocksRaw2 = convertToRaw(historyEditorState.getCurrentContent());
         const historyHtml = draftToHtml(contentBlocksRaw2, hashConfig);
 
-		let res;
 		const {id, urlImageVideoPresentation, author, price, title, describtion, history} = productObj;
-		const payload = {
-			id: id,
-			urlImageVideoPresentation: urlImageVideoPresentation,
-			author: author,
-			contract_price: price,
-			title: title,
-			describtion: descriptionHtml,
-			history: historyHtml
-		}
+		// const payload = {
+        //         id: id,
+        //         urlImageVideoPresentation: urlImageVideoPresentation,
+        //         author: author,
+        //         contract_price: price,
+        //         title: title,
+        //         describtion: descriptionHtml,
+        //         history: historyHtml
+		// }
+        const payload = {} //empty to trigger error
 
 		try {
-			res = await httpClient.post('/InsertProducts/Update', payload)
+			const res = await httpClient.post('/InsertProducts/Update', payload)
+            console.log(res, "RES")
+            setProductObj(res.data)
 		} catch (error) {
-			return console.error(error)
-		}
-
-		// TODO manage statuses
-		if (res.status === 200) {
-			console.log("XXXX", res.data)
-			setProductObj(res.data)
+            console.error("ERROR", error.response.status)
+            setErrors({ apiCall: `Error ${error.response.status}: ${error.response.data.error}` })
+            setIsLoading(false);
+            return
 		}
 
 		setIsLoading(false)
@@ -126,14 +129,19 @@ const ProductBasicInfo = (props) => {
 			},
 		};
 
-		const response = await httpClient.post(`/Upload/UploadImage`, formData, config);
-		console.log(response);
-
-		const retVal = new Promise((resolve, reject) => {
-			resolve({ data: { link: response.data.url } });
-		});
-
-		return retVal;
+        try {
+            const response = await httpClient.post(`/Upload/UploadImagezz`, formData, config);
+            const retVal = new Promise((resolve, reject) => {
+                resolve({ data: { link: response.data.url } });
+            });
+            return retVal;
+        } catch (error) {
+            console.error("ERROR", error.response.status)
+            setErrors({ apiCall: `Error ${error.response.status}: ${error.response.data.error}` })
+            setIsLoading(false);
+            return
+        }
+		
 	};
 
     const _handleValidate = () => {
