@@ -23,8 +23,11 @@ const ProductElementsEncrypt = (props) => {
     useEffect( () => {
 
         if (!productObj) return ("");
-        if (!productObj.documentsEncrypted) return ("");
-        if (!productObj.documentsEncrypted[0]) return "";
+        if (!productObj.documentsEncrypted) return "";
+        if (!productObj.documentsEncrypted[0]) {
+            setDocsCleared(true)
+            return ""
+        }
         if (docsCleared === true) return("");
 
         const {documentsEncrypted} = productObj;
@@ -45,31 +48,40 @@ const ProductElementsEncrypt = (props) => {
         setTempDocsArr(tempDocsArrClone);
     }
 
-    const _handleClearDocs = () => {
-        setDocsCleared(true);
+    const _handleClearDocs = async () => {
+
+        const decisionContinue = confirm("Do you want to delete and clear the encrypted files slots?")
+
+        if (!decisionContinue) return;
+
+        setDocsCleared(true)
+
+        //delete current docs on DB -- TODO
+        const payload1 = JSON.stringify(productObj.id); //test
+
+        console.log("11111")
+        try {
+            const deleteDocsRes = await httpClient.post("/Remove/EncryptedFiles", payload1);
+            console.log(deleteDocsRes, "RES")
+            setProductObj(deleteDocsRes.data)
+        } catch (error) {
+            console.error("ERROR", error.response.status)
+            setErrors({ apiCall: `Error ${error.response.status}: ${error.response.data.error}` })
+            setIsLoading(false);
+            return
+        }
+
+        console.log("2222222")
+
+        console.log("DELETE DOCS RES", deleteDocsRes);
+
+        setDocsCleared(true)
     }
 
     const _handleSubmitEncryptDocs = async () => {
 
         setIsLoading(true);
         console.log('submittin encrypt doc', tempDocsArr)
-
-        //delete current docs on DB -- TODO
-        const payload1 = JSON.stringify(productObj.documentsEncrypted.encryptionId); //test
-
-        try {
-            const deleteDocsRes = await httpClient.post("/Remove/EncryptedFiles", payload1);
-            console.log(deleteDocsRes, "RES")
-            setProductObj(deleteDocsRes.data)
-		} catch (error) {
-            console.error("ERROR", error.response.status)
-            setErrors({ apiCall: `Error ${error.response.status}: ${error.response.data.error}` })
-            setIsLoading(false);
-            return
-		}
-
-
-        console.log("DELETE DOCS RES", deleteDocsRes);
 
         //POST new docs to server
         const formData = new FormData();
