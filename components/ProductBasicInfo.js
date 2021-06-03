@@ -89,17 +89,17 @@ const ProductBasicInfo = (props) => {
         const contentBlocksRaw2 = convertToRaw(historyEditorState.getCurrentContent());
         const historyHtml = draftToHtml(contentBlocksRaw2, hashConfig);
 
-		const {id, urlImageVideoPresentation, author, price, title, describtion, history} = productObj;
-		// const payload = {
-        //         id: id,
-        //         urlImageVideoPresentation: urlImageVideoPresentation,
-        //         author: author,
-        //         contract_price: price,
-        //         title: title,
-        //         describtion: descriptionHtml,
-        //         history: historyHtml
-		// }
-        const payload = {} //empty to trigger error
+		const {id, urlImageVideoPresentation, author, price, title} = productObj;
+		const payload = {
+                id: id,
+                urlImageVideoPresentation: urlImageVideoPresentation,
+                author: author,
+                contract_price: price,
+                title: title,
+                describtion: descriptionHtml,
+                history: historyHtml
+		}
+        // const payload = {} //empty to trigger error
 
 		try {
 			const res = await httpClient.post('/InsertProducts/Update', payload)
@@ -173,7 +173,11 @@ const ProductBasicInfo = (props) => {
     }
 
     //render functions
-
+    const displayError = () => {
+        retur (
+            <p>Error</p>
+        )
+    }
 
     
     //TODO add prop that differentiates between video and img upl
@@ -254,6 +258,7 @@ const ProductBasicInfo = (props) => {
                     />
 
                 </Form>
+                {/* errors ? displayError() : ""  TODO DISPLAY ERRORS*/}
             </Loader>
             {!isLoading ? (<Button variant="success" onClick={() => _handleSubmitBasicInfo()}>Save Data</Button>) : (<Button variant="success" disabled><Spinner as="span" animation="grow" size="sm" role="status" aria-hidden="true" />Loading...</Button>)}
         </div>
