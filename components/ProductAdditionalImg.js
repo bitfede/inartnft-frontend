@@ -40,9 +40,16 @@ const ProductAdditonalImg = (props) => {
             tag: tag
         }
 
-        const resImageUpl = await httpClient.post("/InsertProducts/InsertUpdateImage", payload)
+        try {
+            const resImageUpl = await httpClient.post("/InsertProducts/InsertUpdateImage", payload)
+            console.log("RES IMGO UPPL", resImageUpl);
+		} catch (error) {
+            console.error("ERROR", error.response.status)
+            setErrors({ apiCall: `Error ${error.response.status}: ${error.response.data.error}` })
+            setIsLoading(false);
+            return
+		}
 
-        console.log("RES IMGO UPPL", resImageUpl);
     }
 
     const _handleDeleteImage = async () => {
@@ -60,19 +67,31 @@ const ProductAdditonalImg = (props) => {
             url: ""
         }
 
-        const payload = JSON.stringify(currentUrl)
+        const {id, descriptionImage, tag, titleImage, url} = productObj.imagesProduct;
 
-        const res = await httpClient.post("/Remove/File", payload)
-
-        console.log("VIDEO DELETION: ", res)
-
-        if (res.status === 200) {
-            setProductObj(productObjClone)
+        const payload = {
+            productsId: productObj.id,
+            titleImage: titleImage,
+            descriptionImage: descriptionImage,
+            url: url,
+            tag: tag
         }
+
+        try {
+            const res = await httpClient.post("/InsertProducts/RemoveImage", payload)
+            console.log("VIDEO DELETION: ", res)
+            setProductObj(productObjClone)
+		} catch (error) {
+            console.error("ERROR", error.response.status)
+            setErrors({ apiCall: `Error ${error.response.status}: ${error.response.data.error}` })
+            setIsLoading(false);
+            return
+		}
 
     }
 
     //render functions
+
 
     if (!productObj) return "";
     if (!productObj.imagesProduct) {

@@ -57,9 +57,17 @@ const ProductElementsEncrypt = (props) => {
         //delete current docs on DB -- TODO
         const payload1 = JSON.stringify(productObj.documentsEncrypted.encryptionId); //test
 
-        console.log(payload1)
+        try {
+            const deleteDocsRes = await httpClient.post("/Remove/EncryptedFiles", payload1);
+            console.log(deleteDocsRes, "RES")
+            setProductObj(deleteDocsRes.data)
+		} catch (error) {
+            console.error("ERROR", error.response.status)
+            setErrors({ apiCall: `Error ${error.response.status}: ${error.response.data.error}` })
+            setIsLoading(false);
+            return
+		}
 
-        const deleteDocsRes = await httpClient.post("/Remove/EncryptedFiles", payload1);
 
         console.log("DELETE DOCS RES", deleteDocsRes);
 
@@ -78,11 +86,16 @@ const ProductElementsEncrypt = (props) => {
             },
         };
 
+        try {
+            const docsUplRes = await httpClient.post(`/InsertProducts/InsertElementsForEncypt`, formData, config);
+            console.log("UPL DOCS", docsUplRes);
+		} catch (error) {
+            console.error("ERROR", error.response.status)
+            setErrors({ apiCall: `Error ${error.response.status}: ${error.response.data.error}` })
+            setIsLoading(false);
+            return
+		}
 
-        const docsUplRes = await httpClient.post(`/InsertProducts/InsertElementsForEncypt`, formData, config);
-        //CHECK HTTP STATUSES!!!!! TO-DO
-
-        console.log("UPL DOCS", docsUplRes);
         setIsLoading(false);
 	}
 

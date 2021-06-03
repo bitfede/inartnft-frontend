@@ -40,9 +40,17 @@ const ProductVideo = (props) => {
             tag: tag
         }
 
-        const resVideoUpl = await httpClient.post("/InsertProducts/InsertUpdateVideo", payload)
+        try {
+            const resVideoUpl = await httpClient.post("/InsertProducts/InsertUpdateVideo", payload)
+            console.log("RES VIDEO UPLOAD: ", resVideoUpl);
+		} catch (error) {
+            console.error("ERROR", error.response.status)
+            setErrors({ apiCall: `Error ${error.response.status}: ${error.response.data.error}` })
+            setIsLoading(false);
+            return
+		}
 
-        console.log("RES VIDO UPPL", resVideoUpl);
+
     }
 
     const _handleDeleteVideo = async () => {
@@ -60,15 +68,27 @@ const ProductVideo = (props) => {
             url: ""
         }
 
-        const payload = JSON.stringify(currentUrl)
+        const {id, descriptionVideo, tag, titleVideo, url} = productObj.videosProduct;
 
-        const res = await httpClient.post("/Remove/File", payload)
-
-        console.log("VIDEO DELETION: ", res)
-
-        if (res.status === 200) {
-            setProductObj(productObjClone)
+        const payload = {
+            productsId: productObj.id,
+            titleVideo: titleVideo,
+            descriptionVideo: descriptionVideo,
+            url: url,
+            tag: tag
         }
+
+        try {
+            const res = await httpClient.post("/InsertProducts/RemoveVideo", payload)
+            console.log("VIDEO DELETION: ", res)
+            setProductObj(productObjClone)
+		} catch (error) {
+            console.error("ERROR", error.response.status)
+            setErrors({ apiCall: `Error ${error.response.status}: ${error.response.data.error}` })
+            setIsLoading(false);
+            return
+		}
+
     }
 
     //render functions

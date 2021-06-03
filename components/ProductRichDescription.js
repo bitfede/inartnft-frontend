@@ -67,11 +67,17 @@ const ProductRichDescription = (props) => {
             descriptionDocuments: markupHtml,
         };
 
-        const res = await httpClient.post("/InsertProducts/InsertUpdateDocument", payload);
-        //TODO Handle all statuses, 200, 400 etc
+        try {
+            const res = await httpClient.post("/InsertProducts/InsertUpdateDocument", payload);
+            console.log("POST DESCR LONG INFO", res);
+            setIsLoading(false);
+		} catch (error) {
+            console.error("ERROR", error.response.status)
+            setErrors({ apiCall: `Error ${error.response.status}: ${error.response.data.error}` })
+            setIsLoading(false);
+            return
+		}
 
-        console.log("POST DESCR LONG INFO", res);
-        setIsLoading(false);
 
     }
 
@@ -88,20 +94,26 @@ const ProductRichDescription = (props) => {
 			},
 		};
 
-		const response = await httpClient.post(`/Upload/UploadImage`, formData, config);
-		console.log(response);
+        try {
+            const response = await httpClient.post(`/Upload/UploadImage`, formData, config);
+            const retVal = new Promise((resolve, reject) => {
+                resolve({ data: { link: response.data.url } });
+            });
+            setIsLoading(false);
+            return retVal;
+		} catch (error) {
+            console.error("ERROR", error.response.status)
+            setErrors({ apiCall: `Error ${error.response.status}: ${error.response.data.error}` })
+            setIsLoading(false);
+            return
+        }
 
-		const retVal = new Promise((resolve, reject) => {
-			resolve({ data: { link: response.data.url } });
-		});
-
-		return retVal;
 	};
 
     //render functions
 
 
-    
+    //main render
     return (
         <div className={styles.inputCard}>
             <h2 className={styles.sectionTitle}>Additional Description</h2>
