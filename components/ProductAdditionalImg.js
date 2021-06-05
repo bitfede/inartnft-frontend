@@ -15,6 +15,9 @@ const ProductAdditonalImg = (props) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isTouched, setIsTouched] = useState(false);
     const [errors, setErrors] = useState(null);
+    const [newImgTitle, setNewImgTitle] = useState(null);
+    const [newImgTag, setNewImgTag] = useState(null);
+    const [newImgDesc, setNewImgDesc] = useState(null);
 
     useEffect( () => {
 
@@ -34,8 +37,8 @@ const ProductAdditonalImg = (props) => {
 
         const payload = {
             productsId: productObj.id,
-            titleImage: titleImage,
-            descriptionImage: descriptionImage,
+            titleImage: newImgTitle,
+            descriptionImage: newImgDesc,
             url: url,
             tag: tag
         }
@@ -52,7 +55,8 @@ const ProductAdditonalImg = (props) => {
 
     }
 
-    const _handleDeleteImage = async (imgId) => {
+    const _handleDeleteImage = async (e, imgId) => {
+        e.preventDefault()
 
         const currentUrl = productObj.imagesProduct.url;
         let choice = confirm(`Are you sure you want to delete image ${imgId}?`)
@@ -106,7 +110,7 @@ const ProductAdditonalImg = (props) => {
                             <p><strong>Image #{i+1}</strong></p>
                             <p><strong>Title:</strong> {imageProd.titleImage}</p>
                             <p><strong>Tag:</strong> {imageProd.tag}</p>
-                            <p><a onClick={(e) => _handleDeleteImage(imageProd.id)} href="#">delete</a></p>
+                            <p><a onClick={(e) => _handleDeleteImage(e, imageProd.id)} href="#">delete</a></p>
                         </div>
                     </li>
             )
@@ -147,13 +151,13 @@ const ProductAdditonalImg = (props) => {
 
                 <Form.Group controlId="formPrice">
                     <Form.Label>Image Title</Form.Label>
-                    <Form.Control value={productObj ? productObj.imagesProduct.titleImage : ""} onChange={e => setProductObj( {...productObj, imagesProduct: {...productObj.imagesProduct, titleImage: e.target.value }})  } as="input" placeholder="" />
+                    <Form.Control value={newImgTitle ? newImgTitle : ""} onChange={e => setNewImgTitle(e.target.value)  } as="input" placeholder="" />
                     <Form.Control.Feedback type="invalid">{isTouched && errors?.imgDescription}</Form.Control.Feedback>
                 </Form.Group>
 
                 <Form.Group controlId="formDescription">
                     <Form.Label>Image Description</Form.Label>
-                    <Form.Control value={productObj ? productObj.imagesProduct.descriptionImage : ""} onChange={e => setProductObj( {...productObj, imagesProduct: {...productObj.imagesProduct, descriptionImage: e.target.value}} ) } as="textarea" placeholder="Write your image description here...." />
+                    <Form.Control value={newImgDesc ? newImgDesc : ""} onChange={e => setNewImgDesc( e.target.value ) } as="textarea" placeholder="Write your image description here...." />
                     <Form.Control.Feedback type="invalid">{isTouched && errors?.description}</Form.Control.Feedback>
                 </Form.Group>
                 
@@ -163,6 +167,8 @@ const ProductAdditonalImg = (props) => {
                     mediaUrl={productObj.imagesProduct ? productObj.imagesProduct.url : ""} 
                     productObj={productObj ? productObj : ""}        
                     setProductObj={setProductObj}
+                    newImgTitle={newImgTitle}
+                    newImgDesc={newImgDesc}
                 />
 
             </Form>
