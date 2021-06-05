@@ -11,6 +11,12 @@
     text-align: center;  
 }
 
+.sectionSubTitle {
+    font-size: 1.2rem;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
 #clearDocsBtn {
     margin-left: 1rem;
 }
@@ -18,4 +24,31 @@
 
 .deleteMediaBtn {
     margin-left: 1rem;
+}
+
+.imageListUl {
+    list-style-type: none;
+    margin-bottom: 5rem;
+}
+
+.imageListLi {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.imageListLi img {
+    width: 120px;
+}
+
+.imageListLi p {
+    margin: 0px;
+    margin-left: 2rem;
+    padding-bottom: 0.5rem;
+}
+
+.imageListLi p a {
+    color: red;
 }

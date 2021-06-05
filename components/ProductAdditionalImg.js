@@ -52,12 +52,14 @@ const ProductAdditonalImg = (props) => {
 
     }
 
-    const _handleDeleteImage = async () => {
+    const _handleDeleteImage = async (imgId) => {
 
         const currentUrl = productObj.imagesProduct.url;
-        let choice = confirm("Are you sure you want to delete this image?")
+        let choice = confirm(`Are you sure you want to delete image ${imgId}?`)
 
         if (choice === false) return;
+
+        return // TODO implement the delete for this new image management
 
         let productObjClone = {...productObj};
         productObjClone.imagesProduct = {
@@ -91,7 +93,32 @@ const ProductAdditonalImg = (props) => {
     }
 
     //render functions
+    const renderSavedImages = () => {
 
+        if (!productObj.imagesProduct) return
+
+        const savedImagesJsx = productObj.imagesProduct.map( (imageProd, i) => {
+
+            return (
+                    <li className={styles.imageListLi}>
+                        <img src={imageProd.url} />
+                        <div>
+                            <p><strong>Image #{i+1}</strong></p>
+                            <p><strong>Title:</strong> {imageProd.titleImage}</p>
+                            <p><strong>Tag:</strong> {imageProd.tag}</p>
+                            <p><a onClick={(e) => _handleDeleteImage(imageProd.id)} href="#">delete</a></p>
+                        </div>
+                    </li>
+            )
+        })
+
+
+        return (
+            <ul className={styles.imageListUl}>
+                {savedImagesJsx}
+            </ul>
+        )
+    }
 
     if (!productObj) return "";
     if (!productObj.imagesProduct) {
@@ -105,8 +132,17 @@ const ProductAdditonalImg = (props) => {
 
     return (
         <div className={styles.inputCard}>
-            <h2 className={styles.sectionTitle}>Image</h2>
+            <h2 className={styles.sectionTitle}>Images</h2>
             <Loader show={isLoading}>
+            <h3 className={styles.sectionSubTitle}>Saved Images</h3>
+
+            <div>
+
+                {renderSavedImages()}
+
+            </div>
+
+            <h3 className={styles.sectionSubTitle}>Upload new image</h3>
             <Form>
 
                 <Form.Group controlId="formPrice">
