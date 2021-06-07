@@ -59,29 +59,32 @@ const ProductAdditonalImg = (props) => {
         e.preventDefault()
 
         const currentUrl = productObj.imagesProduct.url;
-        let choice = confirm(`Are you sure you want to delete image ${imgId}?`)
+        let choice = confirm(`Are you sure you want to delete this image?`)
+        console.log("[*] Deleting:", imgId  )
 
         if (choice === false) return;
 
-        return // TODO implement the delete for this new image management
+        // return // TODO implement the delete for this new image management
 
         let productObjClone = {...productObj};
-        productObjClone.imagesProduct = {
-            descriptionImage: "",
-            tag: "",
-            titleImage: "",
-            url: ""
-        }
+        // productObjClone.imagesProduct = {
+        //     descriptionImage: "",
+        //     tag: "",
+        //     titleImage: "",
+        //     url: ""
+        // }
 
-        const {id, descriptionImage, tag, titleImage, url} = productObj.imagesProduct;
+        // const {id, descriptionImage, tag, titleImage, url} = productObj.imagesProduct;
 
-        const payload = {
-            productsId: productObj.id,
-            titleImage: titleImage,
-            descriptionImage: descriptionImage,
-            url: url,
-            tag: tag
-        }
+        // const payload = {
+        //     productsId: productObj.id,
+        //     titleImage: titleImage,
+        //     descriptionImage: descriptionImage,
+        //     url: url,
+        //     tag: tag
+        // }
+
+        const payload = JSON.stringify(imgId)
 
         try {
             const res = await httpClient.post("/InsertProducts/RemoveImage", payload)
