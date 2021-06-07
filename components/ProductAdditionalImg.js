@@ -87,6 +87,7 @@ const ProductAdditonalImg = (props) => {
         const payload = JSON.stringify(imgId)
 
         try {
+            console.log("image ", productObjClone)
             const res = await httpClient.post("/InsertProducts/RemoveImage", payload)
             console.log("VIDEO DELETION: ", res)
             setProductObj(productObjClone)
