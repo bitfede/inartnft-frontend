@@ -219,7 +219,7 @@ function NewNftPage(props) {
 					id: newNftId,
 					urlImageVideoPresentation: newNftMainImage,
 					author: newNftAuthor,
-					contract_price: newNftPrice,
+					price: newNftPrice,
 					title: newNftTitle,
 					describtion: nftDescriptionHtml,
 					history: nftHistoryHtml,

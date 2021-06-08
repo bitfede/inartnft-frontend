@@ -94,7 +94,7 @@ const ProductBasicInfo = (props) => {
                 id: id,
                 urlImageVideoPresentation: urlImageVideoPresentation,
                 author: author,
-                contract_price: price,
+                price: price,
                 title: title,
                 describtion: descriptionHtml,
                 history: historyHtml
