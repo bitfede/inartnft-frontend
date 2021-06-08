@@ -590,7 +590,7 @@
 						"type": "string"
 					}
 				],
-				"internalType": "struct NftShop.BuyedNft[]",
+				"internalType": "struct LibMarket.BuyedNft[]",
 				"name": "",
 				"type": "tuple[]"
 			}
