@@ -63,8 +63,8 @@ const ProductRichDescription = (props) => {
 
         const payload = {
             productsId: productObj.id,
-            titleDocuments: productObj.title,
-            descriptionDocuments: markupHtml,
+            titleDocument: productObj.title,
+            descriptionDocument: markupHtml,
         };
 
         try {

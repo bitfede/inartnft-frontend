@@ -278,8 +278,8 @@ function NewNftPage(props) {
 
 				const payload = {
 					productsId: newNftId,
-					titleDocuments: newNftTitle,
-					descriptionDocuments: markup,
+					titleDocument: newNftTitle,
+					descriptionDocument: markup,
 				};
 
 				setIsLoading(true);
@@ -696,7 +696,7 @@ function NewNftPage(props) {
 
 							{/* Next button */}
 							<Button /*disabled={Object.keys(errors || {}).length || false}*/ onClick={() => _handleNextStep()}>
-								{activeStep <= 3 ? "Next" : "Click here to view the NFT Draft"}
+								{activeStep <= 3 ? "Next" : "Click here to edit the NFT Draft"}
 							</Button>
 						</Col>
 					</Row>
